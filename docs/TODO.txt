@@ -1,0 +1,139 @@
+TODO :
+
+
++- Finish struct Pixel:
+  + RGB fields <-> u_int union
+  + Endianness
+  - Alpha channel? Should we remove it when using OpenCV Image implementation?
+
+
++ Finish QtImage:
+
+  + Implement Pixel <-> QRgb conversion.
+
+    Image Formats
+
+    Each pixel stored in a QImage is represented by an integer. The size of the 
+    integer varies depending on the format. QImage supports several image formats 
+    described by the QImage::Format enum.
+
+    Monochrome images are stored using 1-bit indexes into a color table with at 
+    most two colors. There are two different types of monochrome images: big 
+    endian (MSB first) or little endian (LSB first) bit order.
+
+    8-bit images are stored using 8-bit indexes into a color table, i.e. they 
+    have a single byte per pixel. The color table is a QVector<QRgb>, and the 
+    QRgb typedef is equivalent to an unsigned int containing an ARGB quadruplet 
+    on the format 0xAARRGGBB.
+
+    32-bit images have no color table; instead, each pixel contains an QRgb value.
+    There are three different types of 32-bit images storing RGB (i.e. 0xffRRGGBB),
+    ARGB and premultiplied ARGB values respectively. In the premultiplied format 
+    the red, green, and blue channels are multiplied by the alpha component 
+    divided by 255.
+
+    An image's format can be retrieved using the format() function. Use the 
+    convertToFormat() functions to convert an image into another format. The 
+    allGray() and isGrayscale() functions tell whether a color image can safely 
+    be converted to a grayscale image.
+
+    typedef QRgb
+
+    An ARGB quadruplet on the format #AARRGGBB, equivalent to an unsigned int.
+
+    The type also holds a value for the alpha-channel. The default alpha channel 
+    is ff, i.e opaque. For more information, see the Alpha-Blended Drawing section.
+    See also QColor::rgb() and QColor::rgba().
+
+  + Finish QtImage::Scale().
+
+  + Add Image::GetName().
+
+
++- Think how to switch between different Image implementations: #ifdef, ...
+  + use IMAGEIMP var in defines.mk
+
+
++- Implement ModScale::Compare().
+  - Metrics?
+
+
++- Add logging :
+  + Use singleton
+  + Add '0' before single digits
+  - Log level?
+
+
++ Be able to stop the processing when "Stop" button is pressed.
+  "There are essentially two different options:
+   + Force processing of events using QApplication::processEvents(), OR
+   + Create a thread that emits signals that can be used to update the progress bar"
+
+
+-+ Finish the UI:
+  + Update the progress bar
+  + Add button to clear the results
+  + Use the threshold value
+  + "Stop" button working (see above)
+  +- Implement all source methods
+  +- Display image dimensions (where? can we display dimensions on the image 
+   itself? yes)
+  -+ Display full image names on gray background below. Strip directory name
+   from image names in the table? Display dir name instead of "First image" and
+   "Second image" in table header? But how to get the full image name from the
+   table then?
+  - "Delete" button working (or disable it)
+  - Option to include subfolders when selecting a folder?
+  - Better window resize policy? Or disable resize?
+  - ...
+
+
+-+ Throw and handle exceptions.
+  - Recompile Qt with exceptions enabled ("-exceptions")?
+
+
+-+ Put LICENSE (LGPL v2.1 from Qt) and README (important for GitHub) in the root
+ dir. Put TODO in docs dir.
+ Make different Windows and Linux exe dirs?
+ Create binary distribution for Windows (zip), containing Qt DLL-s. Which one?
+  d:\qt\qt\bin\QTCORE4.DLL
+  d:\qt\qt\bin\QTGUI4.DLL
+  d:\qt\qt\bin\MINGWM10.DLL
+  d:\qt\qt\bin\LIBGCC_S_DW2-1.DLL
+
+
+- Try to compile under Linux. Create binary distribution for Linux?
+
+
++- Compile for release, not debug
+ CONFIG -= debug
+ CONFIG += release
+
+
+- Put Author and Copyright header in all files?
+
+
+- Create an open-source project in GitHub(yes) or SourceForge(no).
+ Firts install git locally. Do not commit img dir and Eclipse project files!
+
+
+- Check for memory leaks
+
+
+- Benchmark the algorithms - remember start and finish time and calculate
+ the average.
+
+
+- OpenCV integration:
+  - Implement the Image class using IplImage
+
+    Basically the problem is that OpenCV per se does not support an alpha channel, 
+    however it seems that Qt needs one.
+
+  - Use SIFT and SURF implementations from OpenCV
+
+
+- Implement more algorithms.
+
+
+- CUDA optimizations?

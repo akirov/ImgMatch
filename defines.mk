@@ -1,0 +1,10 @@
+
+COREDIR = core
+
+UIDIR=qtui
+#QTUI=1
+
+#LIBIMGMATCH=libimgmatch.a
+
+IMAGEIMP=QTIMAGE
+#QTIMAGE=1

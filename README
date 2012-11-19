@@ -1,0 +1,20 @@
+ImgMatch is a framework for non-trivial image comparison and pattern matching.
+
+ImgMatch is free. It is licensed under LGPL.
+
+It can be used ...
+
+ImgMatch is written in C++.
+ImgMatch has a platform-independent GUI, which uses Qt4 framework.
+
+To compile the source in Windows or Linux environments you need Qt4 and g++.
+Then just type "make". The binary ...
+
+Or, you can download self-contained binary distribution for Windows. No need
+to install - just unpack and run...
+
+Matching algorithms list:
+...
+
+Future plans include more matching algorithms implementation, OpenCV 
+integration, benchmarking, speed optimizations...
