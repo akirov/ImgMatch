@@ -5,7 +5,9 @@
 #-------------------------------------------------
 
 #CONFIG += debug
+
 CONFIG += release
+#CONFIG += static
 
 
 TARGET = imgmatch
