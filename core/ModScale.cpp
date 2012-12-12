@@ -8,9 +8,6 @@
 
 double ModScale::Compare( const Image& img1, const Image& img2 )
 {
-#if 0
-    return (20.0/100.0) * ((double) rand() / RAND_MAX);
-#else
     int ScaledHeight = img1.GetHeight() * ScaledWidth / img1.GetWidth();
 
     std::auto_ptr<Image> scaledImg1( img1.Copy() );
@@ -36,9 +33,8 @@ double ModScale::Compare( const Image& img1, const Image& img2 )
         }
     }
 
-    distance /= ScaledWidth*ScaledHeight;
+    distance /= ScaledWidth*ScaledHeight;  // The average
     LOG("img1=" << img1.GetName() << ", img2=" << img2.GetName() << ", distance=" << distance);
 
     return (1 - distance / MaxDistance);  // %
-#endif /* 0 */
 }
