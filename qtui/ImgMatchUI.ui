@@ -60,7 +60,7 @@
       </widget>
       <widget class="QLineEdit" name="leSrcDir1">
        <property name="enabled">
-        <bool>false</bool>
+        <bool>true</bool>
        </property>
        <property name="geometry">
         <rect>
@@ -73,7 +73,7 @@
       </widget>
       <widget class="QPushButton" name="pbSrcDir1">
        <property name="enabled">
-        <bool>false</bool>
+        <bool>true</bool>
        </property>
        <property name="geometry">
         <rect>
@@ -102,7 +102,7 @@
       </widget>
       <widget class="QLineEdit" name="leSrcImg1">
        <property name="enabled">
-        <bool>true</bool>
+        <bool>false</bool>
        </property>
        <property name="geometry">
         <rect>
@@ -115,7 +115,7 @@
       </widget>
       <widget class="QPushButton" name="pbSrcImg1">
        <property name="enabled">
-        <bool>true</bool>
+        <bool>false</bool>
        </property>
        <property name="geometry">
         <rect>
@@ -131,7 +131,7 @@
       </widget>
       <widget class="QLabel" name="lbSrcDir1">
        <property name="enabled">
-        <bool>false</bool>
+        <bool>true</bool>
        </property>
        <property name="geometry">
         <rect>
@@ -169,7 +169,7 @@
       </widget>
       <widget class="QLabel" name="lbSrcImg1">
        <property name="enabled">
-        <bool>true</bool>
+        <bool>false</bool>
        </property>
        <property name="geometry">
         <rect>
@@ -188,7 +188,7 @@
       </widget>
       <widget class="QLineEdit" name="leSrcImg2">
        <property name="enabled">
-        <bool>true</bool>
+        <bool>false</bool>
        </property>
        <property name="geometry">
         <rect>
@@ -201,7 +201,7 @@
       </widget>
       <widget class="QLabel" name="lbSrcImg2">
        <property name="enabled">
-        <bool>true</bool>
+        <bool>false</bool>
        </property>
        <property name="geometry">
         <rect>
@@ -220,7 +220,7 @@
       </widget>
       <widget class="QPushButton" name="pbSrcImg2">
        <property name="enabled">
-        <bool>true</bool>
+        <bool>false</bool>
        </property>
        <property name="geometry">
         <rect>
@@ -254,7 +254,7 @@
           <string>Compare images in one directory</string>
          </property>
          <property name="checked">
-          <bool>false</bool>
+          <bool>true</bool>
          </property>
          <attribute name="buttonGroup">
           <string>buttonGroup</string>
@@ -287,7 +287,7 @@
           <string>Compare two images only</string>
          </property>
          <property name="checked">
-          <bool>true</bool>
+          <bool>false</bool>
          </property>
          <attribute name="buttonGroup">
           <string>buttonGroup</string>
@@ -302,7 +302,7 @@
       <bool>true</bool>
      </property>
      <attribute name="title">
-      <string>Find Dups</string>
+      <string>Process</string>
      </attribute>
      <widget class="QGroupBox" name="groupBox_3">
       <property name="geometry">
@@ -674,7 +674,7 @@
       <bool>false</bool>
      </property>
      <attribute name="title">
-      <string>View Dups</string>
+      <string>View Results</string>
      </attribute>
      <widget class="QPushButton" name="pbViewUp">
       <property name="geometry">
