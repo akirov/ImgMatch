@@ -1,3 +1,6 @@
+ImgMatch
+========
+
 ImgMatch is a framework for image comparison and pattern recognition.
 
 ImgMatch is free. It is licensed under LGPL.
@@ -19,3 +22,13 @@ be in the qtui/release directory.
 
 I plan to make a self-sufficient binary distribution for Windows, containing
 the executable and needed dll-s.
+
+
+Screenshots
+-----------
+
+![first tab](https://github.com/akirov/ImgMatch/raw/master/docs/screen_1.jpg)
+
+![second tab](https://github.com/akirov/ImgMatch/raw/master/docs/screen_2.jpg)
+
+![third tab](https://github.com/akirov/ImgMatch/raw/master/docs/screen_3.jpg)
