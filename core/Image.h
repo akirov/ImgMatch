@@ -2,6 +2,11 @@
 #define __IMAGE_H__
 
 #include <string>
+#include <sys/param.h>  // For BYTE_ORDER definition in MinWG
+
+#if ! defined(BYTE_ORDER) || ! defined(BIG_ENDIAN) || ! defined(LITTLE_ENDIAN)
+#error "Endian not defiend!"
+#endif
 
 
 struct Pixel
@@ -12,7 +17,19 @@ struct Pixel
     Pixel() : ARGB(0) {}
     Pixel(unsigned long argb) : ARGB(argb) {}
     Pixel(unsigned char r, unsigned char g, unsigned char b, unsigned char a=0xFF) :
-        A(a), R(r), G(g), B(b)
+#if BYTE_ORDER == BIG_ENDIAN
+        A(a), 
+        R(r), 
+        G(g), 
+        B(b)
+#elif BYTE_ORDER == LITTLE_ENDIAN
+        B(b), 
+        G(g), 
+        R(r), 
+        A(a)
+#else
+#error "Unknown BYTE_ORDER"
+#endif /* BYTE_ORDER */
     {}
 
     operator unsigned long () const { return ARGB; }
@@ -30,7 +47,7 @@ struct Pixel
             unsigned char R;
             unsigned char A;
 #else
-#error "BYTE_ORDER not defined"
+#error "Unknown BYTE_ORDER"
 #endif /* BYTE_ORDER */
         };
         unsigned long ARGB;

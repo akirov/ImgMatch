@@ -38,9 +38,9 @@ Image* QtImage::Copy() const
 Pixel QtImage::GetPixel( int x, int y ) const
 {
     QRgb qt_argb = mQImage->pixel( x, y );  // Or try to get the raw data?
-#if 1
+#if 0  // This is safer
     return Pixel(qRed(qt_argb), qGreen(qt_argb), qBlue(qt_argb));
-#else  // Doesn't work!
+#else  // Depends on byte order!
     return Pixel(qt_argb);
 #endif // 0/1
 }
