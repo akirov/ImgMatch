@@ -3,6 +3,7 @@
 
 #include <QtGui>
 #include <QDir>
+#include <QFileInfo>
 
 
 #include "ImgMatchUI.h"
@@ -651,8 +652,11 @@ void ImgMatchUI::on_twDupsTable_itemSelectionChanged()
 
     ui->qlImgLabel1->setPixmap(QPixmap::fromImage(image1));
 
-    // Display image1 name
-    ui->leImgInfo1->setText(fileName);
+    // Display image1 name and size
+    std::stringstream name_size;
+    name_size << fileName.toStdString() << "  " << std::setprecision(1) 
+              << std::fixed << QFileInfo(fileName).size()/1024.0 << "K";
+    ui->leImgInfo1->setText(name_size.str().c_str());
 
     // Enable "Delete1" button
     if ( ! ui->pbDelImg1->isEnabled() )
@@ -690,7 +694,10 @@ void ImgMatchUI::on_twDupsTable_itemSelectionChanged()
     ui->qlImgLabel2->setPixmap(QPixmap::fromImage(image2));
 
     // Display image2 name
-    ui->leImgInfo2->setText(fileName);
+    name_size.str("");
+    name_size << fileName.toStdString() << "  " << std::setprecision(1) 
+              << std::fixed << QFileInfo(fileName).size()/1024.0 << "K";
+    ui->leImgInfo2->setText(name_size.str().c_str());
 
     // Enable "Delete2" button
     if ( ! ui->pbDelImg2->isEnabled() )
