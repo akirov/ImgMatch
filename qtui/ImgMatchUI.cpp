@@ -248,12 +248,12 @@ void ImgMatchUI::addRowInDupsTable( const ComPair& cmp )
     LOG("ImgMatchUI::addRowInDupsTable()");
 
     std::stringstream ss;
-    ss << std::setw(5) << cmp.comp_res << "%";
+    ss << std::setw(5) << cmp.compRes << "%";
 
     QTableWidgetItem* item[3];
-    item[0] = new QTableWidgetItem(QString::fromStdString(cmp.src_img1));
+    item[0] = new QTableWidgetItem(QString::fromStdString(cmp.imgOneUri));
     item[1] = new QTableWidgetItem(QString::fromStdString(ss.str()));
-    item[2] = new QTableWidgetItem(QString::fromStdString(cmp.src_img2));
+    item[2] = new QTableWidgetItem(QString::fromStdString(cmp.imgTwoUri));
 
     int row = ui->twDupsTable->rowCount(); // current row count
 #if 0
@@ -356,13 +356,13 @@ void ImgMatchUI::compareProcess( ImageSource image_source,
                     ComPair cmp(src1_name.toStdString() + "/" + file_list[i].toStdString(), 
                                 src1_name.toStdString() + "/" + file_list[j].toStdString());
 
-                    QtImage img1(cmp.src_img1); 
-                    QtImage img2(cmp.src_img2);
+                    QtImage img1(cmp.imgOneUri);
+                    QtImage img2(cmp.imgTwoUri);
                     // Check for errors when opening the images!
 
-                    cmp.comp_res = 100 * img_match->Compare(img1, img2);
+                    cmp.compRes = 100 * img_match->Compare(img1, img2);
 
-//                  if ( match_threshold && cmp.comp_res >= match_threshold )
+//                  if ( match_threshold && cmp.compRes >= match_threshold )
                         addRowInDupsTable(cmp);
 
                     ++progress;
@@ -389,11 +389,11 @@ void ImgMatchUI::compareProcess( ImageSource image_source,
             ComPair cmp(src1_name.toStdString(), 
                         src2_name.toStdString());
 
-            QtImage img1(cmp.src_img1); 
-            QtImage img2(cmp.src_img2);
+            QtImage img1(cmp.imgOneUri);
+            QtImage img2(cmp.imgTwoUri);
             // Check for errors when opening the images!
 
-            cmp.comp_res = 100 * img_match->Compare(img1, img2);
+            cmp.compRes = 100 * img_match->Compare(img1, img2);
 
             addRowInDupsTable(cmp);
 
@@ -415,14 +415,13 @@ void ImgMatchUI::compareProcess( ImageSource image_source,
 CompareThread::CompareThread( ImgMatchUI::ImageSource image_source, 
         const QString& src1_name, const QString& src2_name,
         MatchMode match_mode, int match_threshold, 
-        int progress_update_interval, QObject* parent ) :
+        QObject* parent ) :
     QThread(parent),
-    m_image_source(image_source),
-    m_src1_name(src1_name),
-    m_src2_name(src2_name),
-    m_match_mode(match_mode),
-    m_match_threshold(match_threshold),
-    m_progress_update_interval(progress_update_interval),
+    mImageSource(image_source),
+    mSrc1Name(src1_name),
+    mSrc2Name(src2_name),
+    mMatchMode(match_mode),
+    mMatchThreshold(match_threshold),
     mStopFlag(false)
 {
 }
@@ -434,24 +433,25 @@ void CompareThread::run()
 
     std::auto_ptr<ImgMatch> img_match(NULL);
 
-    switch ( m_match_mode )
+    switch ( mMatchMode )
     {
         case MOD_SCALE_DOWN:
             img_match.reset( new ModScale );
             break;
 
         default:
-            THROW("Match mode " << m_match_mode << " is not implemented");
+            THROW("Match mode " << mMatchMode << " is not implemented");
     }
 
-    switch( m_image_source )
+    switch( mImageSource )
     {
         case ImgMatchUI::SRC_ONE_DIR:
         {
-            QDir dir1(m_src1_name);
+            QDir dir1(mSrc1Name);
             QStringList file_list, filters;
             filters << "*.jpg" << "*.jpeg";
             file_list = dir1.entryList (filters, QDir::Files | QDir::Hidden);
+            int progress_update_interval;
 
             int N = file_list.size();
 
@@ -468,30 +468,30 @@ void CompareThread::run()
             int progress = 0;
 
             if ( (N*(N-1))/2 < 10 )
-                m_progress_update_interval = 1;
+                progress_update_interval = 1;
             else
-                m_progress_update_interval = (N*(N-1))/20;
+                progress_update_interval = (N*(N-1))/20;
             
             for ( int i=0; !mStopFlag && i<(N-1); i++ )
             {
                 for ( int j=i+1; !mStopFlag && j<N; j++ )
                 {
-                    ComPair cmp(m_src1_name.toStdString() + "/" + file_list[i].toStdString(), 
-                                m_src1_name.toStdString() + "/" + file_list[j].toStdString());
+                    ComPair cmp(mSrc1Name.toStdString() + "/" + file_list[i].toStdString(), 
+                                mSrc1Name.toStdString() + "/" + file_list[j].toStdString());
 
-                    QtImage img1(cmp.src_img1); 
-                    QtImage img2(cmp.src_img2);
+                    QtImage img1(cmp.imgOneUri);
+                    QtImage img2(cmp.imgTwoUri);
                     // Check for errors when opening the images!
 
-                    cmp.comp_res = 100 * img_match->Compare(img1, img2);
+                    cmp.compRes = 100 * img_match->Compare(img1, img2);
 
-//                  if ( m_match_threshold && cmp.comp_res >= m_match_threshold )
+//                  if ( mMatchThreshold && cmp.compRes >= mMatchThreshold )
                         Q_EMIT sendRowInDupsTable(cmp);
 
                     ++progress;
 
                     // Update the progress bar
-                    if ( (progress % m_progress_update_interval) == 0 )
+                    if ( (progress % progress_update_interval) == 0 )
                     {
                         Q_EMIT sendProgressUpdate(progress);
                     }
@@ -507,14 +507,14 @@ void CompareThread::run()
             // Init the progress bar
             Q_EMIT sendProgressRange(0, 1);
 
-            ComPair cmp(m_src1_name.toStdString(), 
-                        m_src2_name.toStdString());
+            ComPair cmp(mSrc1Name.toStdString(), 
+                        mSrc2Name.toStdString());
 
-            QtImage img1(cmp.src_img1); 
-            QtImage img2(cmp.src_img2);
+            QtImage img1(cmp.imgOneUri);
+            QtImage img2(cmp.imgTwoUri);
             // Check for errors when opening the images!
 
-            cmp.comp_res = 100 * img_match->Compare(img1, img2);
+            cmp.compRes = 100 * img_match->Compare(img1, img2);
 
             Q_EMIT sendRowInDupsTable(cmp);
 

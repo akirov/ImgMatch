@@ -27,25 +27,25 @@ QT_END_NAMESPACE
 struct ComPair 
 {
     ComPair() :
-        src_img1(""), src_img2(""), comp_res(-1)
+        imgOneUri(""), imgTwoUri(""), compRes(-1)
     {}
 
     ComPair( const ComPair& other ) :
-        src_img1(other.src_img1),
-        src_img2(other.src_img2),
-        comp_res(other.comp_res)
+        imgOneUri(other.imgOneUri),
+        imgTwoUri(other.imgTwoUri),
+        compRes(other.compRes)
     {}
 
     ComPair( const std::string& s1, const std::string& s2, int res=-1 ) :
-        src_img1(s1), src_img2(s2), comp_res(res) 
+        imgOneUri(s1), imgTwoUri(s2), compRes(res)
     {}
 
     ~ComPair()
     {}
 
-    std::string src_img1;
-    std::string src_img2;
-    int         comp_res;  // in %;  Or double in [1,0] range ???
+    std::string imgOneUri;
+    std::string imgTwoUri;
+    int         compRes;  // in %;  Or double in [0,1] range ???
 };
 
 //Q_DECLARE_METATYPE(ComPair);
@@ -133,7 +133,7 @@ private:
 
     bool mStopFlag;
 #ifdef PROCESSING_THREAD
-    CompareThread* mComThread;  // Or auto_ptr?
+    CompareThread* mComThread;  // Or an auto_ptr?
 #endif // PROCESSING_THREAD
 };
 
@@ -148,7 +148,7 @@ public:
     CompareThread( ImgMatchUI::ImageSource image_source, 
             const QString& src1_name, const QString& src2_name,
             MatchMode match_mode, int match_threshold, 
-            int progress_update_interval=3, QObject* parent = 0 );
+            QObject* parent = 0 );
 
 public:
     void run();
@@ -164,14 +164,13 @@ Q_SIGNALS:
     void sendCompareFinished();  // When compare is finished
 
 private:
-    ImgMatchUI::ImageSource m_image_source;
-    QString m_src1_name;
-    QString m_src2_name;
-    MatchMode m_match_mode;
-    int m_match_threshold;
-    int m_progress_update_interval;
+    ImgMatchUI::ImageSource mImageSource;
+    QString                 mSrc1Name;
+    QString                 mSrc2Name;
+    MatchMode               mMatchMode;
+    int                     mMatchThreshold;
 
-    bool mStopFlag;
+    bool                    mStopFlag;
 };
 
 #endif // PROCESSING_THREAD
