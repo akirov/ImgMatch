@@ -33,6 +33,8 @@ ImgMatchUI::ImgMatchUI(QWidget *parent) :
 
 ImgMatchUI::~ImgMatchUI()
 {
+    LOG("Destroying ImgMatchUI");
+
     delete ui;
 }
 
@@ -282,6 +284,15 @@ void ImgMatchUI::progressUpdate( int progress )
 
 void ImgMatchUI::compareFinished()
 {
+#ifdef PROCESSING_THREAD
+    if ( mComThread )
+    {
+        mComThread->wait(); // Block until the thread is done completely.
+        delete mComThread;
+        mComThread = NULL;
+    }
+#endif // PROCESSING_THREAD
+
     // Enable "Start" find button
     ui->pbFindStart->setEnabled(true);
 
@@ -424,6 +435,12 @@ CompareThread::CompareThread( ImgMatchUI::ImageSource image_source,
     mMatchThreshold(match_threshold),
     mStopFlag(false)
 {
+}
+
+
+CompareThread::~CompareThread()
+{
+    LOG("Destroying CompareThread");
 }
 
 
@@ -584,7 +601,7 @@ void ImgMatchUI::on_pbFindStart_clicked()
 #ifndef PROCESSING_THREAD
     compareProcess( mImgSrc, src1name, src2name, mMatchMode, mMatchThreshold );
 #else
-    mComThread = new CompareThread(mImgSrc, src1name, src2name, mMatchMode, mMatchThreshold);  // XXX Create it dynamicaly! Not on the stack!
+    mComThread = new CompareThread(mImgSrc, src1name, src2name, mMatchMode, mMatchThreshold, this);  // XXX Add "this" as parent to delete CompareThread when ImgMatchUI is deleted.
 
     // Connect signals and slots
     connect(mComThread, SIGNAL(sendProgressRange(int, int)), ui->progressBar, SLOT(setRange(int, int)));
@@ -598,8 +615,6 @@ void ImgMatchUI::on_pbFindStart_clicked()
     connect(ui->pbFindStop, SIGNAL(clicked()), mComThread, SLOT(on_pbFindStop_clicked()));
 
     mComThread->start();  // Calls run()
-
-//  mComThread->wait(); // Block until the thread is done? Don't need this.
 #endif // PROCESSING_THREAD
 }
 

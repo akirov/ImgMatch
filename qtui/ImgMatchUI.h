@@ -115,7 +115,7 @@ private:
 #endif // PROCESSING_THREAD
 
 private:
-    Ui::ImgMatchUI *ui;
+    Ui::ImgMatchUI *ui;  // Or a unique_ptr, or not a pointer at all???
 
     QMenu *helpMenu;
     QAction *aboutAct;
@@ -150,7 +150,8 @@ public:
             MatchMode match_mode, int match_threshold, 
             QObject* parent = 0 );
 
-public:
+    ~CompareThread();
+
     void run();
 
 public Q_SLOTS:
