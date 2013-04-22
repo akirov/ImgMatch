@@ -1,5 +1,5 @@
 
-COREDIR = core
+COREDIR=core
 
 UIDIR=qtui
 #QTUI=1

@@ -2,11 +2,15 @@
 include ./defines.mk
 
 
-#COREDIR = core
+#COREDIR=core
 
-ALLDIRS = $(COREDIR) $(UIDIR)
+ALLDIRS=$(COREDIR) $(UIDIR)
 
 .PHONY: $(ALLDIRS) all clean
+
+
+CFLAGS=-D$(IMAGEIMP)
+export CFLAGS
 
 
 all: $(COREDIR) $(UIDIR)
@@ -14,6 +18,7 @@ all: $(COREDIR) $(UIDIR)
 
 $(COREDIR):
 	$(MAKE) -C $@
+#	$(MAKE) -C $@ CFLAGS=-D$(IMAGEIMP)
 
 
 $(UIDIR):

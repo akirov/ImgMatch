@@ -1,19 +1,19 @@
 
-IMGMATCH_LIB = libimgmatch.a
+IMGMATCH_LIB=libimgmatch.a
 
 
-SOURCES = $(wildcard *.cpp)
+SOURCES=$(wildcard *.cpp)
 
-HEADERS = $(wildcard *.h)
+HEADERS=$(wildcard *.h)
 
-OBJS = $(SOURCES:%.cpp=%.o)
+OBJS=$(SOURCES:%.cpp=%.o)
 
-DEPEND = .depend
+DEPEND=.depend
 
 
-CXX = g++
+CXX=g++
 
-CFLAGS = -Wall
+CFLAGS+=-Wall
 
 
 all: IMGMATCH_LIB
@@ -25,7 +25,7 @@ IMGMATCH_LIB: $(OBJS)
 
 
 %.o: %.cpp
-	$(CXX) -c $<
+	$(CXX) $(CFLAGS) -c $<
 
 
 $(DEPEND): $(SOURCES) $(HEADERS)
