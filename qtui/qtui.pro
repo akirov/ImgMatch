@@ -26,13 +26,21 @@ SOURCES += main.cpp \
 HEADERS += ImgMatchUI.h
 
 
-#contains (IMAGEIMP, QTIMAGE) { 
-QTIMAGE { 
-    message ("IMAGEIMP=QTIMAGE")
+message (IMAGEIMP=$$(IMAGEIMP))
+
+#contains (IMAGEIMP, QTIMAGE) {
+QTIMAGE_RGB32|QTIMAGE_RGB24 {
+    QTIMAGE_RGB32 {
+        message (QTIMAGE_RGB32)
+        DEFINES += QTIMAGE_RGB32
+    } else:QTIMAGE_RGB24 {
+        message (QTIMAGE_RGB24)
+        DEFINES += QTIMAGE_RGB24
+    }
     SOURCES += QtImage.cpp
     HEADERS += QtImage.h
-} else { 
-    message ("IMAGEIMP=...") 
+} else {
+    message (IMAGEIMP is not implemented)
 }
 
 FORMS += ImgMatchUI.ui

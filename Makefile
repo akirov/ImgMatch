@@ -11,6 +11,7 @@ ALLDIRS=$(COREDIR) $(UIDIR)
 
 CFLAGS=-D$(IMAGEIMP)
 export CFLAGS
+#export IMAGEIMP
 
 
 all: $(COREDIR) $(UIDIR)
