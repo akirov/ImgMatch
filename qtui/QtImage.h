@@ -1,7 +1,15 @@
 #ifndef __QTIMAGE_H__
 #define __QTIMAGE_H__
 
-#include <memory>
+#if defined(__GXX_EXPERIMENTAL_CXX0X) || __cplusplus >= 201103L
+  #include <memory>
+  using std::shared_ptr;
+  using std::unique_ptr;
+#else
+  #include <tr1/memory>
+  using std::tr1::shared_ptr;
+  // unique_ptr is NOT in tr1, it REPLACES auto_ptr in C++11
+#endif
 
 #include <QImage>
 
@@ -33,7 +41,7 @@ class QtImage : public Image
   private:
 
     std::string mSrcFileURL;
-    std::auto_ptr<QImage> mQImage;
+    shared_ptr<QImage> mQImage;  // Was std::auto_ptr
 };
 
 
