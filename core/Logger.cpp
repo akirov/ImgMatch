@@ -47,7 +47,7 @@ Logger::Logger(const std::string& logDir, const std::string& fileNamePrefix,
 
     mLogFile.open(logFileName.c_str());
     if( !mLogFile.is_open() ) 
-        throw(std::string("Error opening log file ") + logFileName);  // or exit() ?
+        throw std::runtime_error(std::string("Error opening log file ") + logFileName);
 }
 
 

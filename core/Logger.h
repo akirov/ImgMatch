@@ -5,6 +5,7 @@
 #include <fstream>
 #include <sstream>
 #include <memory>
+#include <stdexcept>
 
 
 #define LOG( text ) \
@@ -21,7 +22,7 @@
         sstr << Logger::GetCurrentDateTimeStr() << " ***EXCEPTION*** " \
              << __FILE__ << ":" << __LINE__ << ": " << text; \
         Logger::Log( sstr.str() ); \
-        throw( sstr.str() ); \
+        throw std::runtime_error( sstr.str() ); \
     } while( false )
 
 
