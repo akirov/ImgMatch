@@ -68,6 +68,8 @@ class Image
 
   public:
 
+    static Image* ConstuctImage(std::string imageUrl);  // "Factory" instead of constructor.
+
     virtual ~Image() 
     {
     }
@@ -77,7 +79,7 @@ class Image
     virtual int GetWidth() const = 0;
     virtual int GetHeight() const = 0;
 
-    virtual std::string GetName() const = 0;  // ???
+    virtual std::string GetName() const = 0;  // Or GetLocation()?
 
     virtual Pixel GetPixel( int x, int y ) const = 0;
 

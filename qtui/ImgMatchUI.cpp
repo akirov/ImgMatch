@@ -20,7 +20,8 @@ ImgMatchUI::ImgMatchUI(QWidget *parent) :
     mMatchMode(MOD_INVALID),
     mMatchThreshold(0),
     mStopFlag(false),
-    mComThread(NULL)
+    mComThread(NULL),
+    mSortingEnabled(false)
 {
     ui->setupUi(this);
 
@@ -264,15 +265,15 @@ void ImgMatchUI::addRowInDupsTable( const ComPair& cmp )
     ui->twDupsTable->insertRow(row);
 #endif /* 0 */
 
-    bool sorting = ui->twDupsTable->isSortingEnabled();
-    if( sorting ) ui->twDupsTable->setSortingEnabled(false);
+/*    bool sorting = ui->twDupsTable->isSortingEnabled();
+    if( sorting ) ui->twDupsTable->setSortingEnabled(false); */
 
     ui->twDupsTable->setItem(row, 0, item[0]);
     item[1]->setTextAlignment(Qt::AlignRight);
     ui->twDupsTable->setItem(row, 1, item[1]);
     ui->twDupsTable->setItem(row, 2, item[2]);
 
-    if( sorting ) ui->twDupsTable->setSortingEnabled(true);
+//    if( sorting ) ui->twDupsTable->setSortingEnabled(true);
 }
 
 
@@ -301,6 +302,10 @@ void ImgMatchUI::compareFinished()
 
     // Upon compare finish enable "View dups"
     ui->tabView->setEnabled(true);
+
+    // Restore results table sorting
+    if ( mSortingEnabled && !ui->twDupsTable->isSortingEnabled() )
+        ui->twDupsTable->setSortingEnabled(true);
 
     int dupsTableWidth = ui->twDupsTable->width();
     ui->twDupsTable->setColumnWidth(0, dupsTableWidth*0.40);
@@ -496,11 +501,7 @@ void CompareThread::run()
                     ComPair cmp(mSrc1Name.toStdString() + "/" + file_list[i].toStdString(), 
                                 mSrc1Name.toStdString() + "/" + file_list[j].toStdString());
 
-                    QtImage img1(cmp.imgOneUri);
-                    QtImage img2(cmp.imgTwoUri);
-                    // Check for errors when opening the images!
-
-                    cmp.compRes = 100 * img_match->Compare(img1, img2);
+                    cmp.compRes = 100 * img_match->Compare(cmp.imgOneUri, cmp.imgTwoUri);
 
 //                  if ( mMatchThreshold && cmp.compRes >= mMatchThreshold )
                         Q_EMIT sendRowInDupsTable(cmp);
@@ -527,11 +528,7 @@ void CompareThread::run()
             ComPair cmp(mSrc1Name.toStdString(), 
                         mSrc2Name.toStdString());
 
-            QtImage img1(cmp.imgOneUri);
-            QtImage img2(cmp.imgTwoUri);
-            // Check for errors when opening the images!
-
-            cmp.compRes = 100 * img_match->Compare(img1, img2);
+            cmp.compRes = 100 * img_match->Compare(cmp.imgOneUri, cmp.imgTwoUri);
 
             Q_EMIT sendRowInDupsTable(cmp);
 
@@ -598,6 +595,10 @@ void ImgMatchUI::on_pbFindStart_clicked()
     ui->pbFindStop->setEnabled(true);
     mStopFlag = false;
 
+    // Disable results table sorting while inserting entries
+    mSortingEnabled = ui->twDupsTable->isSortingEnabled();
+    if( mSortingEnabled ) ui->twDupsTable->setSortingEnabled(false);
+
 #ifndef PROCESSING_THREAD
     compareProcess( mImgSrc, src1name, src2name, mMatchMode, mMatchThreshold );
 #else
@@ -608,13 +609,13 @@ void ImgMatchUI::on_pbFindStart_clicked()
     connect(mComThread, SIGNAL(sendProgressUpdate(int)), ui->progressBar, SLOT(setValue(int)));
 
     qRegisterMetaType<ComPair>("ComPair");  // Or qRegisterMetaType<ComPair>(); with Q_DECLARE_METATYPE(ComPair);
-    connect(mComThread, SIGNAL(sendRowInDupsTable(ComPair)), this, SLOT(addRowInDupsTable(ComPair)));
+    connect(mComThread, SIGNAL(sendRowInDupsTable(ComPair)), this, SLOT(addRowInDupsTable(ComPair)));  // Qt::DirectConnection
 
     connect(mComThread, SIGNAL(sendCompareFinished()), this, SLOT(compareFinished()));
 
     connect(ui->pbFindStop, SIGNAL(clicked()), mComThread, SLOT(on_pbFindStop_clicked()));
 
-    mComThread->start();  // Calls run()
+    mComThread->start();  // Calls run(). Set QThread::LowPriority?
 #endif // PROCESSING_THREAD
 }
 

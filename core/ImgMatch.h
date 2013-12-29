@@ -1,7 +1,11 @@
 #ifndef IMGMATCH_H
 #define IMGMATCH_H
 
+#if 0
 #include "Image.h"
+#else
+#include <string>
+#endif // 0
 
 
 typedef enum
@@ -28,7 +32,11 @@ class ImgMatch
     }
 
     /* Returns match value in the range [0.00, 1.00] */
+#if 0  // Takes the images themselves as parameters
     virtual double Compare( const Image& img1, const Image& img2 ) = 0;
+#else  // Takes image locations (paths)
+    virtual double Compare( const std::string& img1path, const std::string& img2path ) = 0;
+#endif // 0
 
   private:
     

@@ -37,7 +37,8 @@ QTIMAGE_RGB32|QTIMAGE_RGB24 {
         message (QTIMAGE_RGB24)
         DEFINES += QTIMAGE_RGB24
     }
-    SOURCES += QtImage.cpp
+    SOURCES += QtImage.cpp \
+               Image.cpp
     HEADERS += QtImage.h
 } else {
     message (IMAGEIMP is not implemented)

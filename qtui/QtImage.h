@@ -21,12 +21,11 @@ class QtImage : public Image
   public:
 
     QtImage( std::string file_name );
-
     QtImage( const QtImage& other );
 
     ~QtImage();
 
-    Image* Copy() const;
+    QtImage* Copy() const;
 
     inline int GetWidth() const { return mQImage->width(); }
     inline int GetHeight() const { return mQImage->height(); }
@@ -37,10 +36,11 @@ class QtImage : public Image
 
     void Scale( int width, int height, AspectRatio aspect_ratio = Image::ASPR_IGNORE );
 
+  protected:
 
   private:
 
-    std::string mSrcFileURL;
+    std::string mSrcFileURL;  // Or URI?
     shared_ptr<QImage> mQImage;  // Was std::auto_ptr
 };
 

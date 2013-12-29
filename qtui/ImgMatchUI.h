@@ -135,6 +135,7 @@ private:
 #ifdef PROCESSING_THREAD
     CompareThread* mComThread;  // Or an auto_ptr?
 #endif // PROCESSING_THREAD
+    bool mSortingEnabled;
 };
 
 

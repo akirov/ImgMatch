@@ -18,7 +18,7 @@ QtImage::QtImage( std::string file_name ) :
 
 QtImage::~QtImage()
 {
-    // auto_ptr is deleted automatically
+    // shared_ptr is deleted automatically
 }
 
 
@@ -29,7 +29,7 @@ QtImage::QtImage( const QtImage& other )
 }
 
 
-Image* QtImage::Copy() const
+QtImage* QtImage::Copy() const
 {
     return new QtImage(*this);
 }
