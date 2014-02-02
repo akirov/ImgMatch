@@ -651,7 +651,7 @@
         <number>100</number>
        </property>
        <property name="value">
-        <number>75</number>
+        <number>90</number>
        </property>
       </widget>
       <widget class="QLabel" name="label">
@@ -680,9 +680,9 @@
       <property name="geometry">
        <rect>
         <x>700</x>
-        <y>40</y>
+        <y>10</y>
         <width>61</width>
-        <height>28</height>
+        <height>23</height>
        </rect>
       </property>
       <property name="text">
@@ -693,9 +693,9 @@
       <property name="geometry">
        <rect>
         <x>700</x>
-        <y>80</y>
+        <y>40</y>
         <width>61</width>
-        <height>28</height>
+        <height>23</height>
        </rect>
       </property>
       <property name="text">
@@ -981,6 +981,32 @@
       </property>
       <property name="text">
        <string>Clear</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="lbNumRes">
+      <property name="geometry">
+       <rect>
+        <x>700</x>
+        <y>90</y>
+        <width>71</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>0 Results</string>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="pbMoreRes">
+      <property name="geometry">
+       <rect>
+        <x>700</x>
+        <y>110</y>
+        <width>61</width>
+        <height>23</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Show More</string>
       </property>
      </widget>
     </widget>

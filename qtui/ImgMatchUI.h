@@ -1,6 +1,8 @@
 #ifndef IMGMATCHUI_H
 #define IMGMATCHUI_H
 
+#include <list>
+
 #include <QMainWindow>
 //#include <QMetaType>  // For Q_DECLARE_METATYPE
 
@@ -10,6 +12,7 @@
 
 #ifdef PROCESSING_THREAD
 #include <QThread>
+#include <QMutex>
 #endif // PROCESSING_THREAD
 
 
@@ -73,6 +76,7 @@ public:
     } ImageSource;
 
 private slots:
+    void on_pbMoreRes_clicked();
     void on_pbDelImg1_clicked();
     void on_pbDelImg2_clicked();
     void on_pbViewClear_clicked();
@@ -95,6 +99,7 @@ private slots:
     void about();
 #ifdef PROCESSING_THREAD
     void addRowInDupsTable(const ComPair& cmp);
+    void addRowInResults(const ComPair& cmp);
     void progressUpdate(int complete);
     void compareFinished();
 #endif // PROCESSING_THREAD
@@ -104,8 +109,10 @@ private:
     void createMenus();
     void changeEvent(QEvent *e);
     void processSourceRB();
+    void addNextResultsInDupsTable();
 #ifndef PROCESSING_THREAD
     void addRowInDupsTable(const ComPair& cmp);
+    void addRowInResults(const ComPair& cmp);
     void progressUpdate(int complete);
     void compareFinished();
     void compareProcess( ImageSource image_source, 
@@ -134,8 +141,10 @@ private:
     bool mStopFlag;
 #ifdef PROCESSING_THREAD
     CompareThread* mComThread;  // Or an auto_ptr?
+    QMutex mMutex;
 #endif // PROCESSING_THREAD
-    bool mSortingEnabled;
+
+    std::list<ComPair> mResults;
 };
 
 
@@ -162,6 +171,7 @@ public Q_SLOTS:
 Q_SIGNALS:
     void sendProgressRange(int, int);  // Set progress bar range
     void sendRowInDupsTable(const ComPair& cmp);  // Update table
+    void sendRowInResults(const ComPair& cmp);  // Update results. Or "ComPair cmp"?
     void sendProgressUpdate(int);  // Update progress
     void sendCompareFinished();  // When compare is finished
 

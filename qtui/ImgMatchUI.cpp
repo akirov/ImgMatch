@@ -19,9 +19,11 @@ ImgMatchUI::ImgMatchUI(QWidget *parent) :
     mImgSrc(SRC_INVALID),
     mMatchMode(MOD_INVALID),
     mMatchThreshold(0),
-    mStopFlag(false),
-    mComThread(NULL),
-    mSortingEnabled(false)
+    mStopFlag(false)
+#ifdef PROCESSING_THREAD
+    , mComThread(NULL),
+    mMutex()
+#endif // PROCESSING_THREAD
 {
     ui->setupUi(this);
 
@@ -265,21 +267,80 @@ void ImgMatchUI::addRowInDupsTable( const ComPair& cmp )
     ui->twDupsTable->insertRow(row);
 #endif /* 0 */
 
-/*    bool sorting = ui->twDupsTable->isSortingEnabled();
-    if( sorting ) ui->twDupsTable->setSortingEnabled(false); */
+    bool sorting = ui->twDupsTable->isSortingEnabled();
+    if( sorting ) ui->twDupsTable->setSortingEnabled(false);
 
     ui->twDupsTable->setItem(row, 0, item[0]);
     item[1]->setTextAlignment(Qt::AlignRight);
     ui->twDupsTable->setItem(row, 1, item[1]);
     ui->twDupsTable->setItem(row, 2, item[2]);
 
-//    if( sorting ) ui->twDupsTable->setSortingEnabled(true);
+    if( sorting ) ui->twDupsTable->setSortingEnabled(true);
 }
 
 
 void ImgMatchUI::progressUpdate( int progress )
 {
     ui->progressBar->setValue(progress);
+}
+
+
+#define ORDERED_INSERT 0
+
+void ImgMatchUI::addRowInResults( const ComPair& cmp )
+{
+#ifdef PROCESSING_THREAD
+    QMutexLocker ml(&mMutex);
+#endif // PROCESSING_THREAD
+#if ORDERED_INSERT
+    if ( mResults.size() == 0 )
+        mResults.push_front(cmp);
+    else if ( cmp.compRes <= mResults.end()->compRes )
+        mResults.push_back(cmp);
+    else  // Put it in the right place
+    {
+        for ( std::list<ComPair>::iterator it=mResults.begin(); it != mResults.end(); it++ )
+        {
+            if ( cmp.compRes > it->compRes )
+            {
+                mResults.insert(it, cmp);
+                break;
+            }
+        }
+    }
+#else  // sequential insert
+    mResults.push_back(cmp);
+#endif // ordered/sequential insert
+}
+
+
+#define RESULTS_AT_ONCE 100
+
+void ImgMatchUI::addNextResultsInDupsTable()
+{
+#ifdef PROCESSING_THREAD
+    QMutexLocker ml(&mMutex);
+#endif // PROCESSING_THREAD
+    int numResToAdd = std::min(RESULTS_AT_ONCE, (int)mResults.size());
+
+    for( int i=0; i<numResToAdd; ++i )
+    {
+        std::list<ComPair>::iterator pos=mResults.begin();
+#if !ORDERED_INSERT
+        int maxRes = 0;
+
+        for ( std::list<ComPair>::iterator it=mResults.begin(); it != mResults.end(); it++ )
+        {
+            if( it->compRes > maxRes )
+            {
+                maxRes = it->compRes;
+                pos = it;
+            }
+        }
+#endif // ORDERED_INSERT
+        addRowInDupsTable(*pos);
+        mResults.erase(pos);
+    }
 }
 
 
@@ -300,21 +361,7 @@ void ImgMatchUI::compareFinished()
     // Disable "Stop" find button
     ui->pbFindStop->setEnabled(false);
 
-    // Upon compare finish enable "View dups"
-    ui->tabView->setEnabled(true);
-
-    // Restore results table sorting
-    if ( mSortingEnabled && !ui->twDupsTable->isSortingEnabled() )
-        ui->twDupsTable->setSortingEnabled(true);
-
-    int dupsTableWidth = ui->twDupsTable->width();
-    ui->twDupsTable->setColumnWidth(0, dupsTableWidth*0.40);
-    ui->twDupsTable->setColumnWidth(1, dupsTableWidth*0.10);
-    ui->twDupsTable->setColumnWidth(2, dupsTableWidth*0.40);
-
-    // Disable Delete buttons until image is selected
-    ui->pbDelImg1->setEnabled(false);
-    ui->pbDelImg2->setEnabled(false);
+    addNextResultsInDupsTable();
 }
 
 
@@ -378,7 +425,7 @@ void ImgMatchUI::compareProcess( ImageSource image_source,
 
                     cmp.compRes = 100 * img_match->Compare(img1, img2);
 
-//                  if ( match_threshold && cmp.compRes >= match_threshold )
+                    if ( (!match_threshold) || (cmp.compRes >= match_threshold) )
                         addRowInDupsTable(cmp);
 
                     ++progress;
@@ -411,7 +458,8 @@ void ImgMatchUI::compareProcess( ImageSource image_source,
 
             cmp.compRes = 100 * img_match->Compare(img1, img2);
 
-            addRowInDupsTable(cmp);
+//            if ( (!match_threshold) || (cmp.compRes >= match_threshold) )
+                addRowInDupsTable(cmp);
 
             // Update the progress bar
             progressUpdate(1);
@@ -503,8 +551,12 @@ void CompareThread::run()
 
                     cmp.compRes = 100 * img_match->Compare(cmp.imgOneUri, cmp.imgTwoUri);
 
-//                  if ( mMatchThreshold && cmp.compRes >= mMatchThreshold )
+                    if ( (!mMatchThreshold) || (cmp.compRes >= mMatchThreshold) )
+#if 0
                         Q_EMIT sendRowInDupsTable(cmp);
+#else
+                        Q_EMIT sendRowInResults(cmp);
+#endif // 0
 
                     ++progress;
 
@@ -530,7 +582,12 @@ void CompareThread::run()
 
             cmp.compRes = 100 * img_match->Compare(cmp.imgOneUri, cmp.imgTwoUri);
 
-            Q_EMIT sendRowInDupsTable(cmp);
+//            if ( (!mMatchThreshold) || (cmp.compRes >= mMatchThreshold) )
+#if 0
+                Q_EMIT sendRowInDupsTable(cmp);
+#else
+                Q_EMIT sendRowInResults(cmp);
+#endif // 0
 
             // Update the progress bar
             Q_EMIT sendProgressUpdate(1);
@@ -583,10 +640,15 @@ void ImgMatchUI::on_pbFindStart_clicked()
     {
         mMatchMode = MOD_IMG_SIG;
     }
-    // ...
 
-    // Take the mach threshold value
+    // Take the match threshold value
     mMatchThreshold = ui->spinBox->value();
+
+    // Reset the results
+    on_pbViewClear_clicked();
+
+    // Enable "View dups". Or do it only upon completion?
+    ui->tabView->setEnabled(true);
 
     // Disable "Start" find button
     ui->pbFindStart->setEnabled(false);
@@ -595,21 +657,18 @@ void ImgMatchUI::on_pbFindStart_clicked()
     ui->pbFindStop->setEnabled(true);
     mStopFlag = false;
 
-    // Disable results table sorting while inserting entries
-    mSortingEnabled = ui->twDupsTable->isSortingEnabled();
-    if( mSortingEnabled ) ui->twDupsTable->setSortingEnabled(false);
-
 #ifndef PROCESSING_THREAD
     compareProcess( mImgSrc, src1name, src2name, mMatchMode, mMatchThreshold );
 #else
-    mComThread = new CompareThread(mImgSrc, src1name, src2name, mMatchMode, mMatchThreshold, this);  // XXX Add "this" as parent to delete CompareThread when ImgMatchUI is deleted.
+    mComThread = new CompareThread(mImgSrc, src1name, src2name, mMatchMode, mMatchThreshold, this);  // Add "this" as parent to delete CompareThread when ImgMatchUI is deleted.
 
     // Connect signals and slots
     connect(mComThread, SIGNAL(sendProgressRange(int, int)), ui->progressBar, SLOT(setRange(int, int)));
     connect(mComThread, SIGNAL(sendProgressUpdate(int)), ui->progressBar, SLOT(setValue(int)));
 
     qRegisterMetaType<ComPair>("ComPair");  // Or qRegisterMetaType<ComPair>(); with Q_DECLARE_METATYPE(ComPair);
-    connect(mComThread, SIGNAL(sendRowInDupsTable(ComPair)), this, SLOT(addRowInDupsTable(ComPair)));  // Qt::DirectConnection
+    connect(mComThread, SIGNAL(sendRowInDupsTable(ComPair)), this, SLOT(addRowInDupsTable(ComPair)));
+    connect(mComThread, SIGNAL(sendRowInResults(ComPair)), this, SLOT(addRowInResults(ComPair)), Qt::DirectConnection);
 
     connect(mComThread, SIGNAL(sendCompareFinished()), this, SLOT(compareFinished()));
 
@@ -749,16 +808,24 @@ void ImgMatchUI::on_pbViewDown_clicked()
 
 void ImgMatchUI::on_pbViewClear_clicked()
 {
+    ui->pbDelImg1->setEnabled(false);
+    ui->qlImgLabel1->clear();
+    ui->leImgInfo1->clear();
+
+    ui->pbDelImg2->setEnabled(false);
+    ui->qlImgLabel2->clear();
+    ui->leImgInfo2->clear();
+
     ui->twDupsTable->clearContents();
     ui->twDupsTable->setRowCount(0);
 
-    ui->qlImgLabel1->clear();
-    ui->leImgInfo1->clear();
-    ui->pbDelImg1->setEnabled(false);
+    mResults.clear();
 
-    ui->qlImgLabel2->clear();
-    ui->leImgInfo2->clear();
-    ui->pbDelImg2->setEnabled(false);
+    // Need to do this on resize too
+    int dupsTableWidth = ui->twDupsTable->width();
+    ui->twDupsTable->setColumnWidth(0, dupsTableWidth*0.40);
+    ui->twDupsTable->setColumnWidth(1, dupsTableWidth*0.10);
+    ui->twDupsTable->setColumnWidth(2, dupsTableWidth*0.40);
 
     ui->progressBar->setValue(0);
 }
@@ -773,4 +840,9 @@ void ImgMatchUI::on_pbDelImg1_clicked()
 void ImgMatchUI::on_pbDelImg2_clicked()
 {
     
+}
+
+void ImgMatchUI::on_pbMoreRes_clicked()
+{
+    addNextResultsInDupsTable();
 }
