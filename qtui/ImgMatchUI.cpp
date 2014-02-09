@@ -828,6 +828,7 @@ void ImgMatchUI::on_pbViewClear_clicked()
     ui->twDupsTable->clearContents();
     ui->twDupsTable->setRowCount(0);
 
+    ui->lbNumRes->setText("0");
     mResults.clear();
     mNumResults = 0;
 
