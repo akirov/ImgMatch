@@ -145,6 +145,7 @@ private:
 #endif // PROCESSING_THREAD
 
     std::list<ComPair> mResults;
+    unsigned int mNumResults;
 };
 
 

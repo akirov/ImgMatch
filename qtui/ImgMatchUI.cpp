@@ -19,11 +19,13 @@ ImgMatchUI::ImgMatchUI(QWidget *parent) :
     mImgSrc(SRC_INVALID),
     mMatchMode(MOD_INVALID),
     mMatchThreshold(0),
-    mStopFlag(false)
+    mStopFlag(false),
 #ifdef PROCESSING_THREAD
-    , mComThread(NULL),
-    mMutex()
+    mComThread(NULL),
+    mMutex(),
 #endif // PROCESSING_THREAD
+    mResults(),
+    mNumResults(0)
 {
     ui->setupUi(this);
 
@@ -250,8 +252,6 @@ void ImgMatchUI::on_rbSrcTwoImg_clicked()
 
 void ImgMatchUI::addRowInDupsTable( const ComPair& cmp )
 {
-    LOG("ImgMatchUI::addRowInDupsTable()");
-
     std::stringstream ss;
     ss << std::setw(5) << cmp.compRes << "%";
 
@@ -311,6 +311,8 @@ void ImgMatchUI::addRowInResults( const ComPair& cmp )
 #else  // sequential insert
     mResults.push_back(cmp);
 #endif // ordered/sequential insert
+    mNumResults++;
+    ui->lbNumRes->setText(QString::number(mNumResults));
 }
 
 
@@ -355,11 +357,15 @@ void ImgMatchUI::compareFinished()
     }
 #endif // PROCESSING_THREAD
 
+    LOG("Compare finish");
+
     // Enable "Start" find button
     ui->pbFindStart->setEnabled(true);
 
     // Disable "Stop" find button
     ui->pbFindStop->setEnabled(false);
+
+    ui->lbNumRes->setText(QString::number(mNumResults));
 
     addNextResultsInDupsTable();
 }
@@ -540,10 +546,11 @@ void CompareThread::run()
             if ( (N*(N-1))/2 < 10 )
                 progress_update_interval = 1;
             else
-                progress_update_interval = (N*(N-1))/20;
+                progress_update_interval = (N*(N-1))/40;
             
             for ( int i=0; !mStopFlag && i<(N-1); i++ )
             {
+                // If i == 0 print status "Caching..." else print "Comparing..."?
                 for ( int j=i+1; !mStopFlag && j<N; j++ )
                 {
                     ComPair cmp(mSrc1Name.toStdString() + "/" + file_list[i].toStdString(), 
@@ -656,6 +663,8 @@ void ImgMatchUI::on_pbFindStart_clicked()
     // Enable "Stop" find button
     ui->pbFindStop->setEnabled(true);
     mStopFlag = false;
+
+    LOG("Compare start");
 
 #ifndef PROCESSING_THREAD
     compareProcess( mImgSrc, src1name, src2name, mMatchMode, mMatchThreshold );
@@ -820,6 +829,7 @@ void ImgMatchUI::on_pbViewClear_clicked()
     ui->twDupsTable->setRowCount(0);
 
     mResults.clear();
+    mNumResults = 0;
 
     // Need to do this on resize too
     int dupsTableWidth = ui->twDupsTable->width();

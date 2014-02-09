@@ -10,6 +10,18 @@
     <height>540</height>
    </rect>
   </property>
+  <property name="minimumSize">
+   <size>
+    <width>800</width>
+    <height>540</height>
+   </size>
+  </property>
+  <property name="maximumSize">
+   <size>
+    <width>800</width>
+    <height>540</height>
+   </size>
+  </property>
   <property name="windowTitle">
    <string>ImgMatchUI</string>
   </property>
@@ -657,7 +669,7 @@
       <widget class="QLabel" name="label">
        <property name="geometry">
         <rect>
-         <x>60</x>
+         <x>62</x>
          <y>20</y>
          <width>111</width>
          <height>21</height>
@@ -993,7 +1005,10 @@
        </rect>
       </property>
       <property name="text">
-       <string>0 Results</string>
+       <string>0</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
       </property>
      </widget>
      <widget class="QPushButton" name="pbMoreRes">
@@ -1001,12 +1016,25 @@
        <rect>
         <x>700</x>
         <y>110</y>
-        <width>61</width>
+        <width>71</width>
         <height>23</height>
        </rect>
       </property>
       <property name="text">
        <string>Show More</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="lbTotalRes">
+      <property name="geometry">
+       <rect>
+        <x>700</x>
+        <y>70</y>
+        <width>71</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Total Results</string>
       </property>
      </widget>
     </widget>
