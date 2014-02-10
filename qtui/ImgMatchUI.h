@@ -48,7 +48,7 @@ struct ComPair
 
     std::string imgOneUri;
     std::string imgTwoUri;
-    int         compRes;  // in %;  Or double in [0,1] range ???
+    int         compRes;  // in %;  Or float in [0,1] range ???
 };
 
 //Q_DECLARE_METATYPE(ComPair);

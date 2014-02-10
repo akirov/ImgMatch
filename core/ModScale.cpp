@@ -17,7 +17,7 @@ ModScale::~ModScale()
 }
 
 
-double ModScale::Compare( const std::string& img1path, const std::string& img2path )
+float ModScale::Compare( const std::string& img1path, const std::string& img2path )
 {
     Image *scaledImg1, *scaledImg2;
 
@@ -50,7 +50,7 @@ double ModScale::Compare( const std::string& img1path, const std::string& img2pa
         mScaledImagesCache[img2path] = scaledImg2;
     }
 
-    double distance=0;
+    float distance=0.0f, r, g, b;
     Pixel pixel1, pixel2;
 
     for( int x=0; x<ScaledWidth; x++ )
@@ -58,12 +58,13 @@ double ModScale::Compare( const std::string& img1path, const std::string& img2pa
         for( int y=0; y<ScaledHeight; y++ )
         {
             pixel1 = scaledImg1->GetPixel(x, y);
-
             pixel2 = scaledImg2->GetPixel(x, y);
 
-            distance += ::sqrt((pixel1.R - pixel2.R)*(pixel1.R - pixel2.R) +
-                               (pixel1.G - pixel2.G)*(pixel1.G - pixel2.G) +
-                               (pixel1.B - pixel2.B)*(pixel1.B - pixel2.B));
+            r = (float)pixel1.R - (float)pixel2.R;
+            g = (float)pixel1.G - (float)pixel2.G,
+            b = (float)pixel1.B - (float)pixel2.B;
+
+            distance += ::sqrt(r*r + g*g + b*b);
         }
     }
 
