@@ -840,96 +840,6 @@
        <bool>true</bool>
       </property>
      </widget>
-     <widget class="QScrollArea" name="saViewImg1">
-      <property name="geometry">
-       <rect>
-        <x>11</x>
-        <y>197</y>
-        <width>371</width>
-        <height>210</height>
-       </rect>
-      </property>
-      <property name="widgetResizable">
-       <bool>true</bool>
-      </property>
-      <widget class="QWidget" name="scrollAreaWidgetContents">
-       <property name="geometry">
-        <rect>
-         <x>0</x>
-         <y>0</y>
-         <width>367</width>
-         <height>206</height>
-        </rect>
-       </property>
-       <widget class="QLabel" name="qlImgLabel1">
-        <property name="geometry">
-         <rect>
-          <x>0</x>
-          <y>0</y>
-          <width>367</width>
-          <height>206</height>
-         </rect>
-        </property>
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Ignored" vsizetype="Ignored">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-        <property name="text">
-         <string>First Image</string>
-        </property>
-        <property name="alignment">
-         <set>Qt::AlignCenter</set>
-        </property>
-       </widget>
-      </widget>
-     </widget>
-     <widget class="QScrollArea" name="saViewImg2">
-      <property name="geometry">
-       <rect>
-        <x>394</x>
-        <y>197</y>
-        <width>371</width>
-        <height>210</height>
-       </rect>
-      </property>
-      <property name="widgetResizable">
-       <bool>true</bool>
-      </property>
-      <widget class="QWidget" name="scrollAreaWidgetContents_2">
-       <property name="geometry">
-        <rect>
-         <x>0</x>
-         <y>0</y>
-         <width>367</width>
-         <height>206</height>
-        </rect>
-       </property>
-       <widget class="QLabel" name="qlImgLabel2">
-        <property name="geometry">
-         <rect>
-          <x>0</x>
-          <y>0</y>
-          <width>367</width>
-          <height>206</height>
-         </rect>
-        </property>
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Ignored" vsizetype="Ignored">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-        <property name="text">
-         <string>Second Image</string>
-        </property>
-        <property name="alignment">
-         <set>Qt::AlignCenter</set>
-        </property>
-       </widget>
-      </widget>
-     </widget>
      <widget class="QTableWidget" name="twDupsTable">
       <property name="geometry">
        <rect>
@@ -1035,6 +945,50 @@
       </property>
       <property name="text">
        <string>Total Results</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="qlImgLabel2">
+      <property name="geometry">
+       <rect>
+        <x>394</x>
+        <y>197</y>
+        <width>371</width>
+        <height>210</height>
+       </rect>
+      </property>
+      <property name="frameShape">
+       <enum>QFrame::StyledPanel</enum>
+      </property>
+      <property name="frameShadow">
+       <enum>QFrame::Sunken</enum>
+      </property>
+      <property name="text">
+       <string>Second Image</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
+      </property>
+     </widget>
+     <widget class="QLabel" name="qlImgLabel1">
+      <property name="geometry">
+       <rect>
+        <x>11</x>
+        <y>197</y>
+        <width>371</width>
+        <height>210</height>
+       </rect>
+      </property>
+      <property name="frameShape">
+       <enum>QFrame::StyledPanel</enum>
+      </property>
+      <property name="frameShadow">
+       <enum>QFrame::Sunken</enum>
+      </property>
+      <property name="text">
+       <string>First Image</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
       </property>
      </widget>
     </widget>

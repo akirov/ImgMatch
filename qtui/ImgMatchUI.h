@@ -101,6 +101,7 @@ private slots:
     void addRowInDupsTable(const ComPair& cmp);
     void addRowInResults(const ComPair& cmp);
     void progressUpdate(int complete);
+    void numResultsUpdate();
     void compareFinished();
 #endif // PROCESSING_THREAD
 
@@ -114,6 +115,7 @@ private:
     void addRowInDupsTable(const ComPair& cmp);
     void addRowInResults(const ComPair& cmp);
     void progressUpdate(int complete);
+    void numResultsUpdate();
     void compareFinished();
     void compareProcess( ImageSource image_source, 
             const QString& src1_name, const QString& src2_name,
@@ -173,6 +175,7 @@ Q_SIGNALS:
     void sendProgressRange(int, int);  // Set progress bar range
     void sendRowInDupsTable(const ComPair& cmp);  // Update table
     void sendRowInResults(const ComPair& cmp);  // Update results. Or "ComPair cmp"?
+    void sendNumResultsUpdate();
     void sendProgressUpdate(int);  // Update progress
     void sendCompareFinished();  // When compare is finished
 

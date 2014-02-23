@@ -312,6 +312,12 @@ void ImgMatchUI::addRowInResults( const ComPair& cmp )
     mResults.push_back(cmp);
 #endif // ordered/sequential insert
     mNumResults++;
+//    ui->lbNumRes->setText(QString::number(mNumResults));
+}
+
+
+void ImgMatchUI::numResultsUpdate()
+{
     ui->lbNumRes->setText(QString::number(mNumResults));
 }
 
@@ -559,11 +565,14 @@ void CompareThread::run()
                     cmp.compRes = 100 * img_match->Compare(cmp.imgOneUri, cmp.imgTwoUri);
 
                     if ( (!mMatchThreshold) || (cmp.compRes >= mMatchThreshold) )
+                    {
 #if 0
                         Q_EMIT sendRowInDupsTable(cmp);
 #else
                         Q_EMIT sendRowInResults(cmp);
 #endif // 0
+                        Q_EMIT sendNumResultsUpdate();
+                    }
 
                     ++progress;
 
@@ -590,11 +599,14 @@ void CompareThread::run()
             cmp.compRes = 100 * img_match->Compare(cmp.imgOneUri, cmp.imgTwoUri);
 
 //            if ( (!mMatchThreshold) || (cmp.compRes >= mMatchThreshold) )
+            {
 #if 0
                 Q_EMIT sendRowInDupsTable(cmp);
 #else
                 Q_EMIT sendRowInResults(cmp);
 #endif // 0
+                Q_EMIT sendNumResultsUpdate();
+            }
 
             // Update the progress bar
             Q_EMIT sendProgressUpdate(1);
@@ -678,6 +690,7 @@ void ImgMatchUI::on_pbFindStart_clicked()
     qRegisterMetaType<ComPair>("ComPair");  // Or qRegisterMetaType<ComPair>(); with Q_DECLARE_METATYPE(ComPair);
     connect(mComThread, SIGNAL(sendRowInDupsTable(ComPair)), this, SLOT(addRowInDupsTable(ComPair)));
     connect(mComThread, SIGNAL(sendRowInResults(ComPair)), this, SLOT(addRowInResults(ComPair)), Qt::DirectConnection);
+    connect(mComThread, SIGNAL(sendNumResultsUpdate()), this, SLOT(numResultsUpdate()));
 
     connect(mComThread, SIGNAL(sendCompareFinished()), this, SLOT(compareFinished()));
 
@@ -732,7 +745,7 @@ void ImgMatchUI::on_twDupsTable_itemSelectionChanged()
 //  qlImgLabel1->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Ignored);
 //  qlImgLabel1->setScaledContents(false);
 //  ui->saViewImg1->setWidget(qlImgLabel1);
-    ui->saViewImg1->setBackgroundRole(QPalette::Dark);
+//  ui->saViewImg1->setBackgroundRole(QPalette::Dark);
 
     ui->qlImgLabel1->setPixmap(QPixmap::fromImage(image1));
 
@@ -773,7 +786,7 @@ void ImgMatchUI::on_twDupsTable_itemSelectionChanged()
 //  qlImgLabel2->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Ignored);
 //  qlImgLabel2->setScaledContents(false);
 //  ui->saViewImg2->setWidget(qlImgLabel2);
-    ui->saViewImg2->setBackgroundRole(QPalette::Dark);
+//  ui->saViewImg2->setBackgroundRole(QPalette::Dark);
 
     ui->qlImgLabel2->setPixmap(QPixmap::fromImage(image2));
 
