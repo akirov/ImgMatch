@@ -339,12 +339,12 @@
            <rect>
             <x>10</x>
             <y>10</y>
-            <width>95</width>
+            <width>110</width>
             <height>21</height>
            </rect>
           </property>
           <property name="text">
-           <string>Scale Down</string>
+           <string>Color Distance</string>
           </property>
           <property name="checked">
            <bool>true</bool>
