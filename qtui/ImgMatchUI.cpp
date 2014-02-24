@@ -20,10 +20,8 @@ ImgMatchUI::ImgMatchUI(QWidget *parent) :
     mMatchMode(MOD_INVALID),
     mMatchThreshold(0),
     mStopFlag(false),
-#ifdef PROCESSING_THREAD
     mComThread(NULL),
     mMutex(),
-#endif // PROCESSING_THREAD
     mResults(),
     mNumResults(0)
 {
@@ -289,9 +287,7 @@ void ImgMatchUI::progressUpdate( int progress )
 
 void ImgMatchUI::addRowInResults( const ComPair& cmp )
 {
-#ifdef PROCESSING_THREAD
     QMutexLocker ml(&mMutex);
-#endif // PROCESSING_THREAD
 #if ORDERED_INSERT
     if ( mResults.size() == 0 )
         mResults.push_front(cmp);
@@ -326,9 +322,7 @@ void ImgMatchUI::numResultsUpdate()
 
 void ImgMatchUI::addNextResultsInDupsTable()
 {
-#ifdef PROCESSING_THREAD
     QMutexLocker ml(&mMutex);
-#endif // PROCESSING_THREAD
     int numResToAdd = std::min(RESULTS_AT_ONCE, (int)mResults.size());
 
     for( int i=0; i<numResToAdd; ++i )
@@ -354,14 +348,12 @@ void ImgMatchUI::addNextResultsInDupsTable()
 
 void ImgMatchUI::compareFinished()
 {
-#ifdef PROCESSING_THREAD
     if ( mComThread )
     {
         mComThread->wait(); // Block until the thread is done completely.
         delete mComThread;
         mComThread = NULL;
     }
-#endif // PROCESSING_THREAD
 
     LOG("Compare finish");
 
@@ -376,117 +368,6 @@ void ImgMatchUI::compareFinished()
     addNextResultsInDupsTable();
 }
 
-
-#ifndef PROCESSING_THREAD
-
-void ImgMatchUI::compareProcess( ImageSource image_source, 
-        const QString& src1_name, const QString& src2_name,
-        MatchMode match_mode, int match_threshold, 
-        int progress_update_interval )
-{
-    std::auto_ptr<ImgMatch> img_match(NULL);
-
-    switch ( match_mode )
-    {
-        case MOD_SCALE_DOWN:
-            img_match.reset( new ModScale );
-            break;
-
-        default:
-            THROW("Match mode " << match_mode << " is not implemented");
-    }
-
-    switch( image_source )
-    {
-        case SRC_ONE_DIR:
-        {
-            QDir dir1(src1_name);
-            QStringList file_list, filters;
-            filters << "*.jpg" << "*.jpeg";
-            file_list = dir1.entryList (filters, QDir::Files | QDir::Hidden);
-
-            int N = file_list.size();
-
-            if ( N < 2 ) 
-                break;  // Or return?
-
-            // Init the progress bar
-            ui->progressBar->setRange(0, (N*(N-1))/2);
-
-            // Cycle over the image pairs to_compare, calling Compare() method for each
-            // of them. Update the progress bar. Break if the Stop button is pressed.
-            // Add each processed pair to ViewDups table.
-
-            int progress = 0;
-
-            if ( (N*(N-1))/2 < 10 )
-                progress_update_interval = 1;
-            else
-                progress_update_interval = (N*(N-1))/20;
-            
-            for ( int i=0; !mStopFlag && i<(N-1); i++ )
-            {
-                for ( int j=i+1; !mStopFlag && j<N; j++ )
-                {
-                    ComPair cmp(src1_name.toStdString() + "/" + file_list[i].toStdString(), 
-                                src1_name.toStdString() + "/" + file_list[j].toStdString());
-
-                    QtImage img1(cmp.imgOneUri);
-                    QtImage img2(cmp.imgTwoUri);
-                    // Check for errors when opening the images!
-
-                    cmp.compRes = 100 * img_match->Compare(img1, img2);
-
-                    if ( (!match_threshold) || (cmp.compRes >= match_threshold) )
-                        addRowInDupsTable(cmp);
-
-                    ++progress;
-
-                    QApplication::processEvents();
-
-                    // Update the progress bar
-                    if ( (progress % progress_update_interval) == 0 )
-                    {
-                        progressUpdate(progress);
-                    }
-                }
-            }
-            progressUpdate(progress);
-
-            break;
-        }
-
-        case SRC_TWO_IMG:
-        {
-            // Init the progress bar
-            ui->progressBar->setRange(0, 1);
-
-            ComPair cmp(src1_name.toStdString(), 
-                        src2_name.toStdString());
-
-            QtImage img1(cmp.imgOneUri);
-            QtImage img2(cmp.imgTwoUri);
-            // Check for errors when opening the images!
-
-            cmp.compRes = 100 * img_match->Compare(img1, img2);
-
-//            if ( (!match_threshold) || (cmp.compRes >= match_threshold) )
-                addRowInDupsTable(cmp);
-
-            // Update the progress bar
-            progressUpdate(1);
-
-            break;
-        }
-
-        default:
-            THROW( "Unknown source!" );
-    }
-
-    compareFinished();
-}
-
-#else
 
 CompareThread::CompareThread( ImgMatchUI::ImageSource image_source, 
         const QString& src1_name, const QString& src2_name,
@@ -621,8 +502,6 @@ void CompareThread::run()
     Q_EMIT sendCompareFinished();
 }
 
-#endif // PROCESSING_THREAD
-
 
 void ImgMatchUI::on_pbFindStart_clicked()
 {
@@ -678,9 +557,6 @@ void ImgMatchUI::on_pbFindStart_clicked()
 
     LOG("Compare start");
 
-#ifndef PROCESSING_THREAD
-    compareProcess( mImgSrc, src1name, src2name, mMatchMode, mMatchThreshold );
-#else
     mComThread = new CompareThread(mImgSrc, src1name, src2name, mMatchMode, mMatchThreshold, this);  // Add "this" as parent to delete CompareThread when ImgMatchUI is deleted.
 
     // Connect signals and slots
@@ -697,15 +573,10 @@ void ImgMatchUI::on_pbFindStart_clicked()
     connect(ui->pbFindStop, SIGNAL(clicked()), mComThread, SLOT(on_pbFindStop_clicked()));
 
     mComThread->start();  // Calls run(). Set QThread::LowPriority?
-#endif // PROCESSING_THREAD
 }
 
 
-#ifdef PROCESSING_THREAD
 void CompareThread::on_pbFindStop_clicked()
-#else
-void ImgMatchUI::on_pbFindStop_clicked()
-#endif // PROCESSING_THREAD
 {
     mStopFlag = true;
     LOG("mStopFlag = true");

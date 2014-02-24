@@ -5,15 +5,10 @@
 
 #include <QMainWindow>
 //#include <QMetaType>  // For Q_DECLARE_METATYPE
-
-#include "ImgMatch.h"
-
-#define PROCESSING_THREAD
-
-#ifdef PROCESSING_THREAD
 #include <QThread>
 #include <QMutex>
-#endif // PROCESSING_THREAD
+
+#include "ImgMatch.h"
 
 
 namespace Ui {
@@ -54,9 +49,7 @@ struct ComPair
 //Q_DECLARE_METATYPE(ComPair);
 
 
-#ifdef PROCESSING_THREAD
 class CompareThread;
-#endif // PROCESSING_THREAD
 
 
 class ImgMatchUI : public QMainWindow {
@@ -84,9 +77,6 @@ private slots:
     void on_pbViewUp_clicked();
     void on_twDupsTable_itemSelectionChanged();
     void on_pbFindStart_clicked();
-#ifndef PROCESSING_THREAD
-    void on_pbFindStop_clicked();
-#endif // PROCESSING_THREAD
     void on_rbSrcOneDir_clicked();
     void on_rbSrcTwoDir_clicked();
     void on_rbSrcImgDir_clicked();
@@ -97,13 +87,11 @@ private slots:
     void on_pbSrcImg2_clicked();
     void on_actionExit_triggered();
     void about();
-#ifdef PROCESSING_THREAD
     void addRowInDupsTable(const ComPair& cmp);
     void addRowInResults(const ComPair& cmp);
     void progressUpdate(int complete);
     void numResultsUpdate();
     void compareFinished();
-#endif // PROCESSING_THREAD
 
 private:
     void createActions();
@@ -111,17 +99,6 @@ private:
     void changeEvent(QEvent *e);
     void processSourceRB();
     void addNextResultsInDupsTable();
-#ifndef PROCESSING_THREAD
-    void addRowInDupsTable(const ComPair& cmp);
-    void addRowInResults(const ComPair& cmp);
-    void progressUpdate(int complete);
-    void numResultsUpdate();
-    void compareFinished();
-    void compareProcess( ImageSource image_source, 
-            const QString& src1_name, const QString& src2_name,
-            MatchMode match_mode, int match_threshold, 
-            int progress_update_interval=3 );
-#endif // PROCESSING_THREAD
 
 private:
     Ui::ImgMatchUI *ui;  // Or a unique_ptr, or not a pointer at all???
@@ -141,17 +118,13 @@ private:
     int mMatchThreshold;
 
     bool mStopFlag;
-#ifdef PROCESSING_THREAD
     CompareThread* mComThread;  // Or an auto_ptr?
     QMutex mMutex;
-#endif // PROCESSING_THREAD
 
     std::list<ComPair> mResults;
     unsigned int mNumResults;
 };
 
-
-#ifdef PROCESSING_THREAD
 
 class CompareThread : public QThread
 {
@@ -188,7 +161,5 @@ private:
 
     bool                    mStopFlag;
 };
-
-#endif // PROCESSING_THREAD
 
 #endif // IMGMATCHUI_H
