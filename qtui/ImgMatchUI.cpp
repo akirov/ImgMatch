@@ -1,7 +1,12 @@
 #include <sstream>
 #include <iomanip>
 
-#include <QtGui>
+#include "qglobal.h"
+#if QT_VERSION >= 0x050000
+    #include <QtWidgets>
+#else
+    #include <QtGui>
+#endif  // QT_VERSION
 #include <QDir>
 #include <QFileInfo>
 

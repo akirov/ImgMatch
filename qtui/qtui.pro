@@ -45,3 +45,5 @@ QTIMAGE_RGB32|QTIMAGE_RGB24 {
 }
 
 FORMS += ImgMatchUI.ui
+
+greaterThan(QT_MAJOR_VERSION, 4): QT += widgets

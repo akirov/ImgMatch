@@ -1,4 +1,4 @@
-#include <QtGui/QApplication>
+#include <QApplication>
 #include "ImgMatchUI.h"
 #include "Logger.h"
 
