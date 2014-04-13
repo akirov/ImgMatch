@@ -1,10 +1,15 @@
 
 COREDIR=core
-
 UIDIR=qtui
-#QTUI=1
 
-#LIBIMGMATCH=libimgmatch.a
+# OpenCV instalation parameters
+ifeq ($(OS),Windows_NT)
+OPENCVLIB=D:/OpenCV/mingw/lib
+OPENCVINC=D:/OpenCV/build/include
+OPENCVVER=248
+else
+endif
 
-IMAGEIMP=QTIMAGE_RGB32
-#QTIMAGE_RGB32=1
+# Whether to use Qt Image implementation or OpenCV. Uncomment one:
+#IMAGEIMP=QTIMAGE_RGB32
+IMAGEIMP=OCVIMAGE_8UC3

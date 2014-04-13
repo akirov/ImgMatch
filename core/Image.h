@@ -74,7 +74,7 @@ class Image
     {
     }
 
-    virtual Image* Copy() const = 0;
+//  virtual Image* Copy() const = 0;
 
     virtual int GetWidth() const = 0;
     virtual int GetHeight() const = 0;

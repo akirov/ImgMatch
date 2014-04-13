@@ -5,7 +5,6 @@
 #-------------------------------------------------
 
 #CONFIG += debug
-
 CONFIG += release
 #CONFIG += static
 
@@ -14,19 +13,23 @@ TARGET = imgmatch
 TEMPLATE = app
 
 
+#INCLUDEPATH += ../$$(CORE)
 INCLUDEPATH += ../core
 
+#LIBS += -L"../$$(CORE)" -limgmatch
 LIBS += -L"../core" -limgmatch
 
+#PRE_TARGETDEPS += ../$$(CORE)/$$(IMGMATCH_LIB)
 PRE_TARGETDEPS += ../core/libimgmatch.a
 
 SOURCES += main.cpp \
-           ImgMatchUI.cpp
+           ImgMatchUI.cpp \
+           Image.cpp
 
 HEADERS += ImgMatchUI.h
 
 
-message (IMAGEIMP=$$(IMAGEIMP))
+#message (IMAGEIMP=$$(IMAGEIMP))
 
 #contains (IMAGEIMP, QTIMAGE) {
 QTIMAGE_RGB32|QTIMAGE_RGB24 {
@@ -37,11 +40,19 @@ QTIMAGE_RGB32|QTIMAGE_RGB24 {
         message (QTIMAGE_RGB24)
         DEFINES += QTIMAGE_RGB24
     }
-    SOURCES += QtImage.cpp \
-               Image.cpp
+    SOURCES += QtImage.cpp
     HEADERS += QtImage.h
-} else {
-    message (IMAGEIMP is not implemented)
+}
+else:OCVIMAGE_8UC3 {
+    DEFINES += OCVIMAGE_8UC3
+    INCLUDEPATH += $$(OPENCVINC)
+    LIBS += -L$$(OPENCVLIB) -lopencv_core$$(OPENCVVER) -lopencv_highgui$$(OPENCVVER) \
+            -lopencv_ml$$(OPENCVVER) -lopencv_imgproc$$(OPENCVVER)
+    SOURCES += OCVImage.cpp
+    HEADERS += OCVImage.h
+}
+else {
+    message (Unknown Image implementation)
 }
 
 FORMS += ImgMatchUI.ui

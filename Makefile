@@ -1,20 +1,24 @@
 
 include ./defines.mk
 
+#export COREDIR
 
-#COREDIR=core
-
-ALLDIRS=$(COREDIR) $(UIDIR)
-
-.PHONY: $(ALLDIRS) all clean
-
+export OPENCVLIB
+export OPENCVINC
+export OPENCVVER
 
 CFLAGS=-D$(IMAGEIMP)
 export CFLAGS
 #export IMAGEIMP
 
 
-all: $(COREDIR) $(UIDIR)
+ALLDIRS=$(COREDIR) $(UIDIR)
+
+
+.PHONY: $(ALLDIRS) all clean
+
+
+all: $(ALLDIRS)
 
 
 $(COREDIR):
