@@ -102,6 +102,15 @@ void ImgMatchUI::processSourceRB()
         img1en = true;
         img2en = true;
     }
+    else if( ui->rbProcImage->isChecked() )
+    {
+        mImgSrc = SRC_ONE_IMG;
+
+        dir1en = false;
+        dir2en = false;
+        img1en = true;
+        img2en = false;
+    }
     else
     {
         mImgSrc = SRC_INVALID;
@@ -203,7 +212,8 @@ void ImgMatchUI::on_pbSrcImg1_clicked()
         ui->leSrcImg1->setText( fileName );
 
         if ( ((mImgSrc == SRC_TWO_IMG) and (! ui->leSrcImg2->text().isEmpty()))
-          or ((mImgSrc == SRC_IMG_DIR) and (! ui->leSrcDir1->text().isEmpty())) )
+          or ((mImgSrc == SRC_IMG_DIR) and (! ui->leSrcDir1->text().isEmpty()))
+          or (mImgSrc == SRC_ONE_IMG))
             ui->pbFindStart->setEnabled(true);
     }
 }
@@ -248,6 +258,12 @@ void ImgMatchUI::on_rbSrcImgDir_clicked()
 
 
 void ImgMatchUI::on_rbSrcTwoImg_clicked()
+{
+    processSourceRB();
+}
+
+
+void ImgMatchUI::on_rbProcImage_clicked()
 {
     processSourceRB();
 }
@@ -348,6 +364,10 @@ void ImgMatchUI::addNextResultsInDupsTable()
         addRowInDupsTable(*pos);
         mResults.erase(pos);
     }
+
+    // Disable "Show more" after processing has finished and all results displayed
+    if ( (mComThread == NULL) and (numResToAdd < RESULTS_AT_ONCE) )
+        ui->pbMoreRes->setEnabled(false);
 }
 
 
@@ -401,9 +421,9 @@ void CompareThread::run()
 
     std::auto_ptr<ImgMatch> img_match(NULL);
 
-    switch ( mMatchMode )
+    switch ( mMatchMode )  // Or use a factory?
     {
-        case MOD_SCALE_DOWN:
+        case MOD_COLOR_DIST:
             img_match.reset( new ModScale );
             break;
 
@@ -417,14 +437,14 @@ void CompareThread::run()
         {
             QDir dir1(mSrc1Name);
             QStringList file_list, filters;
-            filters << "*.jpg" << "*.jpeg";
+            filters << "*.jpg" << "*.jpeg" << "*.gif" << "*.png";
             file_list = dir1.entryList (filters, QDir::Files | QDir::Hidden);
             int progress_update_interval;
 
             int N = file_list.size();
 
             if ( N < 2 ) 
-                break;  // Or return?
+                break;
 
             // Init the progress bar
             Q_EMIT sendProgressRange(0, (N*(N-1))/2);
@@ -447,6 +467,67 @@ void CompareThread::run()
                 {
                     ComPair cmp(mSrc1Name.toStdString() + "/" + file_list[i].toStdString(), 
                                 mSrc1Name.toStdString() + "/" + file_list[j].toStdString());
+
+                    cmp.compRes = 100 * img_match->Compare(cmp.imgOneUri, cmp.imgTwoUri);
+
+                    if ( (!mMatchThreshold) || (cmp.compRes >= mMatchThreshold) )
+                    {
+#if 0
+                        Q_EMIT sendRowInDupsTable(cmp);
+#else
+                        Q_EMIT sendRowInResults(cmp);
+#endif // 0
+                        Q_EMIT sendNumResultsUpdate();
+                    }
+
+                    ++progress;
+
+                    // Update the progress bar
+                    if ( (progress % progress_update_interval) == 0 )
+                    {
+                        Q_EMIT sendProgressUpdate(progress);
+                    }
+                }
+            }
+            Q_EMIT sendProgressUpdate(progress);
+
+            break;
+        }
+
+        case ImgMatchUI::SRC_TWO_DIR:
+        {
+            QDir dir1(mSrc1Name);
+            QDir dir2(mSrc2Name);
+            QStringList file_list1, file_list2, filters;
+            filters << "*.jpg" << "*.jpeg" << "*.gif" << "*.png";
+            file_list1 = dir1.entryList (filters, QDir::Files | QDir::Hidden);
+            file_list2 = dir2.entryList (filters, QDir::Files | QDir::Hidden);
+            int progress_update_interval;
+
+            int N1 = file_list1.size();
+            int N2 = file_list2.size();
+
+            if ( (N1 < 1) or (N2 < 1) )
+                // Emit an error?
+                break;
+
+            // Init the progress bar
+            Q_EMIT sendProgressRange(0, N1 * N2);
+
+            int progress = 0;
+
+            if ( N1 * N2 < 10 )
+                progress_update_interval = 1;
+            else
+                progress_update_interval = (N1 * N2)/20;
+
+            for ( int i=0; !mStopFlag && i<N1; i++ )
+            {
+                // If i == 0 print status "Caching..." else print "Comparing..."?
+                for ( int j=0; !mStopFlag && j<N2; j++ )
+                {
+                    ComPair cmp(mSrc1Name.toStdString() + "/" + file_list1[i].toStdString(),
+                                mSrc2Name.toStdString() + "/" + file_list2[j].toStdString());
 
                     cmp.compRes = 100 * img_match->Compare(cmp.imgOneUri, cmp.imgTwoUri);
 
@@ -512,12 +593,36 @@ void ImgMatchUI::on_pbFindStart_clicked()
 {
     QString src1name, src2name;
 
+    // Take the source
     switch( mImgSrc )
     {
         case SRC_ONE_DIR:
         {
             src1name = ui->leSrcDir1->text();
             mSrcDir1Name = src1name.toStdString();
+            break;
+        }
+
+        case SRC_TWO_DIR:
+        {
+            src1name = ui->leSrcDir1->text();
+            src2name = ui->leSrcDir2->text();
+            if ( src1name == src2name )
+            {
+                QMessageBox::warning(this, "Warning", "Two dirs must be different");
+                return;
+            }
+            mSrcDir1Name = src1name.toStdString();
+            mSrcDir2Name = src2name.toStdString();
+            break;
+        }
+
+        case SRC_IMG_DIR:
+        {
+            src1name = ui->leSrcDir1->text();
+            mSrcDir1Name = src1name.toStdString();
+            src2name = ui->leSrcImg1->text();
+            mSrcImg1Name = src2name.toStdString();
             break;
         }
 
@@ -530,18 +635,25 @@ void ImgMatchUI::on_pbFindStart_clicked()
             break;
         }
 
+        case SRC_ONE_IMG:
+        {
+            src1name = ui->leSrcImg1->text();
+            mSrcImg1Name = src1name.toStdString();
+            break;
+        }
+
         default:
             THROW( "Unknown source!" );
     }
 
     // Take the method
-    if( ui->rbMetScale->isChecked() )
+    if( ui->rbMetColDist->isChecked() )
     {
-        mMatchMode = MOD_SCALE_DOWN;
+        mMatchMode = MOD_COLOR_DIST;
     }
-    else if( ui->rbMetSig->isChecked() )
+    else if( ui->rbMetText->isChecked() )
     {
-        mMatchMode = MOD_IMG_SIG;
+        mMatchMode = MOD_TEXT;
     }
 
     // Take the match threshold value
@@ -560,24 +672,31 @@ void ImgMatchUI::on_pbFindStart_clicked()
     ui->pbFindStop->setEnabled(true);
     mStopFlag = false;
 
-    LOG("Compare start");
+    if ( mMatchMode == MOD_TEXT )  // Process single images
+    {
+        // TODO
+    }
+    else  // Compare images
+    {
+        LOG("Compare start");
 
-    mComThread = new CompareThread(mImgSrc, src1name, src2name, mMatchMode, mMatchThreshold, this);  // Add "this" as parent to delete CompareThread when ImgMatchUI is deleted.
+        mComThread = new CompareThread(mImgSrc, src1name, src2name, mMatchMode, mMatchThreshold, this);  // Add "this" as parent to delete CompareThread when ImgMatchUI is deleted.
 
-    // Connect signals and slots
-    connect(mComThread, SIGNAL(sendProgressRange(int, int)), ui->progressBar, SLOT(setRange(int, int)));
-    connect(mComThread, SIGNAL(sendProgressUpdate(int)), ui->progressBar, SLOT(setValue(int)));
+        // Connect signals and slots
+        connect(mComThread, SIGNAL(sendProgressRange(int, int)), ui->progressBar, SLOT(setRange(int, int)));
+        connect(mComThread, SIGNAL(sendProgressUpdate(int)), ui->progressBar, SLOT(setValue(int)));
 
-    qRegisterMetaType<ComPair>("ComPair");  // Or qRegisterMetaType<ComPair>(); with Q_DECLARE_METATYPE(ComPair);
-    connect(mComThread, SIGNAL(sendRowInDupsTable(ComPair)), this, SLOT(addRowInDupsTable(ComPair)));
-    connect(mComThread, SIGNAL(sendRowInResults(ComPair)), this, SLOT(addRowInResults(ComPair)), Qt::DirectConnection);
-    connect(mComThread, SIGNAL(sendNumResultsUpdate()), this, SLOT(numResultsUpdate()));
+        qRegisterMetaType<ComPair>("ComPair");  // Or qRegisterMetaType<ComPair>(); with Q_DECLARE_METATYPE(ComPair);
+        connect(mComThread, SIGNAL(sendRowInDupsTable(ComPair)), this, SLOT(addRowInDupsTable(ComPair)));
+        connect(mComThread, SIGNAL(sendRowInResults(ComPair)), this, SLOT(addRowInResults(ComPair)), Qt::DirectConnection);
+        connect(mComThread, SIGNAL(sendNumResultsUpdate()), this, SLOT(numResultsUpdate()));
 
-    connect(mComThread, SIGNAL(sendCompareFinished()), this, SLOT(compareFinished()));
+        connect(mComThread, SIGNAL(sendCompareFinished()), this, SLOT(compareFinished()));
 
-    connect(ui->pbFindStop, SIGNAL(clicked()), mComThread, SLOT(on_pbFindStop_clicked()));
+        connect(ui->pbFindStop, SIGNAL(clicked()), mComThread, SLOT(on_pbFindStop_clicked()));
 
-    mComThread->start();  // Calls run(). Set QThread::LowPriority?
+        mComThread->start();  // Calls run(). Set QThread::LowPriority?
+    }
 }
 
 
@@ -631,50 +750,59 @@ void ImgMatchUI::on_twDupsTable_itemSelectionChanged()
               << std::fixed << QFileInfo(fileName).size()/1024.0 << "K";
     ui->leImgInfo1->setText(name_size.str().c_str());
 
-    // Enable "Delete1" button
-    if ( ! ui->pbDelImg1->isEnabled() )
-        ui->pbDelImg1->setEnabled(true);
-
-
-    item = selItems[2];
-    fileName = item->data(Qt::DisplayRole).toString();
-
-    QImage image2 = QImage(fileName);
-    if (image2.isNull()) {
-        QMessageBox::information(this, tr("InOut"),
-                                 tr("Cannot load %1.").arg(fileName));
-        return;
+    if ( mMatchMode == MOD_TEXT )
+    {
+        // TODO
     }
+    else
+    {
+#if 0
+        // Enable "Delete1" button
+        if ( ! ui->pbDelImg1->isEnabled() )
+            ui->pbDelImg1->setEnabled(true);
+#endif // 0
 
-    dim.str("");
-    dim << image2.width() << "x" << image2.height();
+        item = selItems[2];
+        fileName = item->data(Qt::DisplayRole).toString();
 
-    size = ui->qlImgLabel2->size();
-    image2 = image2.scaled(size, Qt::KeepAspectRatio, Qt::SmoothTransformation);
+        QImage image2 = QImage(fileName);
+        if (image2.isNull()) {
+            QMessageBox::information(this, tr("InOut"),
+                                     tr("Cannot load %1.").arg(fileName));
+            return;
+        }
 
-    painter = new QPainter(&image2);
-    painter->setPen(Qt::white);
-    painter->setFont(QFont("Arial", 10));
-    painter->drawText(image2.rect(), Qt::AlignTop | Qt::AlignLeft, QString::fromStdString(dim.str()));
-    delete painter;
+        dim.str("");
+        dim << image2.width() << "x" << image2.height();
 
-//  QLabel* qlImgLabel2 = new QLabel;
-//  qlImgLabel2->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Ignored);
-//  qlImgLabel2->setScaledContents(false);
-//  ui->saViewImg2->setWidget(qlImgLabel2);
-//  ui->saViewImg2->setBackgroundRole(QPalette::Dark);
+        size = ui->qlImgLabel2->size();
+        image2 = image2.scaled(size, Qt::KeepAspectRatio, Qt::SmoothTransformation);
 
-    ui->qlImgLabel2->setPixmap(QPixmap::fromImage(image2));
+        painter = new QPainter(&image2);
+        painter->setPen(Qt::white);
+        painter->setFont(QFont("Arial", 10));
+        painter->drawText(image2.rect(), Qt::AlignTop | Qt::AlignLeft, QString::fromStdString(dim.str()));
+        delete painter;
 
-    // Display image2 name
-    name_size.str("");
-    name_size << fileName.toStdString() << "  " << std::setprecision(1) 
-              << std::fixed << QFileInfo(fileName).size()/1024.0 << "K";
-    ui->leImgInfo2->setText(name_size.str().c_str());
+//      QLabel* qlImgLabel2 = new QLabel;
+//      qlImgLabel2->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Ignored);
+//      qlImgLabel2->setScaledContents(false);
+//      ui->saViewImg2->setWidget(qlImgLabel2);
+//      ui->saViewImg2->setBackgroundRole(QPalette::Dark);
 
-    // Enable "Delete2" button
-    if ( ! ui->pbDelImg2->isEnabled() )
-        ui->pbDelImg2->setEnabled(true);
+        ui->qlImgLabel2->setPixmap(QPixmap::fromImage(image2));
+
+        // Display image2 name
+        name_size.str("");
+        name_size << fileName.toStdString() << "  " << std::setprecision(1)
+                  << std::fixed << QFileInfo(fileName).size()/1024.0 << "K";
+        ui->leImgInfo2->setText(name_size.str().c_str());
+#if 0
+        // Enable "Delete2" button
+        if ( ! ui->pbDelImg2->isEnabled() )
+            ui->pbDelImg2->setEnabled(true);
+#endif // 0
+    }
 }
 
 
@@ -721,11 +849,26 @@ void ImgMatchUI::on_pbViewClear_clicked()
     mResults.clear();
     mNumResults = 0;
 
-    // Need to do this on resize too
-    int dupsTableWidth = ui->twDupsTable->width();
-    ui->twDupsTable->setColumnWidth(0, dupsTableWidth*0.40);
-    ui->twDupsTable->setColumnWidth(1, dupsTableWidth*0.10);
-    ui->twDupsTable->setColumnWidth(2, dupsTableWidth*0.40);
+    if ( mMatchMode == MOD_TEXT )
+    {
+        ui->qlImgLabel2->setStyleSheet("QLabel { background-color : white; color : black; }");
+        // TODO
+    }
+    else
+    {
+        if (ui->twDupsTable->columnCount() < 3)
+            ui->twDupsTable->setColumnCount(3);
+
+        ui->twDupsTable->setHorizontalHeaderItem(0, new QTableWidgetItem("First Image"));
+        ui->twDupsTable->setHorizontalHeaderItem(1, new QTableWidgetItem("% Match"));
+        ui->twDupsTable->setHorizontalHeaderItem(2, new QTableWidgetItem("Second Image"));
+
+        // Need to do this on resize too
+        int dupsTableWidth = ui->twDupsTable->width();
+        ui->twDupsTable->setColumnWidth(0, dupsTableWidth*0.40);
+        ui->twDupsTable->setColumnWidth(1, dupsTableWidth*0.10);
+        ui->twDupsTable->setColumnWidth(2, dupsTableWidth*0.40);
+    }
 
     ui->progressBar->setValue(0);
 }
@@ -741,6 +884,7 @@ void ImgMatchUI::on_pbDelImg2_clicked()
 {
     
 }
+
 
 void ImgMatchUI::on_pbMoreRes_clicked()
 {

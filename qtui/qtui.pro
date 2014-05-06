@@ -8,6 +8,9 @@
 CONFIG += release
 #CONFIG += static
 
+release:DESTDIR = release
+debug:DESTDIR = debug
+
 
 TARGET = imgmatch
 TEMPLATE = app

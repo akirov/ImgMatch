@@ -149,12 +149,12 @@
         <rect>
          <x>11</x>
          <y>11</y>
-         <width>101</width>
+         <width>111</width>
          <height>16</height>
         </rect>
        </property>
        <property name="text">
-        <string>Select directory</string>
+        <string>Select a directory</string>
        </property>
        <property name="alignment">
         <set>Qt::AlignBottom|Qt::AlignLeading|Qt::AlignLeft</set>
@@ -168,12 +168,12 @@
         <rect>
          <x>11</x>
          <y>60</y>
-         <width>141</width>
+         <width>151</width>
          <height>16</height>
         </rect>
        </property>
        <property name="text">
-        <string>Select second directory</string>
+        <string>Select a second directory</string>
        </property>
        <property name="alignment">
         <set>Qt::AlignBottom|Qt::AlignLeading|Qt::AlignLeft</set>
@@ -187,12 +187,12 @@
         <rect>
          <x>11</x>
          <y>110</y>
-         <width>81</width>
+         <width>101</width>
          <height>16</height>
         </rect>
        </property>
        <property name="text">
-        <string>Select image</string>
+        <string>Select an image</string>
        </property>
        <property name="alignment">
         <set>Qt::AlignBottom|Qt::AlignLeading|Qt::AlignLeft</set>
@@ -224,7 +224,7 @@
         </rect>
        </property>
        <property name="text">
-        <string>Select second image</string>
+        <string>Select a second image</string>
        </property>
        <property name="alignment">
         <set>Qt::AlignBottom|Qt::AlignLeading|Qt::AlignLeft</set>
@@ -263,33 +263,13 @@
        <item row="0" column="0">
         <widget class="QRadioButton" name="rbSrcOneDir">
          <property name="text">
-          <string>Compare images in one directory</string>
+          <string>Compare or process the images in one directory</string>
          </property>
          <property name="checked">
           <bool>true</bool>
          </property>
          <attribute name="buttonGroup">
-          <string>buttonGroup</string>
-         </attribute>
-        </widget>
-       </item>
-       <item row="1" column="0">
-        <widget class="QRadioButton" name="rbSrcTwoDir">
-         <property name="text">
-          <string>Compare two image directories against each other</string>
-         </property>
-         <attribute name="buttonGroup">
-          <string>buttonGroup</string>
-         </attribute>
-        </widget>
-       </item>
-       <item row="2" column="0">
-        <widget class="QRadioButton" name="rbSrcImgDir">
-         <property name="text">
-          <string>Compare single image against a directory</string>
-         </property>
-         <attribute name="buttonGroup">
-          <string>buttonGroup</string>
+          <string notr="true">buttonGroup</string>
          </attribute>
         </widget>
        </item>
@@ -302,7 +282,37 @@
           <bool>false</bool>
          </property>
          <attribute name="buttonGroup">
-          <string>buttonGroup</string>
+          <string notr="true">buttonGroup</string>
+         </attribute>
+        </widget>
+       </item>
+       <item row="2" column="0">
+        <widget class="QRadioButton" name="rbSrcImgDir">
+         <property name="text">
+          <string>Compare a single image against a directory</string>
+         </property>
+         <attribute name="buttonGroup">
+          <string notr="true">buttonGroup</string>
+         </attribute>
+        </widget>
+       </item>
+       <item row="1" column="0">
+        <widget class="QRadioButton" name="rbSrcTwoDir">
+         <property name="text">
+          <string>Compare two image directories against each other</string>
+         </property>
+         <attribute name="buttonGroup">
+          <string notr="true">buttonGroup</string>
+         </attribute>
+        </widget>
+       </item>
+       <item row="0" column="1">
+        <widget class="QRadioButton" name="rbProcImage">
+         <property name="text">
+          <string>Process a single image (for the OCR mode)</string>
+         </property>
+         <attribute name="buttonGroup">
+          <string notr="true">buttonGroup</string>
          </attribute>
         </widget>
        </item>
@@ -334,7 +344,7 @@
          <property name="title">
           <string/>
          </property>
-         <widget class="QRadioButton" name="rbMetScale">
+         <widget class="QRadioButton" name="rbMetColDist">
           <property name="geometry">
            <rect>
             <x>10</x>
@@ -350,7 +360,7 @@
            <bool>true</bool>
           </property>
           <attribute name="buttonGroup">
-           <string>buttonGroup_2</string>
+           <string notr="true">buttonGroup_2</string>
           </attribute>
          </widget>
          <widget class="QComboBox" name="comboBox">
@@ -391,7 +401,7 @@
            <string>Image Signature</string>
           </property>
           <attribute name="buttonGroup">
-           <string>buttonGroup_2</string>
+           <string notr="true">buttonGroup_2</string>
           </attribute>
          </widget>
         </widget>
@@ -404,20 +414,20 @@
          <property name="title">
           <string/>
          </property>
-         <widget class="QRadioButton" name="rbMetFFT">
+         <widget class="QRadioButton" name="rbMetHist">
           <property name="geometry">
            <rect>
             <x>10</x>
             <y>10</y>
-            <width>95</width>
+            <width>151</width>
             <height>21</height>
            </rect>
           </property>
           <property name="text">
-           <string>2D FFT</string>
+           <string>Histogram Compare</string>
           </property>
           <attribute name="buttonGroup">
-           <string>buttonGroup_2</string>
+           <string notr="true">buttonGroup_2</string>
           </attribute>
          </widget>
         </widget>
@@ -443,7 +453,7 @@
            <string>SIFT</string>
           </property>
           <attribute name="buttonGroup">
-           <string>buttonGroup_2</string>
+           <string notr="true">buttonGroup_2</string>
           </attribute>
          </widget>
          <widget class="QCheckBox" name="checkBox">
@@ -482,7 +492,7 @@
            <string>SURF</string>
           </property>
           <attribute name="buttonGroup">
-           <string>buttonGroup_2</string>
+           <string notr="true">buttonGroup_2</string>
           </attribute>
          </widget>
         </widget>
@@ -508,7 +518,7 @@
            <string>Face Recognition</string>
           </property>
           <attribute name="buttonGroup">
-           <string>buttonGroup_2</string>
+           <string notr="true">buttonGroup_2</string>
           </attribute>
          </widget>
         </widget>
@@ -534,7 +544,7 @@
            <string>Shape Recognition</string>
           </property>
           <attribute name="buttonGroup">
-           <string>buttonGroup_2</string>
+           <string notr="true">buttonGroup_2</string>
           </attribute>
          </widget>
         </widget>
@@ -560,7 +570,7 @@
            <string>Fingerprint Recognition</string>
           </property>
           <attribute name="buttonGroup">
-           <string>buttonGroup_2</string>
+           <string notr="true">buttonGroup_2</string>
           </attribute>
          </widget>
         </widget>
@@ -578,15 +588,15 @@
            <rect>
             <x>10</x>
             <y>10</y>
-            <width>121</width>
+            <width>161</width>
             <height>21</height>
            </rect>
           </property>
           <property name="text">
-           <string>Text Recognition</string>
+           <string>Text Recognition (OCR)</string>
           </property>
           <attribute name="buttonGroup">
-           <string>buttonGroup_2</string>
+           <string notr="true">buttonGroup_2</string>
           </attribute>
          </widget>
         </widget>
@@ -876,21 +886,6 @@
       <attribute name="horizontalHeaderStretchLastSection">
        <bool>true</bool>
       </attribute>
-      <column>
-       <property name="text">
-        <string>First Image</string>
-       </property>
-      </column>
-      <column>
-       <property name="text">
-        <string>% Match</string>
-       </property>
-      </column>
-      <column>
-       <property name="text">
-        <string>Second Image</string>
-       </property>
-      </column>
      </widget>
      <widget class="QPushButton" name="pbViewClear">
       <property name="geometry">
@@ -963,7 +958,7 @@
        <enum>QFrame::Sunken</enum>
       </property>
       <property name="text">
-       <string>Second Image</string>
+       <string>Second</string>
       </property>
       <property name="alignment">
        <set>Qt::AlignCenter</set>
@@ -985,7 +980,7 @@
        <enum>QFrame::Sunken</enum>
       </property>
       <property name="text">
-       <string>First Image</string>
+       <string>First</string>
       </property>
       <property name="alignment">
        <set>Qt::AlignCenter</set>
@@ -1021,7 +1016,7 @@
  <resources/>
  <connections/>
  <buttongroups>
-  <buttongroup name="buttonGroup_2"/>
   <buttongroup name="buttonGroup"/>
+  <buttongroup name="buttonGroup_2"/>
  </buttongroups>
 </ui>

@@ -65,7 +65,9 @@ public:
         SRC_ONE_DIR,
         SRC_TWO_DIR,
         SRC_IMG_DIR,
-        SRC_TWO_IMG
+        SRC_TWO_IMG,
+//      SRC_PROC_DIR,
+        SRC_ONE_IMG
     } ImageSource;
 
 private slots:
@@ -81,6 +83,7 @@ private slots:
     void on_rbSrcTwoDir_clicked();
     void on_rbSrcImgDir_clicked();
     void on_rbSrcTwoImg_clicked();
+    void on_rbProcImage_clicked();
     void on_pbSrcDir1_clicked();
     void on_pbSrcDir2_clicked();
     void on_pbSrcImg1_clicked();
