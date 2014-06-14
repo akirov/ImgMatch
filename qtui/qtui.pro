@@ -16,13 +16,13 @@ TARGET = imgmatch
 TEMPLATE = app
 
 
-#INCLUDEPATH += ../$$(CORE)
+#INCLUDEPATH += ../$$(COREDIR)
 INCLUDEPATH += ../core
 
-#LIBS += -L"../$$(CORE)" -limgmatch
+#LIBS += -L"../$$(COREDIR)" -limgmatch
 LIBS += -L"../core" -limgmatch
 
-#PRE_TARGETDEPS += ../$$(CORE)/$$(IMGMATCH_LIB)
+#PRE_TARGETDEPS += ../$$(COREDIR)/$$(IMGMATCH_LIB)
 PRE_TARGETDEPS += ../core/libimgmatch.a
 
 SOURCES += main.cpp \
@@ -48,14 +48,20 @@ QTIMAGE_RGB32|QTIMAGE_RGB24 {
 }
 else:OCVIMAGE_8UC3 {
     DEFINES += OCVIMAGE_8UC3
-    INCLUDEPATH += $$(OPENCVINC)
-    LIBS += -L$$(OPENCVLIB) -lopencv_core$$(OPENCVVER) -lopencv_highgui$$(OPENCVVER) \
-            -lopencv_ml$$(OPENCVVER) -lopencv_imgproc$$(OPENCVVER)
     SOURCES += OCVImage.cpp
     HEADERS += OCVImage.h
 }
 else {
     message (Unknown Image implementation)
+}
+
+OPENCVINC = $$(OPENCVINC)
+OPENCVLIB = $$(OPENCVLIB)
+OPENCVVER = $$(OPENCVVER)
+!isEmpty(OPENCVINC):!isEmpty(OPENCVLIB):!isEmpty(OPENCVVER) {
+    INCLUDEPATH += $$(OPENCVINC)
+    LIBS += -L$$(OPENCVLIB) -lopencv_core$$(OPENCVVER) -lopencv_highgui$$(OPENCVVER) \
+            -lopencv_ml$$(OPENCVVER) -lopencv_imgproc$$(OPENCVVER)
 }
 
 FORMS += ImgMatchUI.ui
