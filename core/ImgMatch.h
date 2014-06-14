@@ -11,7 +11,7 @@
 typedef enum
 {
     MOD_INVALID=-1,
-    MOD_COLOR_DIST,
+    MOD_SCALE,
     MOD_IMG_SIG,
     MOD_HISTOGRAM,
     MOD_SIFT,

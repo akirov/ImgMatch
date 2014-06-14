@@ -423,7 +423,7 @@ void CompareThread::run()
 
     switch ( mMatchMode )  // Or use a factory?
     {
-        case MOD_COLOR_DIST:
+        case MOD_SCALE:
             img_match.reset( new ModScale );
             break;
 
@@ -649,7 +649,7 @@ void ImgMatchUI::on_pbFindStart_clicked()
     // Take the method
     if( ui->rbMetColDist->isChecked() )
     {
-        mMatchMode = MOD_COLOR_DIST;
+        mMatchMode = MOD_SCALE;
     }
     else if( ui->rbMetText->isChecked() )
     {
@@ -672,7 +672,7 @@ void ImgMatchUI::on_pbFindStart_clicked()
     ui->pbFindStop->setEnabled(true);
     mStopFlag = false;
 
-    if ( mMatchMode == MOD_TEXT )  // Process single images
+    if ( mMatchMode == MOD_TEXT )  // Process individual images
     {
         // TODO
     }
