@@ -417,7 +417,9 @@ CompareThread::~CompareThread()
 
 void CompareThread::run()
 {
-//  exec();  // Starts event loop. Do we need this???
+    LOG("CompareThread Id : " << QThread::currentThreadId());
+
+//  exec();  // Starts event loop. Does not return until exit(). We only need this to process signals.
 
     std::auto_ptr<ImgMatch> img_match(NULL);
 
@@ -678,7 +680,7 @@ void ImgMatchUI::on_pbFindStart_clicked()
     }
     else  // Compare images
     {
-        LOG("Compare start");
+        LOG("Compare start. Main threadId = " << QThread::currentThreadId());
 
         mComThread = new CompareThread(mImgSrc, src1name, src2name, mMatchMode, mMatchThreshold, this);  // Add "this" as parent to delete CompareThread when ImgMatchUI is deleted.
 
@@ -688,12 +690,12 @@ void ImgMatchUI::on_pbFindStart_clicked()
 
         qRegisterMetaType<ComPair>("ComPair");  // Or qRegisterMetaType<ComPair>(); with Q_DECLARE_METATYPE(ComPair);
         connect(mComThread, SIGNAL(sendRowInDupsTable(ComPair)), this, SLOT(addRowInDupsTable(ComPair)));
-        connect(mComThread, SIGNAL(sendRowInResults(ComPair)), this, SLOT(addRowInResults(ComPair)), Qt::DirectConnection);
+        connect(mComThread, SIGNAL(sendRowInResults(ComPair)), this, SLOT(addRowInResults(ComPair)), Qt::DirectConnection);  // With Qt::DirectConnection the slot is called in CompareThread context, otherwise - in GUI thread!
         connect(mComThread, SIGNAL(sendNumResultsUpdate()), this, SLOT(numResultsUpdate()));
 
         connect(mComThread, SIGNAL(sendCompareFinished()), this, SLOT(compareFinished()));
 
-        connect(ui->pbFindStop, SIGNAL(clicked()), mComThread, SLOT(on_pbFindStop_clicked()));
+        connect(ui->pbFindStop, SIGNAL(clicked()), mComThread, SLOT(on_pbFindStop_clicked()), Qt::DirectConnection);
 
         mComThread->start();  // Calls run(). Set QThread::LowPriority?
     }
@@ -702,8 +704,13 @@ void ImgMatchUI::on_pbFindStart_clicked()
 
 void CompareThread::on_pbFindStop_clicked()
 {
+    // Called in GUI thread context! Lock CompareThread mutex? No need - setting bool should be atomic.
+
     mStopFlag = true;
-    LOG("mStopFlag = true");
+
+    LOG("mStopFlag = true, threadId = " << QThread::currentThreadId());
+
+//  quit();  // Event loop exit with return code 0 (success).
 }
 
 
