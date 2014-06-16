@@ -725,37 +725,31 @@ void ImgMatchUI::on_twDupsTable_itemSelectionChanged()
     QString fileName = item->data(Qt::DisplayRole).toString();
 
     QImage image1(fileName);
-    if (image1.isNull()) {
-        QMessageBox::information(this, tr("InOut"),
-                                 tr("Cannot load %1.").arg(fileName));
-        return;
+    if (image1.isNull())
+    {
+        ui->qlImgLabel1->setText("Image not found");
+    }
+    else
+    {
+        std::stringstream imgInfo;
+        imgInfo << image1.width() << "x" << image1.height();
+        imgInfo << "  " << std::setprecision(1) << std::fixed
+                << QFileInfo(fileName).size()/1024.0 << "K";
+
+        QSize size = ui->qlImgLabel1->size();
+        image1 = image1.scaled(size, Qt::KeepAspectRatio, Qt::SmoothTransformation);
+
+        QPainter* painter = new QPainter(&image1);  // Or use a stack object???
+        painter->setPen(Qt::white);
+        painter->setFont(QFont("Arial", 10));
+        painter->drawText(image1.rect(), Qt::AlignTop | Qt::AlignLeft, QString::fromStdString(imgInfo.str()));
+        delete painter;  // ???
+
+        ui->qlImgLabel1->setPixmap(QPixmap::fromImage(image1));
     }
 
-    std::stringstream dim;
-    dim << image1.width() << "x" << image1.height();
-
-    QSize size = ui->qlImgLabel1->size();
-    image1 = image1.scaled(size, Qt::KeepAspectRatio, Qt::SmoothTransformation);
-
-    QPainter* painter = new QPainter(&image1);
-    painter->setPen(Qt::white);
-    painter->setFont(QFont("Arial", 10));
-    painter->drawText(image1.rect(), Qt::AlignTop | Qt::AlignLeft, QString::fromStdString(dim.str()));
-    delete painter;  // ???
-
-//  QLabel* qlImgLabel1 = new QLabel;
-//  qlImgLabel1->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Ignored);
-//  qlImgLabel1->setScaledContents(false);
-//  ui->saViewImg1->setWidget(qlImgLabel1);
-//  ui->saViewImg1->setBackgroundRole(QPalette::Dark);
-
-    ui->qlImgLabel1->setPixmap(QPixmap::fromImage(image1));
-
-    // Display image1 name and size
-    std::stringstream name_size;
-    name_size << fileName.toStdString() << "  " << std::setprecision(1) 
-              << std::fixed << QFileInfo(fileName).size()/1024.0 << "K";
-    ui->leImgInfo1->setText(name_size.str().c_str());
+    // Display image1 name
+    ui->leImgInfo1->setText(fileName);
 
     if ( mMatchMode == MOD_TEXT )
     {
@@ -765,7 +759,7 @@ void ImgMatchUI::on_twDupsTable_itemSelectionChanged()
     {
 #if 0
         // Enable "Delete1" button
-        if ( ! ui->pbDelImg1->isEnabled() )
+        if ( !image1.isNull() && !ui->pbDelImg1->isEnabled() )
             ui->pbDelImg1->setEnabled(true);
 #endif // 0
 
@@ -773,40 +767,34 @@ void ImgMatchUI::on_twDupsTable_itemSelectionChanged()
         fileName = item->data(Qt::DisplayRole).toString();
 
         QImage image2 = QImage(fileName);
-        if (image2.isNull()) {
-            QMessageBox::information(this, tr("InOut"),
-                                     tr("Cannot load %1.").arg(fileName));
-            return;
+        if (image2.isNull())
+        {
+            ui->qlImgLabel2->setText("Image not found");
+        }
+        else
+        {
+            std::stringstream imgInfo;
+            imgInfo << image2.width() << "x" << image2.height();
+            imgInfo << "  " << std::setprecision(1) << std::fixed
+                    << QFileInfo(fileName).size()/1024.0 << "K";
+
+            QSize size = ui->qlImgLabel2->size();
+            image2 = image2.scaled(size, Qt::KeepAspectRatio, Qt::SmoothTransformation);
+
+            QPainter* painter = new QPainter(&image2);  // Or use a stack object???
+            painter->setPen(Qt::white);
+            painter->setFont(QFont("Arial", 10));
+            painter->drawText(image2.rect(), Qt::AlignTop | Qt::AlignLeft, QString::fromStdString(imgInfo.str()));
+            delete painter;  // ???
+
+            ui->qlImgLabel2->setPixmap(QPixmap::fromImage(image2));
         }
 
-        dim.str("");
-        dim << image2.width() << "x" << image2.height();
-
-        size = ui->qlImgLabel2->size();
-        image2 = image2.scaled(size, Qt::KeepAspectRatio, Qt::SmoothTransformation);
-
-        painter = new QPainter(&image2);
-        painter->setPen(Qt::white);
-        painter->setFont(QFont("Arial", 10));
-        painter->drawText(image2.rect(), Qt::AlignTop | Qt::AlignLeft, QString::fromStdString(dim.str()));
-        delete painter;
-
-//      QLabel* qlImgLabel2 = new QLabel;
-//      qlImgLabel2->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Ignored);
-//      qlImgLabel2->setScaledContents(false);
-//      ui->saViewImg2->setWidget(qlImgLabel2);
-//      ui->saViewImg2->setBackgroundRole(QPalette::Dark);
-
-        ui->qlImgLabel2->setPixmap(QPixmap::fromImage(image2));
-
         // Display image2 name
-        name_size.str("");
-        name_size << fileName.toStdString() << "  " << std::setprecision(1)
-                  << std::fixed << QFileInfo(fileName).size()/1024.0 << "K";
-        ui->leImgInfo2->setText(name_size.str().c_str());
+        ui->leImgInfo2->setText(fileName);
 #if 0
         // Enable "Delete2" button
-        if ( ! ui->pbDelImg2->isEnabled() )
+        if ( !image2.isNull() && !ui->pbDelImg2->isEnabled() )
             ui->pbDelImg2->setEnabled(true);
 #endif // 0
     }
