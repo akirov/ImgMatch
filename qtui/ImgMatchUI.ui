@@ -40,7 +40,7 @@
     </property>
     <widget class="QWidget" name="tabSource">
      <attribute name="title">
-      <string>Select Source</string>
+      <string>1&gt; Task and Source</string>
      </attribute>
      <widget class="QGroupBox" name="groupBox_2">
       <property name="geometry">
@@ -48,11 +48,11 @@
         <x>10</x>
         <y>170</y>
         <width>751</width>
-        <height>211</height>
+        <height>231</height>
        </rect>
       </property>
       <property name="title">
-       <string/>
+       <string>Data Source</string>
       </property>
       <widget class="QPushButton" name="pbSrcDir2">
        <property name="enabled">
@@ -61,7 +61,7 @@
        <property name="geometry">
         <rect>
          <x>661</x>
-         <y>80</y>
+         <y>90</y>
          <width>75</width>
          <height>23</height>
         </rect>
@@ -77,7 +77,7 @@
        <property name="geometry">
         <rect>
          <x>11</x>
-         <y>30</y>
+         <y>40</y>
          <width>641</width>
          <height>20</height>
         </rect>
@@ -90,7 +90,7 @@
        <property name="geometry">
         <rect>
          <x>661</x>
-         <y>30</y>
+         <y>40</y>
          <width>75</width>
          <height>23</height>
         </rect>
@@ -106,7 +106,7 @@
        <property name="geometry">
         <rect>
          <x>11</x>
-         <y>80</y>
+         <y>90</y>
          <width>641</width>
          <height>20</height>
         </rect>
@@ -119,7 +119,7 @@
        <property name="geometry">
         <rect>
          <x>11</x>
-         <y>130</y>
+         <y>140</y>
          <width>641</width>
          <height>20</height>
         </rect>
@@ -132,7 +132,7 @@
        <property name="geometry">
         <rect>
          <x>661</x>
-         <y>130</y>
+         <y>140</y>
          <width>75</width>
          <height>23</height>
         </rect>
@@ -148,7 +148,7 @@
        <property name="geometry">
         <rect>
          <x>11</x>
-         <y>11</y>
+         <y>21</y>
          <width>111</width>
          <height>16</height>
         </rect>
@@ -167,7 +167,7 @@
        <property name="geometry">
         <rect>
          <x>11</x>
-         <y>60</y>
+         <y>70</y>
          <width>151</width>
          <height>16</height>
         </rect>
@@ -186,7 +186,7 @@
        <property name="geometry">
         <rect>
          <x>11</x>
-         <y>110</y>
+         <y>120</y>
          <width>101</width>
          <height>16</height>
         </rect>
@@ -205,7 +205,7 @@
        <property name="geometry">
         <rect>
          <x>10</x>
-         <y>180</y>
+         <y>190</y>
          <width>641</width>
          <height>20</height>
         </rect>
@@ -218,7 +218,7 @@
        <property name="geometry">
         <rect>
          <x>10</x>
-         <y>160</y>
+         <y>170</y>
          <width>131</width>
          <height>16</height>
         </rect>
@@ -237,7 +237,7 @@
        <property name="geometry">
         <rect>
          <x>660</x>
-         <y>180</y>
+         <y>190</y>
          <width>75</width>
          <height>23</height>
         </rect>
@@ -257,7 +257,7 @@
        </rect>
       </property>
       <property name="title">
-       <string/>
+       <string>Task</string>
       </property>
       <layout class="QGridLayout" name="gridLayout_2">
        <item row="0" column="0">
@@ -269,7 +269,7 @@
           <bool>true</bool>
          </property>
          <attribute name="buttonGroup">
-          <string notr="true">buttonGroup</string>
+          <string>buttonGroup</string>
          </attribute>
         </widget>
        </item>
@@ -282,7 +282,7 @@
           <bool>false</bool>
          </property>
          <attribute name="buttonGroup">
-          <string notr="true">buttonGroup</string>
+          <string>buttonGroup</string>
          </attribute>
         </widget>
        </item>
@@ -292,7 +292,7 @@
           <string>Compare a single image against a directory</string>
          </property>
          <attribute name="buttonGroup">
-          <string notr="true">buttonGroup</string>
+          <string>buttonGroup</string>
          </attribute>
         </widget>
        </item>
@@ -302,7 +302,7 @@
           <string>Compare two image directories against each other</string>
          </property>
          <attribute name="buttonGroup">
-          <string notr="true">buttonGroup</string>
+          <string>buttonGroup</string>
          </attribute>
         </widget>
        </item>
@@ -312,7 +312,7 @@
           <string>Process a single image (for the OCR mode)</string>
          </property>
          <attribute name="buttonGroup">
-          <string notr="true">buttonGroup</string>
+          <string>buttonGroup</string>
          </attribute>
         </widget>
        </item>
@@ -324,7 +324,7 @@
       <bool>true</bool>
      </property>
      <attribute name="title">
-      <string>Process</string>
+      <string>2&gt; Process</string>
      </attribute>
      <widget class="QGroupBox" name="groupBox_3">
       <property name="geometry">
@@ -360,7 +360,7 @@
            <bool>true</bool>
           </property>
           <attribute name="buttonGroup">
-           <string notr="true">buttonGroup_2</string>
+           <string>buttonGroup_2</string>
           </attribute>
          </widget>
          <widget class="QComboBox" name="comboBox">
@@ -401,7 +401,7 @@
            <string>Image Signature</string>
           </property>
           <attribute name="buttonGroup">
-           <string notr="true">buttonGroup_2</string>
+           <string>buttonGroup_2</string>
           </attribute>
          </widget>
         </widget>
@@ -427,7 +427,7 @@
            <string>Histogram Compare</string>
           </property>
           <attribute name="buttonGroup">
-           <string notr="true">buttonGroup_2</string>
+           <string>buttonGroup_2</string>
           </attribute>
          </widget>
         </widget>
@@ -453,7 +453,7 @@
            <string>SIFT</string>
           </property>
           <attribute name="buttonGroup">
-           <string notr="true">buttonGroup_2</string>
+           <string>buttonGroup_2</string>
           </attribute>
          </widget>
          <widget class="QCheckBox" name="checkBox">
@@ -492,7 +492,7 @@
            <string>SURF</string>
           </property>
           <attribute name="buttonGroup">
-           <string notr="true">buttonGroup_2</string>
+           <string>buttonGroup_2</string>
           </attribute>
          </widget>
         </widget>
@@ -518,7 +518,7 @@
            <string>Face Recognition</string>
           </property>
           <attribute name="buttonGroup">
-           <string notr="true">buttonGroup_2</string>
+           <string>buttonGroup_2</string>
           </attribute>
          </widget>
         </widget>
@@ -544,7 +544,7 @@
            <string>Shape Recognition</string>
           </property>
           <attribute name="buttonGroup">
-           <string notr="true">buttonGroup_2</string>
+           <string>buttonGroup_2</string>
           </attribute>
          </widget>
         </widget>
@@ -570,7 +570,7 @@
            <string>Fingerprint Recognition</string>
           </property>
           <attribute name="buttonGroup">
-           <string notr="true">buttonGroup_2</string>
+           <string>buttonGroup_2</string>
           </attribute>
          </widget>
         </widget>
@@ -596,7 +596,7 @@
            <string>Text Recognition (OCR)</string>
           </property>
           <attribute name="buttonGroup">
-           <string notr="true">buttonGroup_2</string>
+           <string>buttonGroup_2</string>
           </attribute>
          </widget>
         </widget>
@@ -613,7 +613,7 @@
        </rect>
       </property>
       <property name="title">
-       <string>Find</string>
+       <string>Start</string>
       </property>
       <widget class="QPushButton" name="pbFindStart">
        <property name="enabled">
@@ -696,7 +696,7 @@
       <bool>false</bool>
      </property>
      <attribute name="title">
-      <string>View Results</string>
+      <string>3&gt; View Results</string>
      </attribute>
      <widget class="QPushButton" name="pbViewUp">
       <property name="geometry">
@@ -1016,7 +1016,7 @@
  <resources/>
  <connections/>
  <buttongroups>
-  <buttongroup name="buttonGroup"/>
   <buttongroup name="buttonGroup_2"/>
+  <buttongroup name="buttonGroup"/>
  </buttongroups>
 </ui>
