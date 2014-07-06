@@ -664,7 +664,10 @@ void ImgMatchUI::on_pbFindStart_clicked()
     // Reset the results
     on_pbViewClear_clicked();
 
-    // Enable "View dups". Or do it only upon completion?
+    // Enable "Show More" results button
+    ui->pbMoreRes->setEnabled(true);
+
+    // Enable "View dups" tab. Or do it only upon completion?
     ui->tabView->setEnabled(true);
 
     // Disable "Start" find button
