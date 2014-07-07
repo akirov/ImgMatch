@@ -441,27 +441,26 @@ void CompareThread::run()
             QStringList file_list, filters;
             filters << "*.jpg" << "*.jpeg" << "*.gif" << "*.png";
             file_list = dir1.entryList (filters, QDir::Files | QDir::Hidden);
-            int progress_update_interval;
 
             int N = file_list.size();
 
             if ( N < 2 ) 
                 break;
 
+            int numPairs = (N*(N-1))/2;
+            int progress_update_interval = numPairs/50;
+            int progress = 0;
+
+            if ( progress_update_interval < 1 )
+                progress_update_interval = 1;
+
             // Init the progress bar
-            Q_EMIT sendProgressRange(0, (N*(N-1))/2);
+            Q_EMIT sendProgressRange(0, numPairs);
 
             // Cycle over the image pairs to_compare, calling Compare() method for each
             // of them. Update the progress bar. Break if the Stop button is pressed.
-            // Add each processed pair to ViewDups table.
+            // Add each processed pair to the results, if it is above match threshold.
 
-            int progress = 0;
-
-            if ( (N*(N-1))/2 < 10 )
-                progress_update_interval = 1;
-            else
-                progress_update_interval = (N*(N-1))/40;
-            
             for ( int i=0; !mStopFlag && i<(N-1); i++ )
             {
                 // If i == 0 print status "Caching..." else print "Comparing..."?
@@ -504,7 +503,6 @@ void CompareThread::run()
             filters << "*.jpg" << "*.jpeg" << "*.gif" << "*.png";
             file_list1 = dir1.entryList (filters, QDir::Files | QDir::Hidden);
             file_list2 = dir2.entryList (filters, QDir::Files | QDir::Hidden);
-            int progress_update_interval;
 
             int N1 = file_list1.size();
             int N2 = file_list2.size();
@@ -513,15 +511,15 @@ void CompareThread::run()
                 // Emit an error?
                 break;
 
-            // Init the progress bar
-            Q_EMIT sendProgressRange(0, N1 * N2);
-
+            int numPairs = N1 * N2;
+            int progress_update_interval = numPairs/50;
             int progress = 0;
 
-            if ( N1 * N2 < 10 )
+            if ( progress_update_interval < 1 )
                 progress_update_interval = 1;
-            else
-                progress_update_interval = (N1 * N2)/20;
+
+            // Init the progress bar
+            Q_EMIT sendProgressRange(0, numPairs);
 
             for ( int i=0; !mStopFlag && i<N1; i++ )
             {
