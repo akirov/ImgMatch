@@ -26,6 +26,7 @@ ImgMatchUI::ImgMatchUI(QWidget *parent) :
     mMatchThreshold(0),
     mStopFlag(false),
     mComThread(NULL),
+    mQTimer(NULL),
     mMutex(),
     mResults(),
     mNumResults(0)
@@ -301,6 +302,7 @@ void ImgMatchUI::addRowInDupsTable( const ComPair& cmp )
 void ImgMatchUI::progressUpdate( int progress )
 {
     ui->progressBar->setValue(progress);
+    onTimerTick();
 }
 
 
@@ -373,6 +375,14 @@ void ImgMatchUI::addNextResultsInDupsTable()
 
 void ImgMatchUI::compareFinished()
 {
+    if ( mQTimer )
+    {
+        mQTimer->stop();
+        delete mQTimer;
+        mQTimer = NULL;
+    }
+    onTimerTick();
+
     if ( mComThread )
     {
         mComThread->wait(); // Block until the thread is done completely.
@@ -388,9 +398,23 @@ void ImgMatchUI::compareFinished()
     // Disable "Stop" find button
     ui->pbFindStop->setEnabled(false);
 
+    // Disable progress bar
+    ui->progressBar->setEnabled(false);
+
+    // Disable processed items label
+    ui->lbItemsProc->setEnabled(false);
+
     ui->lbNumRes->setText(QString::number(mNumResults));
 
     addNextResultsInDupsTable();
+}
+
+
+void ImgMatchUI::onTimerTick()
+{
+    if ( not mComThread ) return;
+    int i = mComThread->getItemsProc();
+    ui->lbItemsProc->setText(QString::number(i) + QString(" items processed"));
 }
 
 
@@ -404,6 +428,7 @@ CompareThread::CompareThread( ImgMatchUI::ImageSource image_source,
     mSrc2Name(src2_name),
     mMatchMode(match_mode),
     mMatchThreshold(match_threshold),
+    mItProc(0),
     mStopFlag(false)
 {
 }
@@ -449,7 +474,7 @@ void CompareThread::run()
 
             int numPairs = (N*(N-1))/2;
             int progress_update_interval = numPairs/50;
-            int progress = 0;
+            mItProc = 0;
 
             if ( progress_update_interval < 1 )
                 progress_update_interval = 1;
@@ -481,16 +506,16 @@ void CompareThread::run()
                         Q_EMIT sendNumResultsUpdate();
                     }
 
-                    ++progress;
+                    ++mItProc;
 
                     // Update the progress bar
-                    if ( (progress % progress_update_interval) == 0 )
+                    if ( (mItProc % progress_update_interval) == 0 )
                     {
-                        Q_EMIT sendProgressUpdate(progress);
+                        Q_EMIT sendProgressUpdate(mItProc);
                     }
                 }
             }
-            Q_EMIT sendProgressUpdate(progress);
+            Q_EMIT sendProgressUpdate(mItProc);
 
             break;
         }
@@ -659,6 +684,19 @@ void ImgMatchUI::on_pbFindStart_clicked()
     // Take the match threshold value
     mMatchThreshold = ui->spinBox->value();
 
+    // Disable "Start" find button
+    ui->pbFindStart->setEnabled(false);
+
+    // Enable "Stop" find button
+    ui->pbFindStop->setEnabled(true);
+    mStopFlag = false;
+
+    // Enable progress bar
+    ui->progressBar->setEnabled(true);
+
+    // Enable processed items label
+    ui->lbItemsProc->setEnabled(true);
+
     // Reset the results
     on_pbViewClear_clicked();
 
@@ -667,13 +705,6 @@ void ImgMatchUI::on_pbFindStart_clicked()
 
     // Enable "View dups" tab. Or do it only upon completion?
     ui->tabView->setEnabled(true);
-
-    // Disable "Start" find button
-    ui->pbFindStart->setEnabled(false);
-
-    // Enable "Stop" find button
-    ui->pbFindStop->setEnabled(true);
-    mStopFlag = false;
 
     if ( mMatchMode == MOD_TEXT )  // Process individual images
     {
@@ -687,7 +718,11 @@ void ImgMatchUI::on_pbFindStart_clicked()
 
         // Connect signals and slots
         connect(mComThread, SIGNAL(sendProgressRange(int, int)), ui->progressBar, SLOT(setRange(int, int)));
+#if 0  // Update progress bar directly
         connect(mComThread, SIGNAL(sendProgressUpdate(int)), ui->progressBar, SLOT(setValue(int)));
+#else
+        connect(mComThread, SIGNAL(sendProgressUpdate(int)), this, SLOT(progressUpdate(int)));
+#endif // 0
 
         qRegisterMetaType<ComPair>("ComPair");  // Or qRegisterMetaType<ComPair>(); with Q_DECLARE_METATYPE(ComPair);
         connect(mComThread, SIGNAL(sendRowInDupsTable(ComPair)), this, SLOT(addRowInDupsTable(ComPair)));
@@ -699,6 +734,11 @@ void ImgMatchUI::on_pbFindStart_clicked()
         connect(ui->pbFindStop, SIGNAL(clicked()), mComThread, SLOT(on_pbFindStop_clicked()), Qt::DirectConnection);
 
         mComThread->start();  // Calls run(). Set QThread::LowPriority?
+
+        mQTimer = new QTimer(this);
+        mQTimer->setInterval(2000);
+        connect(mQTimer, SIGNAL(timeout()), this, SLOT(onTimerTick()));
+        mQTimer->start();
     }
 }
 
@@ -867,6 +907,7 @@ void ImgMatchUI::on_pbViewClear_clicked()
     }
 
     ui->progressBar->setValue(0);
+    ui->lbItemsProc->setText("0 items processed");
 }
 
 

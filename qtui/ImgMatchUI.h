@@ -7,6 +7,7 @@
 //#include <QMetaType>  // For Q_DECLARE_METATYPE
 #include <QThread>
 #include <QMutex>
+#include <QTimer>
 
 #include "ImgMatch.h"
 
@@ -95,6 +96,7 @@ private slots:
     void progressUpdate(int complete);
     void numResultsUpdate();
     void compareFinished();
+    void onTimerTick();
 
 private:
     void createActions();
@@ -122,6 +124,7 @@ private:
 
     bool mStopFlag;
     CompareThread* mComThread;  // Or an auto_ptr?
+    QTimer* mQTimer;
     QMutex mMutex;
 
     std::list<ComPair> mResults;
@@ -142,6 +145,7 @@ public:
     ~CompareThread();
 
     void run();
+    int getItemsProc() const { return mItProc; }  // No need to lock.
 
 public Q_SLOTS:
     // Interface to stop the thread
@@ -161,7 +165,7 @@ private:
     QString                 mSrc2Name;
     MatchMode               mMatchMode;
     int                     mMatchThreshold;
-
+    int                     mItProc;
     bool                    mStopFlag;
 };
 
