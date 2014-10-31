@@ -55,12 +55,21 @@ else {
     message (Unknown Image implementation)
 }
 
-OPENCVINC = $$(OPENCVINC)
-OPENCVLIB = $$(OPENCVLIB)
-OPENCVVER = $$(OPENCVVER)
-!isEmpty(OPENCVINC):!isEmpty(OPENCVLIB):!isEmpty(OPENCVVER) {
-    INCLUDEPATH += $$(OPENCVINC)
-    LIBS += -L$$(OPENCVLIB) -lopencv_core$$(OPENCVVER) -lopencv_highgui$$(OPENCVVER) \
+USE_OPENCV = $$(USE_OPENCV)
+contains (USE_OPENCV, 1) | OCVIMAGE_8UC3 {
+    OPENCVINC = $$(OPENCVINC)
+    OPENCVLIB = $$(OPENCVLIB)
+    OPENCVVER = $$(OPENCVVER)
+
+    !isEmpty(OPENCVINC) {
+        INCLUDEPATH += $$(OPENCVINC)
+    }
+
+    !isEmpty(OPENCVLIB) {
+        LIBS += -L$$(OPENCVLIB)
+    }
+
+    LIBS += -lopencv_core$$(OPENCVVER) -lopencv_highgui$$(OPENCVVER) \
             -lopencv_ml$$(OPENCVVER) -lopencv_imgproc$$(OPENCVVER)
 }
 

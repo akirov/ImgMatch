@@ -3,6 +3,7 @@ include ./defines.mk
 
 #export COREDIR
 
+export USE_OPENCV
 export OPENCVLIB
 export OPENCVINC
 export OPENCVVER
