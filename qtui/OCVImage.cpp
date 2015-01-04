@@ -27,17 +27,20 @@ OCVImage::~OCVImage()
 
 Pixel OCVImage::GetPixel( int x, int y ) const
 {
-    return Pixel(mMatImage.at<cv::Vec3b>(y,x)[2], 
-                 mMatImage.at<cv::Vec3b>(y,x)[1],
-                 mMatImage.at<cv::Vec3b>(y,x)[0]);
+    cv::Vec3b data = mMatImage.at<cv::Vec3b>(y,x);  // Because it is at(row, column)
+    return Pixel(data[2], data[1], data[0]);  // 0-B, 1-G, 2-R
 }
 
 
 void OCVImage::Scale( int width, int height, AspectRatio aspect_ratio )
 {
-	if ( aspect_ratio == ASPR_IGNORE )
-		cv::resize(mMatImage, mMatImage, cv::Size(height, width));  // Or cv::resize(mMatImage, tmpImg, ...) ?
-	else
-		cv::resize(mMatImage, mMatImage, cv::Size(mMatImage.size().height *
-				                         (width / mMatImage.size().width), width));
+    cv::Mat resizedImage;  // Do we need this, or src and dest can be the same?
+
+    if ( aspect_ratio == ASPR_IGNORE )
+        cv::resize(mMatImage, resizedImage, cv::Size(width, height)); // , 0, 0, cv::INTER_AREA
+    else
+        cv::resize(mMatImage, resizedImage, cv::Size(width,
+                   mMatImage.size().height * (width / mMatImage.size().width)));
+
+    mMatImage = resizedImage;  // Frees the old data.
 }

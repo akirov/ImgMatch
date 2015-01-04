@@ -70,6 +70,6 @@ void QtImage::Scale(int width, int height, AspectRatio aspect_ratio)
     QImage scaled_image = mQImage->scaled( width, height, qt_aspr );
     mQImage.reset( new QImage(scaled_image) );
 #else
-    *mQImage = mQImage->scaled( width, height, qt_aspr );
+    *mQImage = mQImage->scaled( width, height, qt_aspr );  // , Qt::SmoothTransformation
 #endif /* 0 */
 }
