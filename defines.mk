@@ -3,7 +3,8 @@ COREDIR=core
 UIDIR=qtui
 
 # Whether to use Qt Image implementation or OpenCV. Uncomment one:
-IMAGEIMP=QTIMAGE_RGB32
+IMAGEIMP=QTIMAGE_RGB24
+#IMAGEIMP=QTIMAGE_RGB32
 #IMAGEIMP=OCVIMAGE_8UC3
 
 # Whether to link with OpenCV. OCVIMAGE forces this.

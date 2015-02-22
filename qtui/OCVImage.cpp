@@ -25,10 +25,10 @@ OCVImage::~OCVImage()
 }
 
 
-Pixel OCVImage::GetPixel( int x, int y ) const
+PixelRGB OCVImage::GetPixelRGB( int x, int y ) const
 {
     cv::Vec3b data = mMatImage.at<cv::Vec3b>(y,x);  // Because it is at(row, column)
-    return Pixel(data[2], data[1], data[0]);  // 0-B, 1-G, 2-R
+    return PixelRGB(data[2], data[1], data[0]);  // 0-B, 1-G, 2-R
 }
 
 

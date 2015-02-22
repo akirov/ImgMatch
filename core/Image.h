@@ -2,6 +2,7 @@
 #define __IMAGE_H__
 
 #include <string>
+#if 0  // This code is hardware-dependent
 #include <sys/param.h>  // For BYTE_ORDER definition in MinWG
 
 #if ! defined(BYTE_ORDER) || ! defined(BIG_ENDIAN) || ! defined(LITTLE_ENDIAN)
@@ -9,28 +10,29 @@
 #endif
 
 
-struct Pixel
+struct PixelARGB
 {
-/*  int x;
-    int y; */
+    PixelARGB() : ARGB(0) {}
 
-    Pixel() : ARGB(0) {}
-    Pixel(unsigned long argb) : ARGB(argb) {}
-    Pixel(unsigned char r, unsigned char g, unsigned char b, unsigned char a=0xFF) :
+    PixelARGB(unsigned long argb) : ARGB(argb) {}
+
+    PixelARGB(unsigned char r, unsigned char g, unsigned char b, unsigned char a=0xFF) :
 #if BYTE_ORDER == BIG_ENDIAN
-        A(a), 
-        R(r), 
-        G(g), 
+        A(a),
+        R(r),
+        G(g),
         B(b)
 #elif BYTE_ORDER == LITTLE_ENDIAN
-        B(b), 
-        G(g), 
-        R(r), 
+        B(b),
+        G(g),
+        R(r),
         A(a)
 #else
 #error "Unknown BYTE_ORDER"
 #endif /* BYTE_ORDER */
     {}
+
+    ~PixelARGB() {}
 
     operator unsigned long () const { return ARGB; }
 
@@ -53,6 +55,23 @@ struct Pixel
         unsigned long ARGB;
     };
 };
+#endif // 0
+
+
+struct PixelRGB
+{
+    PixelRGB() : R(0), G(0), B(0) {}
+
+    PixelRGB(unsigned char r, unsigned char g, unsigned char b) :
+            R(r), G(g), B(b)
+    {}
+
+    ~PixelRGB() {}
+
+    unsigned char R;
+    unsigned char G;
+    unsigned char B;
+};
 
 
 class Image
@@ -65,6 +84,7 @@ class Image
         ASPR_IGNORE
     } AspectRatio;
 
+    // typedef enum { IREP_8, IREP_888, IREP_8888 } ImageRepresentation;
 
   public:
 
@@ -79,9 +99,10 @@ class Image
     virtual int GetWidth() const = 0;
     virtual int GetHeight() const = 0;
 
-    virtual std::string GetName() const = 0;  // Or GetLocation()?
+    virtual std::string GetName() const = 0;  // Or GetURI()?
 
-    virtual Pixel GetPixel( int x, int y ) const = 0;
+    virtual PixelRGB GetPixelRGB( int x, int y ) const = 0;
+//  virtual unsigned char GetPixelGray( int x, int y ) const = 0;
 
     virtual void Scale(int width, int height, AspectRatio aspect_ratio = ASPR_IGNORE) = 0;
 

@@ -32,7 +32,7 @@ class QtImage : public Image
 
     std::string GetName() const { return mSrcFileURL; }  // inline is implicit
 
-    Pixel GetPixel( int x, int y ) const;
+    PixelRGB GetPixelRGB( int x, int y ) const;
 
     void Scale( int width, int height, AspectRatio aspect_ratio = Image::ASPR_IGNORE );
 

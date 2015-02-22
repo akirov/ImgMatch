@@ -10,9 +10,17 @@ QtImage::QtImage( std::string file_name ) :
         THROW( "Unable to open image file '" << file_name << "'" );
     }
 
+#if defined(QTIMAGE_RGB32)
     if ( mQImage->format() != QImage::Format_RGB32 ) {
         *mQImage = mQImage->convertToFormat(QImage::Format_RGB32);  // Or QImage::Format_ARGB32 ???
     }
+#elif defined(QTIMAGE_RGB24)
+    if ( mQImage->format() != QImage::Format_RGB888 ) {
+        *mQImage = mQImage->convertToFormat(QImage::Format_RGB888);
+    }
+#else
+#error "No QtImage implementation!"
+#endif // QTIMAGE
 }
 
 
@@ -35,14 +43,10 @@ QtImage* QtImage::Copy() const
 }
 
 
-Pixel QtImage::GetPixel( int x, int y ) const
+PixelRGB QtImage::GetPixelRGB( int x, int y ) const
 {
     QRgb qt_argb = mQImage->pixel( x, y );  // Or try to get the raw data?
-#if 0  // This is safer
-    return Pixel(qRed(qt_argb), qGreen(qt_argb), qBlue(qt_argb));
-#else  // Depends on byte order!
-    return Pixel(qt_argb);
-#endif // 0/1
+    return PixelRGB(qRed(qt_argb), qGreen(qt_argb), qBlue(qt_argb));
 }
 
 
