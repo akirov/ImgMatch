@@ -1,8 +1,6 @@
 
 include ./defines.mk
 
-#export COREDIR
-
 export USE_OPENCV
 export OPENCVLIB
 export OPENCVINC
@@ -11,6 +9,9 @@ export OPENCVVER
 #export IMAGEIMP
 CFLAGS+=-D$(IMAGEIMP)
 export CFLAGS
+
+COREDIR=core
+UIDIR=qtui
 
 
 ALLDIRS=$(COREDIR) $(UIDIR)

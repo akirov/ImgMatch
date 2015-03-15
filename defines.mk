@@ -1,7 +1,4 @@
 
-COREDIR=core
-UIDIR=qtui
-
 # Whether to use Qt Image implementation or OpenCV. Uncomment one:
 IMAGEIMP=QTIMAGE_RGB24
 #IMAGEIMP=QTIMAGE_RGB32
