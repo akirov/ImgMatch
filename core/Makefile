@@ -1,19 +1,21 @@
 
-IMGMATCH_LIB=libimgmatch.a
+BUILD_DIR=../$(BUILDDIR)
+
+IMGMATCH_LIB=$(BUILD_DIR)/libimgmatch.a
 
 
 SOURCES=$(wildcard *.cpp)
 
 HEADERS=$(wildcard *.h)
 
-OBJS=$(SOURCES:%.cpp=%.o)
+OBJS=$(SOURCES:%.cpp=$(BUILD_DIR)/%.o)
 
-DEPEND=.depend
+DEPEND=$(BUILD_DIR)/.depend
 
 
 CXX=g++
 
-CFLAGS+=-Wall
+CXXFLAGS+=-Wall
 
 
 all: IMGMATCH_LIB
@@ -24,15 +26,15 @@ IMGMATCH_LIB: $(OBJS)
 	ranlib $(IMGMATCH_LIB)
 
 
-%.o: %.cpp
-	$(CXX) $(CFLAGS) -c $<
+$(BUILD_DIR)/%.o: %.cpp
+	$(CXX) $(CXXFLAGS) -c $< -o $@
 
 
 $(DEPEND): $(SOURCES) $(HEADERS)
-	$(CXX) $(CFLAGS) -MM $^ > $@
+	$(CXX) $(CXXFLAGS) -MM $^ > $@
 
 -include $(DEPEND)
 
 
 clean:
-	-rm -f *.o $(IMGMATCH_LIB) $(DEPEND)
+	-rm -f $(BUILD_DIR)/*.o $(IMGMATCH_LIB) $(DEPEND)

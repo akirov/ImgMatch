@@ -8,22 +8,25 @@
 CONFIG += release
 #CONFIG += static
 
-release:DESTDIR = release
-debug:DESTDIR = debug
+#release:DESTDIR = ../$$(BINDIR)
+#debug:DESTDIR = ../$$(BINDIR)
+DESTDIR = ../$$(BINDIR)
+OBJECTS_DIR = ../$$(BUILDDIR)
+MOC_DIR = ../$$(BUILDDIR)
 
 
 TARGET = imgmatch
 TEMPLATE = app
 
 
-#INCLUDEPATH += ../$$(COREDIR)
-INCLUDEPATH += ../core
+#INCLUDEPATH += ../core
+INCLUDEPATH += ../$$(COREDIR)
 
-#LIBS += -L"../$$(COREDIR)" -limgmatch
-LIBS += -L"../core" -limgmatch
+#LIBS += -L"../build" -limgmatch
+LIBS += -L"../$$(BUILDDIR)" -limgmatch
 
-#PRE_TARGETDEPS += ../$$(COREDIR)/$$(IMGMATCH_LIB)
-PRE_TARGETDEPS += ../core/libimgmatch.a
+#PRE_TARGETDEPS += ../build/libimgmatch.a
+PRE_TARGETDEPS += ../$$(BUILDDIR)/libimgmatch.a
 
 SOURCES += main.cpp \
            ImgMatchUI.cpp \

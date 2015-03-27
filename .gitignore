@@ -1,0 +1,9 @@
+.eclipse/
+.settings/
+.project
+.cproject
+img/
+.depend
+*.o
+*.a
+*.exe

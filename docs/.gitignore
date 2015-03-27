@@ -1,0 +1,5 @@
+# Ignore everything in this directory
+*
+# Except the images and this file
+!*.jpg
+!.gitignore

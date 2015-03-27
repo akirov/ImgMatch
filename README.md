@@ -20,7 +20,7 @@ MSYS (for bash) in the path. In Linux (or Cygwin) environment you need g++,
 qt-devel and make. If you want to use OpenCV, you may need to specify the
 location of its headers, libraries and its version in defines.mk.
 Then just run "make" in project's root directory. The executable file will
-be in qtui/release directory.
+be in "bin" directory.
 
 
 Screenshots

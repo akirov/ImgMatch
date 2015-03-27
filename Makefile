@@ -1,4 +1,7 @@
 
+#ROOT_SRC_DIR=$(CURDIR)
+#ROOT_SRC_DIR=$(dir $(realpath $(lastword $(MAKEFILE_LIST))))
+
 include ./defines.mk
 
 export USE_OPENCV
@@ -7,11 +10,13 @@ export OPENCVINC
 export OPENCVVER
 
 #export IMAGEIMP
-CFLAGS+=-D$(IMAGEIMP)
-export CFLAGS
+CXXFLAGS+=-D$(IMAGEIMP)
+export CXXFLAGS
 
-COREDIR=core
-UIDIR=qtui
+export COREDIR=core
+export UIDIR=qtui
+export BINDIR=bin
+export BUILDDIR=build
 
 
 ALLDIRS=$(COREDIR) $(UIDIR)
@@ -25,15 +30,13 @@ all: $(ALLDIRS)
 
 $(COREDIR):
 	$(MAKE) -C $@
-#	$(MAKE) -C $@ CFLAGS=-D$(IMAGEIMP)
 
 
 $(UIDIR):
-ifeq (qtui, $(UIDIR))
+ifneq (,$(findstring qt, $(UIDIR)))
 	cd $(UIDIR); qmake CONFIG+=$(IMAGEIMP); $(MAKE)
-#	cd $(UIDIR); qmake IMAGEIMP=$(IMAGEIMP); $(MAKE)
 else
-	$(error Unknown UIDIR = $(UIDIR))
+	$(error Don't know how to make UIDIR = $(UIDIR))
 endif
 
 
