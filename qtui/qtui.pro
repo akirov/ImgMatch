@@ -49,17 +49,24 @@ QTIMAGE_RGB32|QTIMAGE_RGB24 {
     SOURCES += QtImage.cpp
     HEADERS += QtImage.h
 }
-else:OCVIMAGE_8UC3 {
-    DEFINES += OCVIMAGE_8UC3
-    SOURCES += OCVImage.cpp
-    HEADERS += OCVImage.h
-}
-else {
-    message (Unknown Image implementation)
-}
+#else:OCVIMAGE_8UC3 {
+#    DEFINES += OCVIMAGE_8UC3
+#    SOURCES += OCVImage.cpp
+#    HEADERS += OCVImage.h
+#}
+#else {
+#    message (Unknown Image implementation)
+#}
 
 USE_OPENCV = $$(USE_OPENCV)
-contains (USE_OPENCV, 1) | OCVIMAGE_8UC3 {
+contains (USE_OPENCV, 1) {  # | OCVIMAGE_8UC3
+    OCVIMAGE_8UC3 {
+        message (OCVIMAGE_8UC3)
+        DEFINES += OCVIMAGE_8UC3
+        SOURCES += OCVImage.cpp
+        HEADERS += OCVImage.h
+    }
+
     OPENCVINC = $$(OPENCVINC)
     OPENCVLIB = $$(OPENCVLIB)
     OPENCVVER = $$(OPENCVVER)
@@ -69,11 +76,13 @@ contains (USE_OPENCV, 1) | OCVIMAGE_8UC3 {
     }
 
     !isEmpty(OPENCVLIB) {
-        LIBS += -L$$(OPENCVLIB)
+        LIBS += -L"$$(OPENCVLIB)"
     }
 
     LIBS += -lopencv_core$$(OPENCVVER) -lopencv_highgui$$(OPENCVVER) \
             -lopencv_ml$$(OPENCVVER) -lopencv_imgproc$$(OPENCVVER)
+
+#    LIBS += $$(LDFLAGS) $$(LDLIBS)
 }
 
 FORMS += ImgMatchUI.ui
