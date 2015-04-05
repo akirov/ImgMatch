@@ -1,3 +1,6 @@
+#ifndef __MODSCALE_H__
+#define __MODSCALE_H__
+
 #include <map>
 #include <string>
 #include "ImgMatch.h"
@@ -22,3 +25,5 @@ class ModScale : public ImgMatch
 
     // metrics ?
 };
+
+#endif // __MODSCALE_H__

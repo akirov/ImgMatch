@@ -1,5 +1,5 @@
-#ifndef IMGMATCH_H
-#define IMGMATCH_H
+#ifndef __IMGMATCH_H__
+#define __IMGMATCH_H__
 
 #if 0
 #include "Image.h"
@@ -43,4 +43,4 @@ class ImgMatch
 };
 
 
-#endif /* IMGMATCH_H */
+#endif /* __IMGMATCH_H__ */
