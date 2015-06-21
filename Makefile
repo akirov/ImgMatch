@@ -5,6 +5,10 @@
 
 include ./defines.mk
 
+ifneq (,$(findstring OPENCV, $(SIFT_IMP)))
+    IMAGEIMP=OCVIMAGE_8UC3
+endif
+
 ifneq (,$(findstring OCVIMAGE, $(IMAGEIMP)))
     USE_OPENCV=1
 endif
@@ -23,11 +27,12 @@ endif
 
 CPPFLAGS+=-D$(IMAGEIMP)
 
+export IMAGEIMP
 export USE_OPENCV
 export OPENCVLIB
 export OPENCVINC
 export OPENCVVER
-export IMAGEIMP
+export SIFT_IMP
 
 export CPPFLAGS
 export CXXFLAGS

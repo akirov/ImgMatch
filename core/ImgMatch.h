@@ -31,7 +31,7 @@ class ImgMatch
     {
     }
 
-    /* Returns match value in the range [0.00, 1.00] */
+    /* Returns match value in the range [0.00, 1.00]. Negative value means error. */
 #if 0  // Takes the images themselves as parameters
     virtual float Compare( const Image& img1, const Image& img2 ) = 0;
 #else  // Takes image locations (paths)

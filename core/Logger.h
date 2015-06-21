@@ -29,7 +29,7 @@
 class Logger
 {
   public:
-    virtual ~Logger();  // To delete the auto_ptr
+    ~Logger();
 
     static void Log( const std::string& text );
 
@@ -52,9 +52,7 @@ class Logger
 //  static Logger* sLogger;
     static std::auto_ptr<Logger> sLogger;
 
-    std::string   mLogDir;
-    std::string   mFileNamePrefix;
-    std::string   mFileNameExt;
+    std::string   mLogFileName;
     std::ofstream mLogFile;
 };
 

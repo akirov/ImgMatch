@@ -10,7 +10,7 @@ class OCVImage : public Image
 {
   public:
 
-    OCVImage( const std::string& file_name );
+    OCVImage( const std::string& file_name, PixelRep pixel_rep );
     OCVImage( const OCVImage& other );
 
     ~OCVImage();
@@ -26,12 +26,17 @@ class OCVImage : public Image
 
     void Scale( int width, int height, AspectRatio aspect_ratio = Image::ASPR_IGNORE );
 
+    void Convert(Image::PixelRep newRep);
+
+    cv::Mat* getImpl() { return &mMatImage; }  // If we want to use implementation specific methods. Unsafe!
+
   protected:
 
   private:
 
     std::string mSrcFileURL;
-    cv::Mat mMatImage;  // Or IplImage* ?
+    Image::PixelRep mPixelRep;
+    cv::Mat mMatImage;  // Or shared_ptr<IplImage> ?
 };
 
 

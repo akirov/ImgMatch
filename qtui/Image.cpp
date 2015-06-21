@@ -6,12 +6,12 @@
 #endif // QTIMAGE
 
 
-Image* Image::ConstuctImage(std::string imageUrl)
+Image* Image::ConstuctImage(std::string image_url, PixelRep pixel_rep)
 {
 #if defined(QTIMAGE_RGB32) || defined(QTIMAGE_RGB24)
-    return new QtImage(imageUrl);
+    return new QtImage(image_url, pixel_rep);
 #elif defined(OCVIMAGE_8UC3)
-    return new OCVImage(imageUrl);
+    return new OCVImage(image_url, pixel_rep);
 #else
 #error "No Image implementation!"
 #endif // IMAGEIMP

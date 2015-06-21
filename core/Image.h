@@ -84,11 +84,17 @@ class Image
         ASPR_IGNORE
     } AspectRatio;
 
-    // typedef enum { IREP_8, IREP_888, IREP_8888 } ImageRepresentation;
+    typedef enum
+    {
+        PIXEL_UNKNOWN=-1,  // Use when we don't care about the representation
+        PIXEL_G,           // 8 bits grayscale
+        PIXEL_RGB,         // 24 bits red-green-blue
+        PIXEL_ARGB         // 32 bits alpha-red-green-blue
+    } PixelRep;
 
   public:
 
-    static Image* ConstuctImage(std::string imageUrl);  // "Factory" instead of constructor.
+    static Image* ConstuctImage(std::string image_url, PixelRep pixel_rep=PIXEL_UNKNOWN);  // "Factory" instead of a constructor.
 
     virtual ~Image() 
     {
@@ -103,8 +109,11 @@ class Image
 
     virtual PixelRGB GetPixelRGB( int x, int y ) const = 0;
 //  virtual unsigned char GetPixelGray( int x, int y ) const = 0;
+//  virtual void* GetPixelPtr( int x, int y ) const = 0;
 
-    virtual void Scale(int width, int height, AspectRatio aspect_ratio = ASPR_IGNORE) = 0;
+    virtual void Scale(int width, int height, AspectRatio aspect_ratio=ASPR_IGNORE) = 0;
+
+    virtual void Convert(PixelRep newRep) = 0;
 
   private:
 

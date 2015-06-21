@@ -1,13 +1,12 @@
 
-# Whether to use Qt Image implementation or OpenCV. Uncomment only one:
-#IMAGEIMP=QTIMAGE_RGB24
-#IMAGEIMP=QTIMAGE_RGB32
-IMAGEIMP=OCVIMAGE_8UC3
+# Image implementation options: Qt or OpenCV. Uncomment only one.
+#IMAGEIMP=OCVIMAGE_8UC3
+IMAGEIMP=QTIMAGE_RGB24
 
-# Whether to link with OpenCV (1=Yes, 0=No). OCVIMAGE forces this.
-USE_OPENCV=1
+# Components implementation options: OPENCV=use OpenCV, 0=disabled.
+SIFT_IMP=0
 
-# OpenCV instalation parameters (if needed).
+# OpenCV instalation parameters (if using OpenCV).
 ifeq ($(OS),Windows_NT)
   ifeq (,$(findstring CYGWIN, $(shell uname)))
     # Windows, but not Cygwin

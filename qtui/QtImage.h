@@ -1,6 +1,7 @@
 #ifndef __QTIMAGE_H__
 #define __QTIMAGE_H__
 
+#include <map>
 #if defined(__GXX_EXPERIMENTAL_CXX0X) || __cplusplus >= 201103L
   #include <memory>
   using std::shared_ptr;
@@ -20,7 +21,7 @@ class QtImage : public Image
 {
   public:
 
-    QtImage( std::string file_name );
+    QtImage( std::string file_name, PixelRep pixel_rep );
     QtImage( const QtImage& other );
 
     ~QtImage();
@@ -36,11 +37,18 @@ class QtImage : public Image
 
     void Scale( int width, int height, AspectRatio aspect_ratio = Image::ASPR_IGNORE );
 
+    void Convert(PixelRep newRep);
+
   protected:
 
   private:
 
+    static const std::map<Image::PixelRep, QImage::Format> mPixelFormatMap;
+    static std::map<Image::PixelRep, QImage::Format> createPixelFormatMap();
+    static Image::PixelRep getPixelRepFromFormat(QImage::Format);
+
     std::string mSrcFileURL;  // Or URI?
+    Image::PixelRep mPixelRep;
     shared_ptr<QImage> mQImage;  // Was std::auto_ptr
 };
 

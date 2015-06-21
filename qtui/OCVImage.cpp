@@ -2,9 +2,10 @@
 #include "Logger.h"
 
 
-OCVImage::OCVImage( const std::string& file_name ) :
+OCVImage::OCVImage( const std::string& file_name, PixelRep pixel_rep ) :
         mSrcFileURL( file_name ),
-        mMatImage( cv::imread(file_name, CV_LOAD_IMAGE_COLOR) )
+        mPixelRep( pixel_rep ),
+        mMatImage( cv::imread(file_name, CV_LOAD_IMAGE_UNCHANGED) )
 {
     if( !mMatImage.data ) {
         THROW( "Unable to open image file '" << file_name << "'" );
@@ -15,6 +16,7 @@ OCVImage::OCVImage( const std::string& file_name ) :
 OCVImage::OCVImage( const OCVImage& other )
 {
     mSrcFileURL = other.mSrcFileURL;
+    mPixelRep = other.mPixelRep;
     other.mMatImage.copyTo(mMatImage);  // Or use Mat::clone()?
 }
 
@@ -43,4 +45,10 @@ void OCVImage::Scale( int width, int height, AspectRatio aspect_ratio )
                    mMatImage.size().height * (width / mMatImage.size().width)));
 
     mMatImage = resizedImage;  // Frees the old data.
+}
+
+
+void OCVImage::Convert( Image::PixelRep newRep )
+{
+    // TODO
 }

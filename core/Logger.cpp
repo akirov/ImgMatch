@@ -35,19 +35,12 @@ std::string Logger::GetCurrentDateTimeStr( const char* hour, const char* min, co
 
 Logger::Logger(const std::string& logDir, const std::string& fileNamePrefix, 
                const std::string& fileNameExt) :
-    mLogDir(logDir),
-    mFileNamePrefix(fileNamePrefix),
-    mFileNameExt(fileNameExt)
+    mLogFileName(logDir + fileNamePrefix + GetCurrentDateTimeStr("h", "m", "s")
+               + fileNameExt),
+    mLogFile(mLogFileName.c_str())  // Create log file
 {
-    // Create log file
-
-    std::string logFileName = mLogDir + mFileNamePrefix 
-                            + GetCurrentDateTimeStr("h", "m", "s") 
-                            + mFileNameExt;
-
-    mLogFile.open(logFileName.c_str());
     if( !mLogFile.is_open() ) 
-        throw std::runtime_error(std::string("Error opening log file ") + logFileName);
+        throw std::runtime_error(std::string("Error opening log file ") + mLogFileName);
 }
 
 
@@ -57,7 +50,8 @@ Logger::~Logger()
 
     LOG("Closing log file.");
 
-    mLogFile.close();
+    if( mLogFile.is_open() )
+        mLogFile.close();
 }
 
 
