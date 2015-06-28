@@ -464,7 +464,8 @@ void CompareThread::run()
         {
             QDir dir1(mSrc1Name);
             QStringList file_list, filters;
-            filters << "*.jpg" << "*.jpeg" << "*.gif" << "*.png";
+            filters << "*.bmp" << "*.dib" << "*.jpeg" << "*.jpg" << "*.jpe" <<
+                "*.png" << "*.pbm" << "*.pgm" << "*.ppm" << "*.tiff" << "*.tif";
             file_list = dir1.entryList (filters, QDir::Files | QDir::Hidden);
 
             int N = file_list.size();
@@ -525,7 +526,8 @@ void CompareThread::run()
             QDir dir1(mSrc1Name);
             QDir dir2(mSrc2Name);
             QStringList file_list1, file_list2, filters;
-            filters << "*.jpg" << "*.jpeg" << "*.gif" << "*.png";
+            filters << "*.bmp" << "*.dib" << "*.jpeg" << "*.jpg" << "*.jpe" <<
+                "*.png" << "*.pbm" << "*.pgm" << "*.ppm" << "*.tiff" << "*.tif";
             file_list1 = dir1.entryList (filters, QDir::Files | QDir::Hidden);
             file_list2 = dir2.entryList (filters, QDir::Files | QDir::Hidden);
 
