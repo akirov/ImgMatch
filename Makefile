@@ -27,6 +27,12 @@ endif
 
 CPPFLAGS+=-D$(IMAGEIMP)
 
+ifneq (,$(findstring 1, $(USE_CPP11)))
+	CXXFLAGS+=-std=c++11
+	QT_CPP11_FLAGS=QMAKE_CXXFLAGS+=-std=c++11
+endif
+
+
 export IMAGEIMP
 export USE_OPENCV
 export OPENCVLIB
@@ -60,7 +66,7 @@ $(COREDIR):
 
 $(UIDIR):
 ifneq (,$(findstring qt, $(UIDIR)))
-	cd $(UIDIR); qmake CONFIG+=$(IMAGEIMP); $(MAKE)
+	cd $(UIDIR); qmake CONFIG+=$(IMAGEIMP) $(QT_CPP11_FLAGS); $(MAKE)
 else
 	$(error Don't know how to make UIDIR = $(UIDIR))
 endif

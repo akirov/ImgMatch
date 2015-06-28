@@ -16,3 +16,6 @@ ifeq ($(OS),Windows_NT)
   endif
 else
 endif
+
+# Whether to use C++11 standard. 1=yes, 0=no.
+USE_CPP11=0

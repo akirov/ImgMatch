@@ -19,7 +19,7 @@ class ModScale : public ImgMatch
 
     static const int ScaledWidth = 15;
     static const int ScaledHeight = 10;  // ~3:2
-    static const float MaxDistance = 441.673f;  // sqrt(3*255^2), Euclidean!
+    static const float MaxDistance;  // Add constexpr (c++11) to initialize it here.
 
     std::map<std::string, Image*> mScaledImagesCache;  // Or shared_ptr<Image> ?
 

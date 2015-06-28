@@ -1,9 +1,11 @@
 #include <cstdlib>
-#include <memory>
 #include <cmath>
 
 #include "ModScale.h"
 #include "Logger.h"
+
+
+const float ModScale::MaxDistance = 441.673f;  // sqrt(3*255^2), Euclidean!
 
 
 ModScale::~ModScale()
