@@ -3,7 +3,7 @@
 
 #if defined(__GXX_EXPERIMENTAL_CXX0X) || __cplusplus >= 201103L
 const std::map<Image::PixelRep, QImage::Format> QtImage::mPixelFormatMap = {
-        { Image::PIXEL_UNKNOWN, QImage::Format_Invalid },
+//      { Image::PIXEL_UNKNOWN, QImage::Format_Invalid },
         { Image::PIXEL_G,       QImage::Format_Indexed8},
         { Image::PIXEL_RGB,     QImage::Format_RGB888},
         { Image::PIXEL_ARGB,    QImage::Format_ARGB32}

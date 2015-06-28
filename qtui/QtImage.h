@@ -33,7 +33,7 @@ class QtImage : public Image
 
     std::string GetName() const { return mSrcFileURL; }  // inline is implicit
 
-    PixelRGB GetPixelRGB( int x, int y ) const;
+    inline PixelRGB GetPixelRGB( int x, int y ) const;
 
     void Scale( int width, int height, AspectRatio aspect_ratio = Image::ASPR_IGNORE );
 
@@ -44,7 +44,7 @@ class QtImage : public Image
   private:
 
     static const std::map<Image::PixelRep, QImage::Format> mPixelFormatMap;
-    static std::map<Image::PixelRep, QImage::Format> createPixelFormatMap();
+    static std::map<Image::PixelRep, QImage::Format> createPixelFormatMap();  // If not C++11
     static Image::PixelRep getPixelRepFromFormat(QImage::Format);
 
     std::string mSrcFileURL;  // Or URI?
