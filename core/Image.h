@@ -87,9 +87,10 @@ class Image
     typedef enum
     {
         PIXEL_UNKNOWN=-1,  // Use when we don't care about the representation
-        PIXEL_G,           // 8 bits grayscale
-        PIXEL_RGB,         // 24 bits red-green-blue
-        PIXEL_ARGB         // 32 bits alpha-red-green-blue
+        PIXEL_Gray8,       // 8 bits grayscale
+        PIXEL_RGB24,       // 24 bits red-green-blue
+        PIXEL_RGB32,       // 32 bits XX-red-green-blue
+        PIXEL_ARGB32       // 32 bits alpha-red-green-blue
     } PixelRep;
 
   public:

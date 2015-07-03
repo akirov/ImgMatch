@@ -2,6 +2,13 @@
 #include "Logger.h"
 
 
+Image::PixelRep OCVImage::getPixelRepFromFormat(int)
+{
+    // TODO
+    return Image::PIXEL_UNKNOWN;
+}
+
+
 OCVImage::OCVImage( const std::string& file_name, PixelRep pixel_rep ) :
         mSrcFileURL( file_name ),
         mPixelRep( pixel_rep ),
@@ -10,6 +17,11 @@ OCVImage::OCVImage( const std::string& file_name, PixelRep pixel_rep ) :
     if( !mMatImage.data ) {
         THROW( "Unable to open image file '" << file_name << "'" );
     }
+
+    if ( PIXEL_UNKNOWN == pixel_rep )
+        mPixelRep = getPixelRepFromFormat(mMatImage.type());
+    else
+        Convert(pixel_rep);  // Will reset mPixelRep to pixel_rep, or set the actual rep.
 }
 
 
@@ -23,7 +35,7 @@ OCVImage::OCVImage( const OCVImage& other )
 
 OCVImage::~OCVImage()
 {
-    // cv::Mat is deleted automatically
+    // cv::Mat content is deleted automatically
 }
 
 

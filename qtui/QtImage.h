@@ -13,6 +13,7 @@
 #endif
 
 #include <QImage>
+#include <QVector>
 
 #include "Image.h"
 
@@ -34,6 +35,7 @@ class QtImage : public Image
     std::string GetName() const { return mSrcFileURL; }  // inline is implicit
 
     inline PixelRGB GetPixelRGB( int x, int y ) const;
+    inline unsigned char GetPixelGray( int x, int y ) const;
 
     void Scale( int width, int height, AspectRatio aspect_ratio = Image::ASPR_IGNORE );
 
@@ -44,7 +46,10 @@ class QtImage : public Image
   private:
 
     static const std::map<Image::PixelRep, QImage::Format> mPixelFormatMap;
+    static const QVector<QRgb>  mGrayIndexTable;
+
     static std::map<Image::PixelRep, QImage::Format> createPixelFormatMap();  // If not C++11
+    static QVector<QRgb> createGrayIndexTable();
     static Image::PixelRep getPixelRepFromFormat(QImage::Format);
 
     std::string mSrcFileURL;  // Or URI?

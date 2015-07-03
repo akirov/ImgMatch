@@ -5,7 +5,7 @@
 #include "Logger.h"
 
 
-const float ModScale::MaxDistance = 441.673f;  // sqrt(3*255^2), Euclidean!
+const float ModScale::MaxDistance = 441.673f;  // Euclidean distance between black and white = sqrt(3*255^2)
 
 
 ModScale::~ModScale()

@@ -15,14 +15,15 @@ class OCVImage : public Image
 
     ~OCVImage();
 
-//  OCVImage* Copy() const;
+//  OCVImage* Copy() const;  // Note: cv::Mat copy operators will only copy the headers and the pointer to the large matrix, not the data itself.
 
     inline int GetWidth() const { return mMatImage.size().width; }  // Or mMatImage.cols ?
     inline int GetHeight() const { return mMatImage.size().height; }  // Or mMatImage.rows ?
 
     std::string GetName() const { return mSrcFileURL; }  // inline is implicit
 
-    PixelRGB GetPixelRGB( int x, int y ) const;
+    inline PixelRGB GetPixelRGB( int x, int y ) const;
+//  inline unsigned char GetPixelGray( int x, int y ) const;
 
     void Scale( int width, int height, AspectRatio aspect_ratio = Image::ASPR_IGNORE );
 
@@ -34,9 +35,11 @@ class OCVImage : public Image
 
   private:
 
+    static Image::PixelRep getPixelRepFromFormat(int);
+
     std::string mSrcFileURL;
     Image::PixelRep mPixelRep;
-    cv::Mat mMatImage;  // Or shared_ptr<IplImage> ?
+    cv::Mat mMatImage;  // No need of pointers here.
 };
 
 

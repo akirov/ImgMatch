@@ -3,10 +3,10 @@
 #IMAGEIMP=OCVIMAGE_8UC3
 IMAGEIMP=QTIMAGE_RGB24
 
-# Components implementation options: OPENCV=use OpenCV, 0=disabled.
+# Components implementation options: "OPENCV" = use OpenCV, "0" = disabled.
 SIFT_IMP=0
 
-# OpenCV instalation parameters (if using OpenCV).
+# Set OpenCV instalation parameters (if using OpenCV).
 ifeq ($(OS),Windows_NT)
   ifeq (,$(findstring CYGWIN, $(shell uname)))
     # Windows, but not Cygwin
@@ -17,5 +17,5 @@ ifeq ($(OS),Windows_NT)
 else
 endif
 
-# Whether to use C++11 standard. 1=yes, 0=no.
+# Whether to use C++11 standard. "1" = yes, "0" = no.
 USE_CPP11=0
