@@ -32,6 +32,10 @@ ifneq (,$(findstring 1, $(USE_CPP11)))
 	QT_CPP11_FLAGS=QMAKE_CXXFLAGS+=-std=c++11
 endif
 
+ifneq (,$(findstring 1, $(ENABLE_LOG)))
+	CPPFLAGS+=-DENABLE_LOG
+endif
+
 
 export IMAGEIMP
 export USE_OPENCV

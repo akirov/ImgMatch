@@ -19,3 +19,6 @@ endif
 
 # Whether to use C++11 standard. "1" = yes, "0" = no.
 USE_CPP11=0
+
+# Enable or disable logging. "1" = enabled. Log file is in bin directory by default.
+ENABLE_LOG=1

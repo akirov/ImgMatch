@@ -8,6 +8,11 @@
 #include <stdexcept>
 
 
+#ifdef ENABLE_LOG
+
+#define INIT_LOG(logDir, fileNamePrefix, fileNameExt) \
+    InitLog(logDir, fileNamePrefix, fileNameExt)
+
 #define LOG( text ) \
     do { \
         std::stringstream sstr; \
@@ -24,6 +29,22 @@
         Logger::Log( sstr.str() ); \
         throw std::runtime_error( sstr.str() ); \
     } while( false )
+
+#else  // No logging
+
+#define INIT_LOG(logDir, fileNamePrefix, fileNameExt)
+
+#define LOG( text )
+
+#define THROW( text ) \
+    do { \
+        std::stringstream sstr; \
+        sstr << Logger::GetCurrentDateTimeStr() << " ***EXCEPTION*** " \
+             << __FILE__ << ":" << __LINE__ << ": " << text; \
+        throw std::runtime_error( sstr.str() ); \
+    } while( false )
+
+#endif // ENABLE_LOG
 
 
 class Logger
