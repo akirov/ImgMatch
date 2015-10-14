@@ -2,6 +2,15 @@
 #define __IMAGE_H__
 
 #include <string>
+
+#if defined(__GXX_EXPERIMENTAL_CXX0X) || __cplusplus >= 201103L
+  #include <cstdint>
+  using std::uint32_t;
+  using std::uint8_t;
+#else
+  #include <stdint.h>
+#endif
+
 #if 0  // This code is hardware-dependent
 #include <sys/param.h>  // For BYTE_ORDER definition in MinWG
 
@@ -14,9 +23,9 @@ struct PixelARGB
 {
     PixelARGB() : ARGB(0) {}
 
-    PixelARGB(unsigned long argb) : ARGB(argb) {}
+    PixelARGB(uint32_t argb) : ARGB(argb) {}
 
-    PixelARGB(unsigned char r, unsigned char g, unsigned char b, unsigned char a=0xFF) :
+    PixelARGB(uint8_t r, uint8_t g, uint8_t b, uint8_t a=0xFF) :
 #if BYTE_ORDER == BIG_ENDIAN
         A(a),
         R(r),
@@ -34,25 +43,25 @@ struct PixelARGB
 
     ~PixelARGB() {}
 
-    operator unsigned long () const { return ARGB; }
+    operator uint32_t () const { return ARGB; }
 
     union {
         struct {
 #if BYTE_ORDER == BIG_ENDIAN
-            unsigned char A;
-            unsigned char R;
-            unsigned char G;
-            unsigned char B;
+            uint8_t A;
+            uint8_t R;
+            uint8_t G;
+            uint8_t B;
 #elif BYTE_ORDER == LITTLE_ENDIAN
-            unsigned char B;
-            unsigned char G;
-            unsigned char R;
-            unsigned char A;
+            uint8_t B;
+            uint8_t G;
+            uint8_t R;
+            uint8_t A;
 #else
 #error "Unknown BYTE_ORDER"
 #endif /* BYTE_ORDER */
         };
-        unsigned long ARGB;
+        uint32_t ARGB;
     };
 };
 #endif // 0
@@ -62,15 +71,15 @@ struct PixelRGB
 {
     PixelRGB() : R(0), G(0), B(0) {}
 
-    PixelRGB(unsigned char r, unsigned char g, unsigned char b) :
+    PixelRGB(uint8_t r, uint8_t g, uint8_t b) :
             R(r), G(g), B(b)
     {}
 
     ~PixelRGB() {}
 
-    unsigned char R;
-    unsigned char G;
-    unsigned char B;
+    uint8_t R;
+    uint8_t G;
+    uint8_t B;
 };
 
 
@@ -109,7 +118,8 @@ class Image
     virtual std::string GetName() const = 0;  // Or GetURI()?
 
     virtual PixelRGB GetPixelRGB( int x, int y ) const = 0;
-//  virtual unsigned char GetPixelGray( int x, int y ) const = 0;
+//  virtual uint32_t GetPixelRGB32( int x, int y ) const = 0;
+//  virtual uint8_t GetPixelGray( int x, int y ) const = 0;
 //  virtual void* GetPixelPtr( int x, int y ) const = 0;
 
     virtual void Scale(int width, int height, AspectRatio aspect_ratio=ASPR_IGNORE) = 0;

@@ -32,7 +32,7 @@ float ModScale::Compare( const std::string& img1path, const std::string& img2pat
     else
     {
 //        LOG("Image " << img1path << " NOT found in cache!");
-        scaledImg1 = Image::ConstuctImage(img1path);  // Check for errors when opening the images!
+        scaledImg1 = Image::ConstuctImage(img1path, Image::PIXEL_RGB24);  // Check for errors when opening the images!
 //        int ScaledHeight = scaledImg1->GetHeight() * ScaledWidth / scaledImg1->GetWidth();
         scaledImg1->Scale( ScaledWidth, ScaledHeight, Image::ASPR_IGNORE );  // Was Image::ASPR_KEEP
         mScaledImagesCache[img1path] = scaledImg1;
@@ -47,7 +47,7 @@ float ModScale::Compare( const std::string& img1path, const std::string& img2pat
     else
     {
 //        LOG("Image " << img2path << " NOT found in cache!");
-        scaledImg2 = Image::ConstuctImage(img2path);
+        scaledImg2 = Image::ConstuctImage(img2path, Image::PIXEL_RGB24);
         scaledImg2->Scale( ScaledWidth, ScaledHeight, Image::ASPR_IGNORE );
         mScaledImagesCache[img2path] = scaledImg2;
     }

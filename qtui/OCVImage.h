@@ -35,7 +35,10 @@ class OCVImage : public Image
 
   private:
 
-    static Image::PixelRep getPixelRepFromFormat(int);
+    static const std::map<Image::PixelRep, int> mPixelTypeMap;
+
+    static std::map<Image::PixelRep, int> createPixelTypeMap();  // If not C++11
+    static Image::PixelRep getPixelRepFromType(int);
 
     std::string mSrcFileURL;
     Image::PixelRep mPixelRep;
