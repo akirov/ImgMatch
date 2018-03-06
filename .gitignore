@@ -7,3 +7,4 @@ img/
 *.o
 *.a
 *.exe
+project/

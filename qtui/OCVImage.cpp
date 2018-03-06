@@ -3,7 +3,7 @@
 
 
 #if defined(__GXX_EXPERIMENTAL_CXX0X) || __cplusplus >= 201103L
-const std::map<Image::PixelRep, int> mPixelTypeMap = {
+const std::map<Image::PixelRep, int> OCVImage::mPixelTypeMap = {
 //      { Image::PIXEL_UNKNOWN, -1 },
         { Image::PIXEL_Gray8,   CV_8UC1},
         { Image::PIXEL_RGB24,   CV_8UC3},
@@ -61,6 +61,7 @@ OCVImage::OCVImage( const std::string& file_name, PixelRep pixel_rep ) :
         case Image::PIXEL_UNKNOWN:
         default:
             mMatImage = cv::imread(file_name, CV_LOAD_IMAGE_UNCHANGED);
+            break;
     }
 
     if( !mMatImage.data ) {

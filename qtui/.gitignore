@@ -3,3 +3,4 @@ release/
 Makefile
 Makefile.*
 ui_ImgMatchUI.h
+.qmake.stash
