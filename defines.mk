@@ -13,8 +13,8 @@ ifeq ($(OS),Windows_NT)
     #OPENCVLIB="D:/OpenCV/mingw/lib"
     #OPENCVINC="D:/OpenCV/build/include"
     #OPENCVVER=2413
-    OPENCVLIB="D:/OpenCV/build/2.4.13.5/mingw/install/x86/mingw/lib"
-    OPENCVINC="D:/OpenCV/build/2.4.13.5/mingw/install/include"
+    OPENCVLIB="D:/OpenCV/2.4.13.6/mingw530_32/install/x86/mingw/lib"
+    OPENCVINC="D:/OpenCV/2.4.13.6/mingw530_32/install/include"
     OPENCVVER=2413
   endif
 else
