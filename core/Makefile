@@ -1,12 +1,23 @@
 
+ifeq ($(OS),Windows_NT)
+  ifeq ($(shell echo $$OSTYPE),cygwin)
+    RM=rm -f
+    BUILD_DIR=../$(BUILDDIR)/
+  else
+    RM=del /F /Q
+    BUILD_DIR=..\$(BUILDDIR)\\
+  endif
+else
+  RM=rm -f
+  BUILD_DIR=../$(BUILDDIR)/
+endif
+
 CXX=g++
-RM=rm -f
+
 CXXFLAGS+=-Wall
 
 
-BUILD_DIR=../$(BUILDDIR)
-
-IMGMATCH_LIB=$(BUILD_DIR)/libimgmatch.a
+IMGMATCH_LIB=$(BUILD_DIR)libimgmatch.a
 
 #SOURCES=$(wildcard *.cpp)
 SOURCES=Logger.cpp ModScale.cpp
@@ -19,9 +30,9 @@ ifneq (,$(findstring OPENCV, $(SIFT_IMP)))
     HEADERS+=ModOcvSIFT.h
 endif
 
-OBJS=$(SOURCES:%.cpp=$(BUILD_DIR)/%.o)
+OBJS=$(SOURCES:%.cpp=$(BUILD_DIR)%.o)
 
-DEPEND=$(BUILD_DIR)/.depend
+DEPEND=$(BUILD_DIR).depend
 
 
 all: $(IMGMATCH_LIB)
@@ -38,9 +49,9 @@ $(DEPEND): $(SOURCES) $(HEADERS)
 -include $(DEPEND)
 
 
-$(BUILD_DIR)/%.o: %.cpp
+$(BUILD_DIR)%.o: %.cpp
 	$(CXX) $(CXXFLAGS) $(CPPFLAGS) -c $< -o $@
 
 
 clean:
-	-$(RM) $(BUILD_DIR)/*.o $(IMGMATCH_LIB) $(DEPEND)
+	-$(RM) $(BUILD_DIR)*.o $(IMGMATCH_LIB) $(DEPEND)

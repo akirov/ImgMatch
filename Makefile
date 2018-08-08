@@ -70,12 +70,14 @@ $(COREDIR):
 
 $(UIDIR):
 ifneq (,$(findstring qt, $(UIDIR)))
-	cd $(UIDIR); qmake CONFIG+=$(IMAGEIMP) $(QT_CPP11_FLAGS); $(MAKE)
+	cd $(UIDIR)  &&  qmake CONFIG+=$(IMAGEIMP) $(QT_CPP11_FLAGS)  &&  $(MAKE)
 else
 	$(error Don't know how to make UIDIR = $(UIDIR))
 endif
 
 
 clean:
-	-@for dir in $(ALLDIRS); do $(MAKE) -C $$dir $@; done
+	$(MAKE) -C $(COREDIR) $@
+	$(MAKE) -C $(UIDIR) $@
+#	-@for dir in $(ALLDIRS); do $(MAKE) -C $$dir $@; done
 #	-@for dir in $(ALLDIRS); do ( cd $$dir; $(MAKE) $@ ); done

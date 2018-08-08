@@ -8,7 +8,7 @@ SIFT_IMP=0
 
 # Set OpenCV instalation parameters (if using OpenCV).
 ifeq ($(OS),Windows_NT)
-  ifeq (,$(findstring CYGWIN, $(shell uname)))
+  ifneq ($(shell echo $$OSTYPE),cygwin)
     # Windows, but not Cygwin
     #OPENCVLIB="D:/OpenCV/mingw/lib"
     #OPENCVINC="D:/OpenCV/build/include"
