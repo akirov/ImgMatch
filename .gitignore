@@ -1,8 +1,9 @@
 .eclipse/
 .settings/
+.idea/
 .project
 .cproject
-img/
+pics/
 .depend
 *.o
 *.a
