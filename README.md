@@ -15,11 +15,11 @@ shapes, fingerprints and text in images.
 ImgMatch is written in C++, in an object-oriented and modular fashion.
 It has a platform-independent GUI, which uses Qt framework.
 
-To compile the source in Windows environment you need Cmake, Qt SDK and MinGW.
-In Linux (or Cygwin) environment you need g++, qt-devel and cmake. If you
-want to use OpenCV, you may need to specify its location in root CMakeLists.txt.
-Then just `cd build`, `cmake .. -G "Unix Makefiles"`, `make` or `mingw-make` and
-`make install`. The executable file will be in `bin` directory.
+To compile the sources you need a C++11 compiler, CMake, Qt SDK, and optionally
+OpenCV. You may need to specify OpenCV and Qt locations in root CMakeLists.txt,
+if they are not standard. Then just `cd build`, `cmake .. -G "Unix Makefiles"`
+(or use other generator), `make` or `mingw-make` and `make install`.
+The executable file will be in `bin` sub-directory.
 
 
 Screenshots
