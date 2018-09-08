@@ -446,7 +446,11 @@ void CompareThread::run()
 
 //  exec();  // Starts event loop. Does not return until exit(). We only need this to process signals.
 
+#if defined(__GXX_EXPERIMENTAL_CXX0X) || __cplusplus >= 201103L
+    std::unique_ptr<ImgMatch> img_match(nullptr);
+#else
     std::auto_ptr<ImgMatch> img_match(NULL);
+#endif  // C++11
 
     switch ( mMatchMode )  // Or use a factory?
     {

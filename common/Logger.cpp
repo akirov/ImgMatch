@@ -7,7 +7,11 @@
 
 
 //Logger* Logger::sLogger = NULL;
+#if defined(__GXX_EXPERIMENTAL_CXX0X) || __cplusplus >= 201103L
+std::unique_ptr<Logger> Logger::sLogger( nullptr );
+#else
 std::auto_ptr<Logger> Logger::sLogger( NULL );
+#endif  // C++11
 
 
 std::string Logger::GetCurrentDateTimeStr( const char* hour, const char* min, const char* sec )
@@ -83,6 +87,7 @@ std::ofstream& Logger::GetLogFile()
 
 void Logger::Log( const std::string& text )
 {
+    // TODO Lock
     std::ofstream& logFile = Logger::GetLogFile();
 
     logFile << text << std::endl;

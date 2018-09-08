@@ -71,7 +71,11 @@ class Logger
 
   private:
 //  static Logger* sLogger;
+#if defined(__GXX_EXPERIMENTAL_CXX0X) || __cplusplus >= 201103L
+    static std::unique_ptr<Logger> sLogger;
+#else
     static std::auto_ptr<Logger> sLogger;
+#endif  // C++11
 
     std::string   mLogFileName;
     std::ofstream mLogFile;
