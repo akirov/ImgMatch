@@ -166,7 +166,7 @@ private:
     MatchMode               mMatchMode;
     int                     mMatchThreshold;
     int                     mItProc;
-    bool                    mStopFlag;
+    bool                    mStopFlag;  // ToDo: Make it atomic
 };
 
 #endif // IMGMATCHUI_H

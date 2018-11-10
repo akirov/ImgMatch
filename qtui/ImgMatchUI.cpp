@@ -751,7 +751,7 @@ void ImgMatchUI::on_pbFindStart_clicked()
 
 void CompareThread::on_pbFindStop_clicked()
 {
-    // Called in GUI thread context! Lock CompareThread mutex? No need - setting bool should be atomic.
+    // Called in GUI thread context! Lock CompareThread mutex?
 
     mStopFlag = true;
 
