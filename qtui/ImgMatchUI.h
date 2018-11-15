@@ -123,7 +123,7 @@ private:
     int mMatchThreshold;
 
     bool mStopFlag;
-    CompareThread* mComThread;  // Or an auto_ptr?
+    CompareThread* mComThread;
     QTimer* mQTimer;
     QMutex mMutex;
 
@@ -145,7 +145,7 @@ public:
     ~CompareThread();
 
     void run();
-    int getItemsProc() const { return mItProc; }  // No need to lock.
+    int getItemsProc() const { return mItProc; }  // Lock?
 
 public Q_SLOTS:
     // Interface to stop the thread

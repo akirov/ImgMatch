@@ -137,7 +137,8 @@ void OCVImage::Convert( Image::PixelRep newRep )
                     break;
                 }
                 default:
-                    ;// throw?
+                    // throw? or return false?
+                    break;
             }
             cv::Mat newImage;
             cvtColor(mMatImage, newImage, code, dstCn);

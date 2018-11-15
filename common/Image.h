@@ -104,7 +104,8 @@ class Image
 
   public:
 
-    static Image* ConstuctImage(std::string image_url, PixelRep pixel_rep=PIXEL_UNKNOWN);  // "Factory" instead of a constructor.
+    // "Factory" instead of a constructor. Use shared_ptr ?
+    static Image* ConstuctImage(std::string image_url, PixelRep pixel_rep=PIXEL_UNKNOWN);
 
     virtual ~Image() 
     {

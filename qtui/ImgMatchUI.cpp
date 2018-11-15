@@ -720,7 +720,9 @@ void ImgMatchUI::on_pbFindStart_clicked()
     {
         LOG("Compare start. Main threadId = " << QThread::currentThreadId());
 
-        mComThread = new CompareThread(mImgSrc, src1name, src2name, mMatchMode, mMatchThreshold, this);  // Add "this" as parent to delete CompareThread when ImgMatchUI is deleted.
+        /* Add "this" as parent to delete CompareThread when ImgMatchUI is deleted.
+         * Or connect &CompareThread::finished with &QObject::deleteLater ? */
+        mComThread = new CompareThread(mImgSrc, src1name, src2name, mMatchMode, mMatchThreshold, this);
 
         // Connect signals and slots
         connect(mComThread, SIGNAL(sendProgressRange(int, int)), ui->progressBar, SLOT(setRange(int, int)));

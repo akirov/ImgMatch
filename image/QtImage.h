@@ -54,7 +54,7 @@ class QtImage : public Image
 
     std::string mSrcFileURL;  // Or URI?
     Image::PixelRep mPixelRep;
-    shared_ptr<QImage> mQImage;  // Was std::auto_ptr
+    shared_ptr<QImage> mQImage;
 };
 
 
