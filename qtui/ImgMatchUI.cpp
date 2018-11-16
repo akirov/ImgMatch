@@ -734,7 +734,8 @@ void ImgMatchUI::on_pbFindStart_clicked()
 
         qRegisterMetaType<ComPair>("ComPair");  // Or qRegisterMetaType<ComPair>(); with Q_DECLARE_METATYPE(ComPair);
         connect(mComThread, SIGNAL(sendRowInDupsTable(ComPair)), this, SLOT(addRowInDupsTable(ComPair)));
-        connect(mComThread, SIGNAL(sendRowInResults(ComPair)), this, SLOT(addRowInResults(ComPair)), Qt::DirectConnection);  // With Qt::DirectConnection the slot is called in CompareThread context, otherwise - in GUI thread!
+        // With Qt::DirectConnection the slot is called in CompareThread context, otherwise - in GUI thread!
+        connect(mComThread, SIGNAL(sendRowInResults(ComPair)), this, SLOT(addRowInResults(ComPair)), Qt::DirectConnection);
         connect(mComThread, SIGNAL(sendNumResultsUpdate()), this, SLOT(numResultsUpdate()));
 
         connect(mComThread, SIGNAL(sendCompareFinished()), this, SLOT(compareFinished()));
