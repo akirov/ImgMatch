@@ -166,7 +166,9 @@ private:
     MatchMode               mMatchMode;
     int                     mMatchThreshold;
     int                     mItProc;
-    bool                    mStopFlag;  // ToDo: Make it atomic
+    bool                    mStopFlag;  /* ToDo: Make it atomic
+     * Or use QThread::requestInterruption() to set thread's internal flag and
+     * QThread::isInterruptionRequested() to check the flag? */
 };
 
 #endif // IMGMATCHUI_H
