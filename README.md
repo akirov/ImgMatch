@@ -68,46 +68,38 @@ ToDo
 
 - Offer to save the cache of image signatures for later reuse, but the
   format will be different for different modules - need proper description.
-  Add "Save" results button alongside "Clear"? will need to expand the form.
+  Add "Save" results button alongside "Clear"? May need to expand the form.
 
 - If we want to modify the image e. g. to display matching points, think
   how to do it - where and how to store processed images.
 
-- "Delete" buttons working; should we delete the entire row from the table?
+- "Delete" buttons working. Should we delete the entire row from the table?
 
 - ModScale improvements:
-
   - convert the images to grayscale (0-255) before resizing them? then we
-  will have only one dimension
-
+    will have only one dimension
   - take the average of some key-regions (grid) instead of single points?
-
   - smooth (denoise) first?
-
   - rotate according to principle components first?
-
   - find the "most interesting region" first?
-
   - when one image is smaller than the thumbnail scale the bigger image to
-  the smaller
-
+    the smaller
   - metrics options:
-  now we calculate the distance between the points in the RGB space and
-  assume that the max distance is between white and black, then take the
-  average;
-  we can use |a-b|/(|a| + |b|) (euclidean)?;
-  or use the angle between color vectors? but we have to move the origin
-  at (128, 128, 128) may be
-
+    now we calculate the distance between the points in the RGB space and
+    assume that the max distance is between white and black, then take the
+    average;
+    we can use |a-b|/(|a| + |b|) (euclidean)?;
+    or use the angle between color vectors? but we have to move the origin
+    at (128, 128, 128) may be
   - crop if the dimensions ratio is very different?
 
-- Implement SIFT / SURF / FAST / ORB modules using OpenCV; need to call a
+- Implement SIFT / SURF / FAST / ORB modules using OpenCV. Need to call a
   decoration function to add matching points before displaying the images.
 
 - Implement histogram compare module.
 
 - Implement image signature module:
-  can use TensofFlow C++ library with a pre-trained in Pyhton neural network
+  Can use TensofFlow C++ library with a pre-trained in Pyhton neural network
   to create image signatures.
   Or use OpenCV ML methods.
 
