@@ -77,21 +77,21 @@ ToDo
 
 - ModScale improvements:
 
-  convert the images to grayscale (0-255) before resizing them? then we
+  - convert the images to grayscale (0-255) before resizing them? then we
   will have only one dimension
 
-  take the average of some key-regions (grid) instead of single points?
+  - take the average of some key-regions (grid) instead of single points?
 
-  smooth (denoise) first?
+  - smooth (denoise) first?
 
-  rotate according to principle components first?
+  - rotate according to principle components first?
 
-  find the "most interesting region" first?
+  - find the "most interesting region" first?
 
-  when one image is smaller than the thumbnail scale the bigger image to
+  - when one image is smaller than the thumbnail scale the bigger image to
   the smaller
 
-  metrics options:
+  - metrics options:
   now we calculate the distance between the points in the RGB space and
   assume that the max distance is between white and black, then take the
   average;
@@ -99,7 +99,7 @@ ToDo
   or use the angle between color vectors? but we have to move the origin
   at (128, 128, 128) may be
 
-  crop if the dimensions ratio is very different?
+  - crop if the dimensions ratio is very different?
 
 - Implement SIFT / SURF / FAST / ORB modules using OpenCV; need to call a
   decoration function to add matching points before displaying the images.
