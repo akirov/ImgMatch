@@ -109,8 +109,8 @@ ToDo
 - Implement image signature module:
   can use TensofFlow C++ library with a pre-trained in Pyhton neural network
   to create image signatures.
-  Or use OpenCV ML methods
+  Or use OpenCV ML methods.
 
-- Implement face matching module
+- Implement face matching module.
 
 - OpenCL/CUDA optimizations.
