@@ -92,17 +92,31 @@ ToDo
     or use the angle between color vectors? but we have to move the origin
     at (128, 128, 128) may be
   - crop if the dimensions ratio is very different?
+  - use OpenCV's matchTemplate()?
 
 - Implement SIFT / SURF / FAST / ORB modules using OpenCV. Need to call a
   decoration function to add matching points before displaying the images.
+  - put all these in a single box ("Local features"?) with options?
 
-- Implement histogram compare module.
+- Implement histogram compare module:
+  - HOG + SVM option?
 
 - Implement image signature module:
-  Can use TensofFlow C++ library with a pre-trained in Pyhton neural network
-  to create image signatures.
-  Or use OpenCV ML methods.
+  - can use TensofFlow C++ library, or just cv::dnn::readNetFromTensorflow(),
+    with a pre-trained in Pyhton neural network to create image signatures
+  - or use pre-trained YOLO for signatures? No, this should be a separate module
+  - or use OpenCV ML methods?
 
-- Implement face matching module.
+- Shape matching module:
+  - Elongatedness
+  - Centroidal Profile
+  - generalized Hough transform
+  - PCA
+
+- Face matching module with OpenCV:
+  - add interface option to group similar faces in results?
+  - Eigenfaces
+  - Fisherfaces
+  - Local Binary Patterns Histograms
 
 - OpenCL/CUDA optimizations.
