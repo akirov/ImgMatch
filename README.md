@@ -94,8 +94,9 @@ ToDo
   - crop if the dimensions ratio is very different?
   - use OpenCV's matchTemplate()?
 
-- Implement SIFT / SURF / FAST / ORB modules using OpenCV. Need to call a
-  decoration function to add matching points before displaying the images.
+- Implement SIFT / SURF / FAST / ORB modules using OpenCV:
+  - need to call a decoration function to add matching points before displaying
+    the images
   - put all these in a single box ("Local features"?) with options?
 
 - Implement histogram compare module:
