@@ -97,6 +97,7 @@ private slots:
     void numResultsUpdate();
     void compareFinished();
     void onTimerTick();
+    void on_pbFindStop_clicked();  // Interface to stop compare thread
 
 private:
     void createActions();
@@ -122,7 +123,6 @@ private:
 
     int mMatchThreshold;
 
-    bool mStopFlag;
     CompareThread* mComThread;
     QTimer* mQTimer;
     QMutex mMutex;
@@ -147,10 +147,6 @@ public:
     void run();
     int getItemsProc() const { return mItProc; }  // Lock?
 
-public Q_SLOTS:
-    // Interface to stop the thread
-    void on_pbFindStop_clicked();
-
 Q_SIGNALS:
     void sendProgressRange(int, int);  // Set progress bar range
     void sendRowInDupsTable(const ComPair& cmp);  // Update table
@@ -166,9 +162,6 @@ private:
     MatchMode               mMatchMode;
     int                     mMatchThreshold;
     int                     mItProc;
-    bool                    mStopFlag;  /* ToDo: Make it atomic
-     * Or use QThread::requestInterruption() to set thread's internal flag and
-     * QThread::isInterruptionRequested() to check the flag? */
 };
 
 #endif // IMGMATCHUI_H

@@ -24,7 +24,6 @@ ImgMatchUI::ImgMatchUI(QWidget *parent) :
     mImgSrc(SRC_INVALID),
     mMatchMode(MOD_INVALID),
     mMatchThreshold(0),
-    mStopFlag(false),
     mComThread(NULL),
     mQTimer(NULL),
     mMutex(),
@@ -418,6 +417,10 @@ void ImgMatchUI::onTimerTick()
 }
 
 
+/******************************************************************************/
+// TODO: move in a separate file. Rename to CompareManagerThread?
+
+
 CompareThread::CompareThread( ImgMatchUI::ImageSource image_source, 
         const QString& src1_name, const QString& src2_name,
         MatchMode match_mode, int match_threshold, 
@@ -428,8 +431,7 @@ CompareThread::CompareThread( ImgMatchUI::ImageSource image_source,
     mSrc2Name(src2_name),
     mMatchMode(match_mode),
     mMatchThreshold(match_threshold),
-    mItProc(0),
-    mStopFlag(false)
+    mItProc(0)
 {
 }
 
@@ -491,11 +493,13 @@ void CompareThread::run()
             // of them. Update the progress bar. Break if the Stop button is pressed.
             // Add each processed pair to the results, if it is above match threshold.
 
-            for ( int i=0; !mStopFlag && i<(N-1); i++ )
+            for ( int i=0; !isInterruptionRequested() && i<(N-1); i++ )
             {
                 // If i == 0 print status "Caching..." else print "Comparing..."?
-                for ( int j=i+1; !mStopFlag && j<N; j++ )
+                for ( int j=i+1; !isInterruptionRequested() && j<N; j++ )
                 {
+                    /* TODO: only push work items in a work queue and process them
+                     * in a pool of worker threads */
                     ComPair cmp(mSrc1Name.toStdString() + "/" + file_list[i].toStdString(), 
                                 mSrc1Name.toStdString() + "/" + file_list[j].toStdString());
 
@@ -552,10 +556,10 @@ void CompareThread::run()
             // Init the progress bar
             Q_EMIT sendProgressRange(0, numPairs);
 
-            for ( int i=0; !mStopFlag && i<N1; i++ )
+            for ( int i=0; !isInterruptionRequested() && i<N1; i++ )
             {
                 // If i == 0 print status "Caching..." else print "Comparing..."?
-                for ( int j=0; !mStopFlag && j<N2; j++ )
+                for ( int j=0; !isInterruptionRequested() && j<N2; j++ )
                 {
                     ComPair cmp(mSrc1Name.toStdString() + "/" + file_list1[i].toStdString(),
                                 mSrc2Name.toStdString() + "/" + file_list2[j].toStdString());
@@ -618,6 +622,9 @@ void CompareThread::run()
 
     Q_EMIT sendCompareFinished();
 }
+
+
+/******************************************************************************/
 
 
 void ImgMatchUI::on_pbFindStart_clicked()
@@ -695,7 +702,6 @@ void ImgMatchUI::on_pbFindStart_clicked()
 
     // Enable "Stop" find button
     ui->pbFindStop->setEnabled(true);
-    mStopFlag = false;
 
     // Enable progress bar
     ui->progressBar->setEnabled(true);
@@ -740,7 +746,8 @@ void ImgMatchUI::on_pbFindStart_clicked()
 
         connect(mComThread, SIGNAL(sendCompareFinished()), this, SLOT(compareFinished()));
 
-        connect(ui->pbFindStop, SIGNAL(clicked()), mComThread, SLOT(on_pbFindStop_clicked()), Qt::DirectConnection);
+        // No need for this - it will be connected utomatically
+        //connect(ui->pbFindStop, SIGNAL(clicked()), this, SLOT(on_pbFindStop_clicked()));
 
         mComThread->start();  // Calls run(). Set QThread::LowPriority?
 
@@ -752,15 +759,11 @@ void ImgMatchUI::on_pbFindStart_clicked()
 }
 
 
-void CompareThread::on_pbFindStop_clicked()
+void ImgMatchUI::on_pbFindStop_clicked()
 {
-    // Called in GUI thread context! Lock CompareThread mutex?
+    LOG("Stop button clicked, threadId = " << QThread::currentThreadId());
 
-    mStopFlag = true;
-
-    LOG("mStopFlag = true, threadId = " << QThread::currentThreadId());
-
-//  quit();  // Event loop exit with return code 0 (success).
+    if( NULL != mComThread ) mComThread->requestInterruption();
 }
 
 
@@ -922,13 +925,13 @@ void ImgMatchUI::on_pbViewClear_clicked()
 
 void ImgMatchUI::on_pbDelImg1_clicked()
 {
-    
+    // TODO
 }
 
 
 void ImgMatchUI::on_pbDelImg2_clicked()
 {
-    
+    // TODO
 }
 
 

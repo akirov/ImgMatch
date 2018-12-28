@@ -35,9 +35,6 @@ Screenshots
 ToDo
 ----
 
-- Use requestInterruption() and isInterruptionRequested(), or make thread
-  stop flag atomic.
-
 - Logger is not thread safe - add a lock.
 
 - Handle closing the main window during processing, e. g.
@@ -50,6 +47,8 @@ ToDo
   Or we can delete the thread object manually in compareFinished() after
   waiting for it to exit (where?).
   Or just connect &CompareThread::finished() with &QObject::deleteLater().
+
+- Extract CompareThread in a separate file! Rename to CompareManagerThread?
 
 - Remove non-C++11 code, if C++03 support can't be guaranteed?
 
