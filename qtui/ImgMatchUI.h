@@ -145,7 +145,7 @@ public:
     ~CompareThread();
 
     void run();
-    int getItemsProc() const { return mItProc; }  // Lock?
+    int getItemsProc() const { return mItProc; }  // Lock, or make mItProc atomic!
 
 Q_SIGNALS:
     void sendProgressRange(int, int);  // Set progress bar range

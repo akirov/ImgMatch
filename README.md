@@ -35,6 +35,8 @@ Screenshots
 ToDo
 ----
 
+- Lock in getItemsProc(), or make mItProc atomic.
+
 - Logger is not thread safe - add a lock.
 
 - Handle closing the main window during processing, e. g.
