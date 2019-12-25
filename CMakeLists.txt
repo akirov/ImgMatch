@@ -3,9 +3,9 @@ cmake_minimum_required(VERSION 3.1.0)
 project(ImgMatch)
 
 
-# Image implementation options: Qt or OpenCV. Uncomment only one!
-#set (IMAGEIMP OCVIMAGE_8UC3)
-set (IMAGEIMP QTIMAGE_RGB24)
+# Image class implementation options: Qt or OpenCV. Uncomment only one!
+set (IMAGEIMP OCVIMAGE_8UC3)
+#set (IMAGEIMP QTIMAGE_RGB24)
 
 
 # Which modules are enabled
@@ -23,6 +23,7 @@ endif (MOD_OCV_SIFT)
 if (${IMAGEIMP} MATCHES "OCVIMAGE")
   if (MINGW)
     set(OpenCV_DIR "D:/OpenCV/2.4.13.6/mingw530_32/install")
+    #set(OpenCV_DIR "D:/OpenCV/mingw/install")
   elseif (MSVC)
     #set(OpenCV_DIR "D:/OpenCV/2.4.13.6/vs2015/install")
     set(OpenCV_DIR "D:/OpenCV/3.4.2/vs2015/install")
@@ -35,6 +36,7 @@ endif (${IMAGEIMP} MATCHES "OCVIMAGE")
 # Set Qt location if needed
 if (MINGW)
   set(Qt5Core_DIR "D:/Qt/5.9.6/mingw53_32")
+  #set(Qt5Core_DIR "D:/Qt/Qt5.5.1/5.5/mingw492_32")
 elseif (MSVC)
   set(Qt5Core_DIR "D:/Qt/5.9.6/msvc2015_64")
 endif (MINGW)
@@ -54,7 +56,7 @@ endif (Qt5Core_FOUND)
 set (ENABLE_LOG TRUE)
 
 
-# Use C++ standard (98, 11, 14)
+# Use C++ standard (98, 11, 14, 17)
 set (CMAKE_CXX_STANDARD 11)
 set (CXX_EXTENSIONS OFF)
 

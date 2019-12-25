@@ -95,17 +95,20 @@ ToDo
   - crop if the dimensions ratio is very different?
   - use OpenCV's matchTemplate()?
 
+- Implement histogram compare module:
+  - use OpenCV's compareHist()
+  - HOG + SVM option?
+
 - Implement SIFT / SURF / FAST / ORB modules using OpenCV:
   - need to call a decoration function to add matching points before displaying
     the images
   - put all these in a single box ("Local features"?) with options?
 
-- Implement histogram compare module:
-  - HOG + SVM option?
-
 - Implement image signature module:
   - can use TensofFlow C++ library, or just cv::dnn::readNetFromTensorflow(),
     with a pre-trained in Pyhton neural network to create image signatures
+    (from VGG-16 or similar, or can use transfer learning like
+     https://blog.metaflow.fr/tensorflow-saving-restoring-and-mixing-multiple-models-c4c94d5d7125)
   - or use pre-trained YOLO for signatures? No, this should be a separate module
   - or use OpenCV ML methods?
 
