@@ -410,7 +410,7 @@ void ImgMatchUI::compareFinished()
 
 void ImgMatchUI::onTimerTick()
 {
-    if ( not mComThread ) return;
+    if ( ! mComThread ) return;
     int i = mComThread->getItemsProc();
     ui->lbItemsProc->setText(QString::number(i) + QString(" items processed"));
 }
