@@ -14,7 +14,6 @@
 #include "ImgMatchUI.h"
 #include "ui_ImgMatchUI.h"
 #include "ModScale.h"
-#include "QtImage.h"
 #include "Logger.h"
 
 
@@ -174,8 +173,8 @@ void ImgMatchUI::on_pbSrcDir1_clicked()
         ui->leSrcDir1->setText( dirName );
 
         if ( (mImgSrc == SRC_ONE_DIR)
-          or ((mImgSrc == SRC_TWO_DIR) and (! ui->leSrcDir2->text().isEmpty()))
-          or ((mImgSrc == SRC_IMG_DIR) and (! ui->leSrcImg1->text().isEmpty())) )
+          || ((mImgSrc == SRC_TWO_DIR) && (! ui->leSrcDir2->text().isEmpty()))
+          || ((mImgSrc == SRC_IMG_DIR) && (! ui->leSrcImg1->text().isEmpty())) )
             ui->pbFindStart->setEnabled(true);
     }
 }
@@ -191,7 +190,7 @@ void ImgMatchUI::on_pbSrcDir2_clicked()
     {
         ui->leSrcDir2->setText( dirName );
 
-        if ( (mImgSrc == SRC_TWO_DIR) and (! ui->leSrcDir1->text().isEmpty()) )
+        if ( (mImgSrc == SRC_TWO_DIR) && (! ui->leSrcDir1->text().isEmpty()) )
             ui->pbFindStart->setEnabled(true);
     }
 }
@@ -211,9 +210,9 @@ void ImgMatchUI::on_pbSrcImg1_clicked()
     {
         ui->leSrcImg1->setText( fileName );
 
-        if ( ((mImgSrc == SRC_TWO_IMG) and (! ui->leSrcImg2->text().isEmpty()))
-          or ((mImgSrc == SRC_IMG_DIR) and (! ui->leSrcDir1->text().isEmpty()))
-          or (mImgSrc == SRC_ONE_IMG))
+        if ( ((mImgSrc == SRC_TWO_IMG) && (! ui->leSrcImg2->text().isEmpty()))
+          || ((mImgSrc == SRC_IMG_DIR) && (! ui->leSrcDir1->text().isEmpty()))
+          || (mImgSrc == SRC_ONE_IMG))
             ui->pbFindStart->setEnabled(true);
     }
 }
@@ -233,7 +232,7 @@ void ImgMatchUI::on_pbSrcImg2_clicked()
     {
         ui->leSrcImg2->setText( fileName );
 
-        if ( (mImgSrc == SRC_TWO_IMG) and (! ui->leSrcImg1->text().isEmpty()) )
+        if ( (mImgSrc == SRC_TWO_IMG) && (! ui->leSrcImg1->text().isEmpty()) )
             ui->pbFindStart->setEnabled(true);
     }
 }
@@ -367,7 +366,7 @@ void ImgMatchUI::addNextResultsInDupsTable()
     }
 
     // Disable "Show more" after processing has finished and all results displayed
-    if ( (mComThread == NULL) and (numResToAdd < RESULTS_AT_ONCE) )
+    if ( (mComThread == NULL) && (numResToAdd < RESULTS_AT_ONCE) )
         ui->pbMoreRes->setEnabled(false);
 }
 
@@ -542,7 +541,7 @@ void CompareThread::run()
             int N1 = file_list1.size();
             int N2 = file_list2.size();
 
-            if ( (N1 < 1) or (N2 < 1) )
+            if ( (N1 < 1) || (N2 < 1) )
                 // Emit an error?
                 break;
 
