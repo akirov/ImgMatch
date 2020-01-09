@@ -15,11 +15,12 @@ shapes, fingerprints and text in images.
 ImgMatch is written in C++, in an object-oriented and modular fashion.
 It has a platform-independent GUI, which uses Qt framework.
 
-To compile the sources you need a C++11 compiler, CMake, Qt SDK, and optionally
+To build the sources you need a C++11 compiler, CMake, Qt SDK, and optionally
 OpenCV. You may need to specify OpenCV and Qt locations in root CMakeLists.txt,
 if they are not standard. Then just `cd build`, `cmake .. -G "Unix Makefiles"`
-(or use other generator), `make` or `mingw-make` and `make install`.
-The executable file will be in `bin` sub-directory.
+(or for Visual Studio 2015 x64: `cmake .. -G "Visual Studio 15 2017" -A x64`),
+then `make` or `mingw32-make` (or for MSVC: `devenv ImgMatch.sln /Build Release`).
+After `make install` the executable file will be in `bin` sub-directory.
 
 
 Screenshots
