@@ -79,7 +79,7 @@ ToDo
 
 - ModScale improvements:
   - convert the images to grayscale (0-255) before resizing them? then we
-    will have only one dimension
+    will have only one dimension; use cv.normalize()?
   - take the average of some key-regions (grid) instead of single points?
   - smooth (denoise) first?
   - rotate according to principle components first?

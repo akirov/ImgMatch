@@ -2,6 +2,9 @@
 #define IMGMATCHUI_H
 
 #include <list>
+#if defined(__GXX_EXPERIMENTAL_CXX0X) || __cplusplus >= 201103L
+ #include <atomic>
+#endif  // C++11
 
 #include <QMainWindow>
 //#include <QMetaType>  // For Q_DECLARE_METATYPE
@@ -145,7 +148,7 @@ public:
     ~CompareThread();
 
     void run();
-    int getItemsProc() const { return mItProc; }  // Lock, or make mItProc atomic!
+    int getItemsProc() const;
 
 Q_SIGNALS:
     void sendProgressRange(int, int);  // Set progress bar range
@@ -161,7 +164,12 @@ private:
     QString                 mSrc2Name;
     MatchMode               mMatchMode;
     int                     mMatchThreshold;
+#if defined(__GXX_EXPERIMENTAL_CXX0X) || __cplusplus >= 201103L
+    std::atomic<int>        mItProc;
+#else
+    // TODO add a lock
     int                     mItProc;
+#endif  // C++11
 };
 
 #endif // IMGMATCHUI_H

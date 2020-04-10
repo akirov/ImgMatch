@@ -445,6 +445,8 @@ void CompareThread::run()
 {
     LOG("CompareThread Id : " << QThread::currentThreadId());
 
+    mItProc = 0;  // TODO lock #if !defined(__GXX_EXPERIMENTAL_CXX0X) && __cplusplus < 201103L
+
 //  exec();  // Starts event loop. Does not return until exit(). We only need this to process signals.
 
 #if defined(__GXX_EXPERIMENTAL_CXX0X) || __cplusplus >= 201103L
@@ -453,7 +455,7 @@ void CompareThread::run()
     std::auto_ptr<ImgMatch> img_match(NULL);
 #endif  // C++11
 
-    switch ( mMatchMode )  // Or use a factory?
+    switch ( mMatchMode )  // TODO use a factory
     {
         case MOD_SCALE:
             img_match.reset( new ModScale );
@@ -480,7 +482,6 @@ void CompareThread::run()
 
             int numPairs = (N*(N-1))/2;
             int progress_update_interval = numPairs/50;
-            mItProc = 0;
 
             if ( progress_update_interval < 1 )
                 progress_update_interval = 1;
@@ -492,6 +493,7 @@ void CompareThread::run()
             // of them. Update the progress bar. Break if the Stop button is pressed.
             // Add each processed pair to the results, if it is above match threshold.
 
+            int itProc=0;
             for ( int i=0; !isInterruptionRequested() && i<(N-1); i++ )
             {
                 // If i == 0 print status "Caching..." else print "Comparing..."?
@@ -514,16 +516,21 @@ void CompareThread::run()
                         Q_EMIT sendNumResultsUpdate();
                     }
 
-                    ++mItProc;
+#if defined(__GXX_EXPERIMENTAL_CXX0X) || __cplusplus >= 201103L
+                    itProc = std::atomic_fetch_add(&mItProc, 1) + 1;
+#else
+                    // TODO lock
+                    itProc = ++mItProc;
+#endif  // C++11
 
                     // Update the progress bar
-                    if ( (mItProc % progress_update_interval) == 0 )
+                    if ( (itProc % progress_update_interval) == 0 )
                     {
-                        Q_EMIT sendProgressUpdate(mItProc);
+                        Q_EMIT sendProgressUpdate(itProc);
                     }
                 }
             }
-            Q_EMIT sendProgressUpdate(mItProc);
+            Q_EMIT sendProgressUpdate(itProc);
 
             break;
         }
@@ -547,7 +554,6 @@ void CompareThread::run()
 
             int numPairs = N1 * N2;
             int progress_update_interval = numPairs/50;
-            int progress = 0;
 
             if ( progress_update_interval < 1 )
                 progress_update_interval = 1;
@@ -555,6 +561,7 @@ void CompareThread::run()
             // Init the progress bar
             Q_EMIT sendProgressRange(0, numPairs);
 
+            int itProc=0;
             for ( int i=0; !isInterruptionRequested() && i<N1; i++ )
             {
                 // If i == 0 print status "Caching..." else print "Comparing..."?
@@ -575,16 +582,21 @@ void CompareThread::run()
                         Q_EMIT sendNumResultsUpdate();
                     }
 
-                    ++progress;
+#if defined(__GXX_EXPERIMENTAL_CXX0X) || __cplusplus >= 201103L
+                    itProc = std::atomic_fetch_add(&mItProc, 1) + 1;
+#else
+                    // TODO lock
+                    itProc = ++mItProc;
+#endif  // C++11
 
                     // Update the progress bar
-                    if ( (progress % progress_update_interval) == 0 )
+                    if ( (itProc % progress_update_interval) == 0 )
                     {
-                        Q_EMIT sendProgressUpdate(progress);
+                        Q_EMIT sendProgressUpdate(itProc);
                     }
                 }
             }
-            Q_EMIT sendProgressUpdate(progress);
+            Q_EMIT sendProgressUpdate(itProc);
 
             break;
         }
@@ -609,6 +621,8 @@ void CompareThread::run()
                 Q_EMIT sendNumResultsUpdate();
             }
 
+            mItProc = 1;  // TODO lock #if !defined(__GXX_EXPERIMENTAL_CXX0X) && __cplusplus < 201103L
+
             // Update the progress bar
             Q_EMIT sendProgressUpdate(1);
 
@@ -620,6 +634,17 @@ void CompareThread::run()
     }
 
     Q_EMIT sendCompareFinished();
+}
+
+
+int CompareThread::getItemsProc() const
+{
+#if defined(__GXX_EXPERIMENTAL_CXX0X) || __cplusplus >= 201103L
+    return mItProc.load();  // Add std::memory_order_acquire ?
+#else
+    // TODO: Lock!
+    return mItProc;
+#endif  // C++11
 }
 
 
