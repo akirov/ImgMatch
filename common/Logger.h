@@ -6,6 +6,11 @@
 #include <sstream>
 #include <memory>
 #include <stdexcept>
+#if defined(__GXX_EXPERIMENTAL_CXX0X) || __cplusplus >= 201103L
+  #include <mutex>
+#else
+  #include <pthread.h>  // For pthread_mutex
+#endif  // C++11
 
 
 #ifdef ENABLE_LOG
@@ -72,8 +77,10 @@ class Logger
   private:
 //  static Logger* sLogger;
 #if defined(__GXX_EXPERIMENTAL_CXX0X) || __cplusplus >= 201103L
+    static std::recursive_mutex sLogLock;
     static std::unique_ptr<Logger> sLogger;
 #else
+    // TODO add pthread_mutex
     static std::auto_ptr<Logger> sLogger;
 #endif  // C++11
 

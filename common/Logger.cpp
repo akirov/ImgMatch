@@ -8,7 +8,8 @@
 
 //Logger* Logger::sLogger = NULL;
 #if defined(__GXX_EXPERIMENTAL_CXX0X) || __cplusplus >= 201103L
-std::unique_ptr<Logger> Logger::sLogger( nullptr );
+std::recursive_mutex Logger::sLogLock;
+std::unique_ptr<Logger> Logger::sLogger{ nullptr };
 #else
 std::auto_ptr<Logger> Logger::sLogger( NULL );
 #endif  // C++11
@@ -41,7 +42,7 @@ Logger::Logger(const std::string& logDir, const std::string& fileNamePrefix,
                const std::string& fileNameExt) :
     mLogFileName(logDir + fileNamePrefix + GetCurrentDateTimeStr("h", "m", "s")
                + fileNameExt),
-    mLogFile(mLogFileName.c_str())  // Create log file
+    mLogFile(mLogFileName.c_str())  // Create log file. Or do it in InitLog()?
 {
     if( !mLogFile.is_open() ) 
         throw std::runtime_error(std::string("Error opening log file ") + mLogFileName);
@@ -50,10 +51,13 @@ Logger::Logger(const std::string& logDir, const std::string& fileNamePrefix,
 
 Logger::~Logger()
 {
+
+    LOG("Closing log file '" << mLogFileName << "'");
+
     // Close log file
-
-    LOG("Closing log file.");
-
+#if defined(__GXX_EXPERIMENTAL_CXX0X) || __cplusplus >= 201103L
+    std::lock_guard<std::recursive_mutex> guard(sLogLock);  // May recurse
+#endif  // C++11
     if( mLogFile.is_open() )
         mLogFile.close();
 }
@@ -63,7 +67,10 @@ void Logger::InitLog( const std::string& logDir,
                       const std::string& fileNamePrefix,
                       const std::string& fileNameExt )
 {
-    sLogger.reset( new Logger(logDir, fileNamePrefix, fileNameExt) );
+#if defined(__GXX_EXPERIMENTAL_CXX0X) || __cplusplus >= 201103L
+    std::lock_guard<std::recursive_mutex> guard(sLogLock);
+#endif  // C++11
+    sLogger.reset( new Logger(logDir, fileNamePrefix, fileNameExt) );  // May call the destructor
 }
 
 
@@ -87,7 +94,9 @@ std::ofstream& Logger::GetLogFile()
 
 void Logger::Log( const std::string& text )
 {
-    // TODO Lock
+#if defined(__GXX_EXPERIMENTAL_CXX0X) || __cplusplus >= 201103L
+    std::lock_guard<std::recursive_mutex> guard(sLogLock);
+#endif  // C++11
     std::ofstream& logFile = Logger::GetLogFile();
 
     logFile << text << std::endl;

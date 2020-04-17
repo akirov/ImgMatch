@@ -36,8 +36,6 @@ Screenshots
 ToDo
 ----
 
-- Logger is not thread safe - add a lock.
-
 - Handle closing the main window during processing, e. g.
   "Ignore closeEvent() during processing, only call MyThread::stop(), and
    then when QThread::finished() signal arrives, you can actually close the
@@ -51,7 +49,7 @@ ToDo
 
 - Extract CompareThread in a separate file! Rename to CompareManagerThread?
 
-- Remove non-C++11 code, if C++03 support can't be guaranteed?
+- Remove non-C++11 code, as C++03 is not supported any more.
 
 - Rename PixelRGB to Pixel8UC3 (or PixelABC, or PixelXYZ), because we can
   have other 3 independent parameters (YUV, HLS, CMY...), not only RGB.
