@@ -2,7 +2,7 @@
 #define __QTIMAGE_H__
 
 #include <map>
-#if defined(__GXX_EXPERIMENTAL_CXX0X) || __cplusplus >= 201103L
+#if defined(__GXX_EXPERIMENTAL_CXX0X) || __cplusplus >= 201103L || (defined(_MSC_VER) && _MSC_VER >= 1900)
   #include <memory>
   using std::shared_ptr;
   using std::unique_ptr;

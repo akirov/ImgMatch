@@ -36,10 +36,10 @@ endif (${IMAGEIMP} MATCHES "OCVIMAGE")
 
 # Set Qt location if needed
 if (MINGW)
-  set(Qt5Core_DIR "D:/Qt/5.9.6/mingw53_32")
+  set(Qt5Core_DIR "D:/Qt/5.12.8/mingw73_32")
   #set(Qt5Core_DIR "D:/Qt/Qt5.5.1/5.5/mingw492_32")
 elseif (MSVC)
-  set(Qt5Core_DIR "D:/Qt/5.9.6/msvc2015_64")
+  set(Qt5Core_DIR "D:/Qt/5.12.8/msvc2015_64")
 endif (MINGW)
 
 find_package (Qt5Core QUIET)

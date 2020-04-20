@@ -2,7 +2,7 @@
 #define IMGMATCHUI_H
 
 #include <list>
-#if defined(__GXX_EXPERIMENTAL_CXX0X) || __cplusplus >= 201103L
+#if defined(__GXX_EXPERIMENTAL_CXX0X) || __cplusplus >= 201103L || (defined(_MSC_VER) && _MSC_VER >= 1900)
  #include <atomic>
 #endif  // C++11
 
@@ -164,7 +164,7 @@ private:
     QString                 mSrc2Name;
     MatchMode               mMatchMode;
     int                     mMatchThreshold;
-#if defined(__GXX_EXPERIMENTAL_CXX0X) || __cplusplus >= 201103L
+#if defined(__GXX_EXPERIMENTAL_CXX0X) || __cplusplus >= 201103L || (defined(_MSC_VER) && _MSC_VER >= 1900)
     std::atomic<int>        mItProc;
 #else
     // TODO add a lock

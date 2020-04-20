@@ -2,7 +2,7 @@
 #include "Logger.h"
 
 
-#if defined(__GXX_EXPERIMENTAL_CXX0X) || __cplusplus >= 201103L
+#if defined(__GXX_EXPERIMENTAL_CXX0X) || __cplusplus >= 201103L || (defined(_MSC_VER) && _MSC_VER >= 1900)
 const std::map<Image::PixelRep, int> OCVImage::mPixelTypeMap = {
 //      { Image::PIXEL_UNKNOWN, -1 },
         { Image::PIXEL_Gray8,   CV_8UC1},

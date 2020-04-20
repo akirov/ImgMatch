@@ -445,11 +445,11 @@ void CompareThread::run()
 {
     LOG("CompareThread Id : " << QThread::currentThreadId());
 
-    mItProc = 0;  // TODO lock #if !defined(__GXX_EXPERIMENTAL_CXX0X) && __cplusplus < 201103L
+    mItProc = 0;  // TODO lock #if !defined(__GXX_EXPERIMENTAL_CXX0X) && __cplusplus < 201103L && (!defined(_MSC_VER) || _MSC_VER < 1900)
 
 //  exec();  // Starts event loop. Does not return until exit(). We only need this to process signals.
 
-#if defined(__GXX_EXPERIMENTAL_CXX0X) || __cplusplus >= 201103L
+#if defined(__GXX_EXPERIMENTAL_CXX0X) || __cplusplus >= 201103L || (defined(_MSC_VER) && _MSC_VER >= 1900)
     std::unique_ptr<ImgMatch> img_match(nullptr);
 #else
     std::auto_ptr<ImgMatch> img_match(NULL);
@@ -516,7 +516,7 @@ void CompareThread::run()
                         Q_EMIT sendNumResultsUpdate();
                     }
 
-#if defined(__GXX_EXPERIMENTAL_CXX0X) || __cplusplus >= 201103L
+#if defined(__GXX_EXPERIMENTAL_CXX0X) || __cplusplus >= 201103L || (defined(_MSC_VER) && _MSC_VER >= 1900)
                     itProc = std::atomic_fetch_add(&mItProc, 1) + 1;
 #else
                     // TODO lock
@@ -582,7 +582,7 @@ void CompareThread::run()
                         Q_EMIT sendNumResultsUpdate();
                     }
 
-#if defined(__GXX_EXPERIMENTAL_CXX0X) || __cplusplus >= 201103L
+#if defined(__GXX_EXPERIMENTAL_CXX0X) || __cplusplus >= 201103L || (defined(_MSC_VER) && _MSC_VER >= 1900)
                     itProc = std::atomic_fetch_add(&mItProc, 1) + 1;
 #else
                     // TODO lock
@@ -621,7 +621,7 @@ void CompareThread::run()
                 Q_EMIT sendNumResultsUpdate();
             }
 
-            mItProc = 1;  // TODO lock #if !defined(__GXX_EXPERIMENTAL_CXX0X) && __cplusplus < 201103L
+            mItProc = 1;  // TODO lock #if !defined(__GXX_EXPERIMENTAL_CXX0X) && __cplusplus < 201103L && (!defined(_MSC_VER) || _MSC_VER < 1900)
 
             // Update the progress bar
             Q_EMIT sendProgressUpdate(1);
@@ -639,7 +639,7 @@ void CompareThread::run()
 
 int CompareThread::getItemsProc() const
 {
-#if defined(__GXX_EXPERIMENTAL_CXX0X) || __cplusplus >= 201103L
+#if defined(__GXX_EXPERIMENTAL_CXX0X) || __cplusplus >= 201103L || (defined(_MSC_VER) && _MSC_VER >= 1900)
     return mItProc.load();  // Add std::memory_order_acquire ?
 #else
     // TODO: Lock!

@@ -6,7 +6,7 @@
 #include <sstream>
 #include <memory>
 #include <stdexcept>
-#if defined(__GXX_EXPERIMENTAL_CXX0X) || __cplusplus >= 201103L
+#if defined(__GXX_EXPERIMENTAL_CXX0X) || __cplusplus >= 201103L || (defined(_MSC_VER) && _MSC_VER >= 1900)
   #include <mutex>
 #else
   #include <pthread.h>  // For pthread_mutex
@@ -76,7 +76,7 @@ class Logger
 
   private:
 //  static Logger* sLogger;
-#if defined(__GXX_EXPERIMENTAL_CXX0X) || __cplusplus >= 201103L
+#if defined(__GXX_EXPERIMENTAL_CXX0X) || __cplusplus >= 201103L || (defined(_MSC_VER) && _MSC_VER >= 1900)
     static std::recursive_mutex sLogLock;
     static std::unique_ptr<Logger> sLogger;
 #else

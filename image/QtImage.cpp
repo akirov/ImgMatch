@@ -1,7 +1,7 @@
 #include "QtImage.h"
 #include "Logger.h"
 
-#if defined(__GXX_EXPERIMENTAL_CXX0X) || __cplusplus >= 201103L
+#if defined(__GXX_EXPERIMENTAL_CXX0X) || __cplusplus >= 201103L || (defined(_MSC_VER) && _MSC_VER >= 1900)
 const std::map<Image::PixelRep, QImage::Format> QtImage::mPixelFormatMap = {
 //      { Image::PIXEL_UNKNOWN, QImage::Format_Invalid },
         { Image::PIXEL_Gray8,   QImage::Format_Indexed8},

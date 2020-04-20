@@ -7,7 +7,7 @@
 
 
 //Logger* Logger::sLogger = NULL;
-#if defined(__GXX_EXPERIMENTAL_CXX0X) || __cplusplus >= 201103L
+#if defined(__GXX_EXPERIMENTAL_CXX0X) || __cplusplus >= 201103L || (defined(_MSC_VER) && _MSC_VER >= 1900)
 std::recursive_mutex Logger::sLogLock;
 std::unique_ptr<Logger> Logger::sLogger{ nullptr };
 #else
@@ -55,7 +55,7 @@ Logger::~Logger()
     LOG("Closing log file '" << mLogFileName << "'");
 
     // Close log file
-#if defined(__GXX_EXPERIMENTAL_CXX0X) || __cplusplus >= 201103L
+#if defined(__GXX_EXPERIMENTAL_CXX0X) || __cplusplus >= 201103L || (defined(_MSC_VER) && _MSC_VER >= 1900)
     std::lock_guard<std::recursive_mutex> guard(sLogLock);  // May recurse
 #endif  // C++11
     if( mLogFile.is_open() )
@@ -67,7 +67,7 @@ void Logger::InitLog( const std::string& logDir,
                       const std::string& fileNamePrefix,
                       const std::string& fileNameExt )
 {
-#if defined(__GXX_EXPERIMENTAL_CXX0X) || __cplusplus >= 201103L
+#if defined(__GXX_EXPERIMENTAL_CXX0X) || __cplusplus >= 201103L || (defined(_MSC_VER) && _MSC_VER >= 1900)
     std::lock_guard<std::recursive_mutex> guard(sLogLock);
 #endif  // C++11
     sLogger.reset( new Logger(logDir, fileNamePrefix, fileNameExt) );  // May call the destructor
@@ -94,7 +94,7 @@ std::ofstream& Logger::GetLogFile()
 
 void Logger::Log( const std::string& text )
 {
-#if defined(__GXX_EXPERIMENTAL_CXX0X) || __cplusplus >= 201103L
+#if defined(__GXX_EXPERIMENTAL_CXX0X) || __cplusplus >= 201103L || (defined(_MSC_VER) && _MSC_VER >= 1900)
     std::lock_guard<std::recursive_mutex> guard(sLogLock);
 #endif  // C++11
     std::ofstream& logFile = Logger::GetLogFile();

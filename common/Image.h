@@ -3,7 +3,7 @@
 
 #include <string>
 
-#if defined(__GXX_EXPERIMENTAL_CXX0X) || __cplusplus >= 201103L
+#if defined(__GXX_EXPERIMENTAL_CXX0X) || __cplusplus >= 201103L || (defined(_MSC_VER) && _MSC_VER >= 1900)
   #include <cstdint>
   using std::uint32_t;
   using std::uint8_t;
