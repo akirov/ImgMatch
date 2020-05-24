@@ -47,19 +47,12 @@ ToDo
   waiting for it to exit (where?).
   Or just connect &CompareThread::finished() with &QObject::deleteLater().
 
-- Extract CompareThread in a separate file! Rename to CompareManagerThread?
+- Extract CompareThread in a separate file? Rename to CompareManagerThread.
+
+- Process files in parallel with a pool of worker threads - POSIX (see Wav2mp3),
+  QThreadPool, QtConcurrent, or C++11.
 
 - Remove non-C++11 code, as C++03 is not supported any more.
-
-- Rename PixelRGB to Pixel8UC3 (or PixelABC, or PixelXYZ), because we can
-  have other 3 independent parameters (YUV, HLS, CMY...), not only RGB.
-  Write conversion methods?
-
-- Provide access (void pointer or #ifdefs?) to Pixel implementation
-  (cv::Mat or QImage), so native methods can be called (with #ifdefs)?
-
-- Process files in parallel with a pool of threads - POSIX (see Wav2mp3),
-  QThreadPool, or QtConcurrent.
 
 - We don't need to store image names in the results, we can store image
   index in an array of names (URIs) only, so change ComPair?
@@ -67,9 +60,6 @@ ToDo
 - Offer to save the cache of image signatures for later reuse, but the
   format will be different for different modules - need proper description.
   Add "Save" results button alongside "Clear"? May need to expand the form.
-
-- If we want to modify the image e. g. to display matching points, think
-  how to do it - where and how to store processed images.
 
 - "Delete" buttons working. Should we delete the entire row from the table?
 
@@ -96,6 +86,9 @@ ToDo
   - use OpenCV's compareHist()
   - HOG + SVM option?
 
+- If we want to modify the image e. g. to display matching points, think
+  how to do it - where and how to store processed images.
+
 - Implement SIFT / SURF / FAST / ORB modules using OpenCV:
   - need to call a decoration function to add matching points before displaying
     the images
@@ -120,5 +113,12 @@ ToDo
   - Eigenfaces
   - Fisherfaces
   - Local Binary Patterns Histograms
+
+- Rename PixelRGB to Pixel8UC3 (or PixelABC, or PixelXYZ), because we can
+  have other 3 independent parameters (YUV, HLS, CMY...), not only RGB.
+  Write conversion methods?
+
+- Provide access (void pointer or #ifdefs?) to Pixel implementation
+  (cv::Mat or QImage), so native methods can be called (with #ifdefs)?
 
 - OpenCL/CUDA optimizations.
