@@ -158,7 +158,29 @@ void ImgMatchUI::about()
 
 void ImgMatchUI::on_actionExit_triggered()
 {
+    if ( mComThread )
+    {
+        mComThread->requestInterruption();
+        mComThread->wait(); // Block until the thread is done completely.
+        delete mComThread;
+        mComThread = NULL;
+    }
+
     close();
+}
+
+
+void ImgMatchUI::closeEvent(QCloseEvent *event)
+{
+    if ( mComThread )
+    {
+        mComThread->requestInterruption();
+        mComThread->wait(); // Block until the thread is done completely.
+        delete mComThread;
+        mComThread = NULL;
+    }
+
+    event->accept();
 }
 
 

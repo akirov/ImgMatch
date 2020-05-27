@@ -108,6 +108,7 @@ private:
     void changeEvent(QEvent *e);
     void processSourceRB();
     void addNextResultsInDupsTable();
+    void closeEvent(QCloseEvent *event);
 
 private:
     Ui::ImgMatchUI *ui;  // Or a unique_ptr, or not a pointer at all???
@@ -126,16 +127,16 @@ private:
 
     int mMatchThreshold;
 
-    CompareThread* mComThread;
+    CompareThread* mComThread;  // TODO Use a pool of threads
     QTimer* mQTimer;
     QMutex mMutex;
 
-    std::list<ComPair> mResults;
+    std::list<ComPair> mResults;  // Or a sorted structure?
     unsigned int mNumResults;
 };
 
 
-class CompareThread : public QThread
+class CompareThread : public QThread  // TODO Move to a separate file
 {
     Q_OBJECT
 

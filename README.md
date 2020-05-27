@@ -36,15 +36,10 @@ Screenshots
 ToDo
 ----
 
-- Handle closing the main window during processing, e. g.
-  "Ignore closeEvent() during processing, only call MyThread::stop(), and
-   then when QThread::finished() signal arrives, you can actually close the
-   window".
-
 - Deleting compare thread: pass parent QObject and verify automatic
   deletion, but not clear when this deletion will happen.
   Or we can delete the thread object manually in compareFinished() after
-  waiting for it to exit (where?).
+  waiting for it to exit. Did that.
   Or just connect &CompareThread::finished() with &QObject::deleteLater().
 
 - Extract CompareThread in a separate file? Rename to CompareManagerThread.
