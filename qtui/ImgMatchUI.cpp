@@ -797,7 +797,7 @@ void ImgMatchUI::on_pbFindStart_clicked()
 
         mComThread->start();  // Calls run(). Set QThread::LowPriority?
 
-        mQTimer = new QTimer(this);
+        mQTimer = new QTimer(this);  // Will be deleted by the parent
         mQTimer->setInterval(2000);
         connect(mQTimer, SIGNAL(timeout()), this, SLOT(onTimerTick()));
         mQTimer->start();
@@ -838,11 +838,10 @@ void ImgMatchUI::on_twDupsTable_itemSelectionChanged()
         QSize size = ui->qlImgLabel1->size();
         image1 = image1.scaled(size, Qt::KeepAspectRatio, Qt::SmoothTransformation);
 
-        QPainter* painter = new QPainter(&image1);  // Or use a stack object???
-        painter->setPen(Qt::white);
-        painter->setFont(QFont("Arial", 10));
-        painter->drawText(image1.rect(), Qt::AlignTop | Qt::AlignLeft, QString::fromStdString(imgInfo.str()));
-        delete painter;  // ???
+        QPainter painter(&image1);
+        painter.setPen(Qt::white);
+        painter.setFont(QFont("Arial", 10));
+        painter.drawText(image1.rect(), Qt::AlignTop | Qt::AlignLeft, QString::fromStdString(imgInfo.str()));
 
         ui->qlImgLabel1->setPixmap(QPixmap::fromImage(image1));
     }
@@ -880,11 +879,10 @@ void ImgMatchUI::on_twDupsTable_itemSelectionChanged()
             QSize size = ui->qlImgLabel2->size();
             image2 = image2.scaled(size, Qt::KeepAspectRatio, Qt::SmoothTransformation);
 
-            QPainter* painter = new QPainter(&image2);  // Or use a stack object???
-            painter->setPen(Qt::white);
-            painter->setFont(QFont("Arial", 10));
-            painter->drawText(image2.rect(), Qt::AlignTop | Qt::AlignLeft, QString::fromStdString(imgInfo.str()));
-            delete painter;  // ???
+            QPainter painter(&image2);
+            painter.setPen(Qt::white);
+            painter.setFont(QFont("Arial", 10));
+            painter.drawText(image2.rect(), Qt::AlignTop | Qt::AlignLeft, QString::fromStdString(imgInfo.str()));
 
             ui->qlImgLabel2->setPixmap(QPixmap::fromImage(image2));
         }
