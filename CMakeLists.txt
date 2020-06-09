@@ -78,11 +78,11 @@ endif (ENABLE_LOG)
 
 set(INSTALL_DIR ${CMAKE_SOURCE_DIR}/bin)
 set(COMMON_DIR  ${CMAKE_SOURCE_DIR}/common)
-set(IMAGE_DIR   ${CMAKE_SOURCE_DIR}/image)
+set(IMAGE_DIR   ${CMAKE_SOURCE_DIR}/imageimp)
 set(MODULES_DIR ${CMAKE_SOURCE_DIR}/modules)
 
 
 add_subdirectory(common)
-add_subdirectory(image)
+add_subdirectory(imageimp)
 add_subdirectory(modules)
 add_subdirectory(qtui)
