@@ -40,12 +40,15 @@ ToDo
   deletion, but not clear when this deletion will happen.
   Or we can delete the thread object manually in compareFinished() after
   waiting for it to exit. Did that.
-  Or just connect &CompareThread::finished() with &QObject::deleteLater().
+  Or just connect &CompareThread::finished() with &QObject::deleteLater()?
 
-- Extract CompareThread in a separate file? Rename to CompareManagerThread.
-
-- Process files in parallel with a pool of worker threads - POSIX (see Wav2mp3),
-  QThreadPool, QtConcurrent, or C++11.
+- Extract CompareThread in a separate file? Rename it to CompareManagerThread?
+  Then it can delegate each ImgMatch::Compare() to a pool of worker threads.
+  Or we can have one thread to read the images (because HDD access is serial),
+  giving them for parallel processing (calculate signature) to a pool of threads,
+  then the first thread can compare signatures. In ImgMatch::Compare() we can
+  pass a Signature abstract class ref, which will be implemented by each module.
+  Pool of worker threads options: POSIX, QThreadPool, QtConcurrent, or C++11.
 
 - Remove non-C++11 code, as C++03 is not supported any more.
 
