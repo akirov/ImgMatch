@@ -9,8 +9,10 @@
 #if (CV_MAJOR_VERSION < 3)
  #include <opencv2/nonfree/features2d.hpp>
  #include <opencv2/nonfree/nonfree.hpp>
+ typedef cv::SiftFeatureDetector SIFTFeatureDetector;
 #else
- #include <opencv2/features2d.hpp>
+ #include <opencv2/xfeatures2d/nonfree.hpp>
+ typedef cv::xfeatures2d::SiftFeatureDetector SIFTFeatureDetector;
 #endif  // CV_MAJOR_VERSION
 
 
@@ -24,7 +26,7 @@ class ModOcvSIFT : public ImgMatch
 
   private:
 
-    cv::SiftFeatureDetector mSiftDetector;
+    SIFTFeatureDetector mSiftDetector;
     std::map<std::string, cv::Mat> mDescriptorsCache;
 };
 

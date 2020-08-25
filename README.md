@@ -65,6 +65,7 @@ ToDo
   - convert the images to grayscale (0-255) before resizing them? then we
     will have only one dimension; use cv.normalize()?
   - take the average of some key-regions (grid) instead of single points?
+  - do K-means clustering by color first?
   - smooth (denoise) first?
   - rotate according to principle components first?
   - find the "most interesting region" first?
@@ -97,8 +98,7 @@ ToDo
     with a pre-trained in Pyhton neural network to create image signatures
     (from VGG-16 or similar, or can use transfer learning like
      https://blog.metaflow.fr/tensorflow-saving-restoring-and-mixing-multiple-models-c4c94d5d7125)
-  - or use pre-trained YOLO for signatures? No, this should be a separate module
-  - or use OpenCV ML methods?
+  - or use pre-trained YOLO for signatures?
 
 - Shape matching module:
   - Elongatedness
