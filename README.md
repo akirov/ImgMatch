@@ -39,7 +39,7 @@ ToDo
 - Deleting compare thread: pass parent QObject and verify automatic
   deletion, but not clear when this deletion will happen.
   Or we can delete the thread object manually in compareFinished() after
-  waiting for it to exit. Did that.
+  waiting for it to exit. DONE.
   Or just connect &CompareThread::finished() with &QObject::deleteLater()?
 
 - Extract CompareThread in a separate file? Rename it to CompareManagerThread?
@@ -52,23 +52,38 @@ ToDo
 
 - Remove non-C++11 code, as C++03 is not supported any more.
 
-- We don't need to store image names in the results, we can store image
-  index in an array of names (URIs) only, so change ComPair?
-
 - Offer to save the cache of image signatures for later reuse, but the
   format will be different for different modules - need proper description.
   Add "Save" results button alongside "Clear"? May need to expand the form.
 
 - "Delete" buttons working. Should we delete the entire row from the table?
 
+- Add "Pause" button and display intermediate results?
+
+- Change visualization of matching images: replace the two separate images with
+  a single image consisting of two concatenated images with a separtor between
+  them? Each matching class will need to provide a method to generate such
+  combined image given two image URIs. This will give him the opportunity to
+  draw lines between corresponding features for example! Provide default
+  implementation.
+
+- Implement SIFT / SURF / FAST / ORB modules using OpenCV:
+  - use RANSAC to match feature points from two images
+  - if we want to display matching points, first have to change the visualization
+    as described above
+  - put all these in a single box ("Local features"?) with options?
+
+- Implement histogram compare module:
+  - use OpenCV's compareHist()
+  - HOG + SVM option?
+
 - ModScale improvements:
   - convert the images to grayscale (0-255) before resizing them? then we
-    will have only one dimension; use cv.normalize()?
+    will have only one dimension; use cv::normalize()?
   - take the average of some key-regions (grid) instead of single points?
   - do K-means clustering by color first?
   - smooth (denoise) first?
   - rotate according to principle components first?
-  - find the "most interesting region" first?
   - when one image is smaller than the thumbnail scale the bigger image to
     the smaller
   - metrics options:
@@ -80,18 +95,6 @@ ToDo
     at (128, 128, 128) may be
   - crop if the dimensions ratio is very different?
   - use OpenCV's matchTemplate()?
-
-- Implement histogram compare module:
-  - use OpenCV's compareHist()
-  - HOG + SVM option?
-
-- If we want to modify the image e. g. to display matching points, think
-  how to do it - where and how to store processed images.
-
-- Implement SIFT / SURF / FAST / ORB modules using OpenCV:
-  - need to call a decoration function to add matching points before displaying
-    the images
-  - put all these in a single box ("Local features"?) with options?
 
 - Implement image signature module:
   - can use TensofFlow C++ library, or just cv::dnn::readNetFromTensorflow(),
