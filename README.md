@@ -50,8 +50,6 @@ ToDo
   pass a Signature abstract class ref, which will be implemented by each module.
   Pool of worker threads options: POSIX, QThreadPool, QtConcurrent, or C++11.
 
-- Remove non-C++11 code, as C++03 is not supported any more.
-
 - Offer to save the cache of image signatures for later reuse, but the
   format will be different for different modules - need proper description.
   Add "Save" results button alongside "Clear"? May need to expand the form.
@@ -60,6 +58,9 @@ ToDo
 
 - Add "Pause" button and display intermediate results?
 
+- Provide access (void pointer or #ifdefs?) to Pixel implementation
+  (cv::Mat or QImage), so native methods can be called.
+
 - Change visualization of matching images: replace the two separate images with
   a single image consisting of two concatenated images with a separtor between
   them? Each matching class will need to provide a method to generate such
@@ -67,11 +68,11 @@ ToDo
   draw lines between corresponding features for example! Provide default
   implementation.
 
-- Implement SIFT / SURF / FAST / ORB modules using OpenCV:
+- Implement SIFT / SURF / FAST / ORB features match using OpenCV:
+  - put all these in a single box ("Features match") with options
   - use RANSAC to match feature points from two images
   - if we want to display matching points, first have to change the visualization
     as described above
-  - put all these in a single box ("Local features"?) with options?
 
 - Implement histogram compare module:
   - use OpenCV's compareHist()
@@ -119,7 +120,6 @@ ToDo
   have other 3 independent parameters (YUV, HLS, CMY...), not only RGB.
   Write conversion methods?
 
-- Provide access (void pointer or #ifdefs?) to Pixel implementation
-  (cv::Mat or QImage), so native methods can be called (with #ifdefs)?
+- Remove non-C++11 code, as C++03 is not supported any more.
 
 - OpenCL/CUDA optimizations.
