@@ -11,7 +11,7 @@ endif (MOD_SCALE)
 
 if (MOD_OCV_SIFT)
   include_directories (${OpenCV_INCLUDE_DIRS})
-  set (MOD_SOURCES ${MOD_SOURCES} ModOcvSIFT.cpp)
+  set (MOD_SOURCES ${MOD_SOURCES} ModOcvFeat.cpp)
 endif (MOD_OCV_SIFT)
 
 

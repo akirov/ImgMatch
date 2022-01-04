@@ -10,7 +10,7 @@ set (IMAGEIMP OCVIMAGE_8UC3)
 
 # Which modules are enabled
 set (MOD_SCALE TRUE)
-set (MOD_OCV_SIFT FALSE)
+set (MOD_OCV_SIFT TRUE)
 
 
 if (MOD_OCV_SIFT)
@@ -59,7 +59,7 @@ set (ENABLE_LOG TRUE)
 
 
 # Use C++ standard (98, 11, 14, 17)
-set (CMAKE_CXX_STANDARD 11)
+set (CMAKE_CXX_STANDARD 14)
 set (CMAKE_CXX_STANDARD_REQUIRED ON)
 set (CXX_EXTENSIONS OFF)
 

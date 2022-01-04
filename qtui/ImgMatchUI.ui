@@ -263,7 +263,7 @@
        <item row="0" column="0">
         <widget class="QRadioButton" name="rbSrcOneDir">
          <property name="text">
-          <string>Compare or process the images in one directory</string>
+          <string>Compare or process all images in a directory</string>
          </property>
          <property name="checked">
           <bool>true</bool>
@@ -309,7 +309,7 @@
        <item row="4" column="0">
         <widget class="QRadioButton" name="rbProcImage">
          <property name="text">
-          <string>Process a single image (for the OCR mode)</string>
+          <string>Process a single image</string>
          </property>
          <attribute name="buttonGroup">
           <string notr="true">buttonGroup</string>
@@ -324,7 +324,7 @@
       <bool>true</bool>
      </property>
      <attribute name="title">
-      <string>2&gt; Process</string>
+      <string>2&gt; Processing</string>
      </attribute>
      <widget class="QGroupBox" name="groupBox_3">
       <property name="geometry">
@@ -622,7 +622,7 @@
        </rect>
       </property>
       <property name="title">
-       <string>Start</string>
+       <string>Process</string>
       </property>
       <widget class="QPushButton" name="pbFindStart">
        <property name="enabled">
@@ -970,7 +970,7 @@
        </rect>
       </property>
       <property name="text">
-       <string>Total Results</string>
+       <string>All Results</string>
       </property>
      </widget>
      <widget class="QLabel" name="qlImgLabel2">
@@ -1047,8 +1047,8 @@
  <resources/>
  <connections/>
  <buttongroups>
+  <buttongroup name="buttonGroup_3"/>
   <buttongroup name="buttonGroup_2"/>
   <buttongroup name="buttonGroup"/>
-  <buttongroup name="buttonGroup_3"/>
  </buttongroups>
 </ui>
