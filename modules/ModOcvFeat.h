@@ -7,15 +7,18 @@
 #include "Image.h"
 #include <opencv2/core/core.hpp>
 #include <opencv2/features2d/features2d.hpp>
-#if (CV_MAJOR_VERSION < 3)
+#if (CV_MAJOR_VERSION < 3)  // OpenCV 2
  #include <opencv2/nonfree/features2d.hpp>
  #include <opencv2/nonfree/nonfree.hpp>
  typedef cv::SiftFeatureDetector SIFTFeatureDetector;
-#else
+#elif (CV_VERSION_MAJOR == 3 && CV_VERSION_MINOR == 4 && CV_VERSION_REVISION < 6)  // TODO: Fix CV_VERSION_REVISION !
  #include <opencv2/features2d.hpp>
  #include <opencv2/xfeatures2d/nonfree.hpp>
  typedef cv::xfeatures2d::SiftFeatureDetector SIFTFeatureDetector;
-#endif  // CV_MAJOR_VERSION
+#else  // OpenCV version > 3.4.5
+ #include <opencv2/features2d.hpp>
+ typedef cv::SiftFeatureDetector SIFTFeatureDetector;
+#endif  // OpenCV version
 
 
 class ModOcvFeat : public ImgMatch
