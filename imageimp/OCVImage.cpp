@@ -50,17 +50,17 @@ OCVImage::OCVImage( const std::string& file_name, PixelRep pixel_rep ) :
     switch( pixel_rep )
     {
         case Image::PIXEL_Gray8:
-            mMatImage = cv::imread(file_name, IMREAD_ANYCOLOR);
+            mMatImage = cv::imread(file_name, cv::IMREAD_ANYCOLOR);
             break;
         case Image::PIXEL_RGB24:
-            mMatImage = cv::imread(file_name, IMREAD_COLOR);
+            mMatImage = cv::imread(file_name, cv::IMREAD_COLOR);
             break;
         case Image::PIXEL_RGB32:
-            mMatImage = cv::imread(file_name, IMREAD_ANYCOLOR); // The same as CV_LOAD_IMAGE_UNCHANGED
+            mMatImage = cv::imread(file_name, cv::IMREAD_ANYCOLOR); // The same as CV_LOAD_IMAGE_UNCHANGED
             break;
         case Image::PIXEL_UNKNOWN:
         default:
-            mMatImage = cv::imread(file_name, IMREAD_UNCHANGED);
+            mMatImage = cv::imread(file_name, cv::IMREAD_UNCHANGED);
             break;
     }
 
@@ -131,7 +131,7 @@ void OCVImage::Convert( Image::PixelRep newRep )
                 {
                     if ( oldType == CV_8UC3 )
                     {
-                        code = CV_RGB2GRAY;
+                        code = cv::COLOR_BGR2GRAY;
                         dstCn = 1;
                     }
                     break;
