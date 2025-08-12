@@ -1,6 +1,8 @@
 .eclipse/
 .settings/
+.ide/
 .idea/
+.vscode/
 .project
 .cproject
 pics/
