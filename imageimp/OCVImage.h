@@ -2,6 +2,7 @@
 #define __OCVIMAGE_H__
 
 #include <opencv2/opencv.hpp>
+#include <opencv2/core/version.hpp>
 
 #include "Image.h"
 

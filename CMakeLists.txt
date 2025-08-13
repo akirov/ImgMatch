@@ -29,10 +29,16 @@ if (${IMAGEIMP} MATCHES "OCVIMAGE")
   elseif (MSVC)
     #set(OpenCV_DIR "D:/OpenCV/2.4.13.6/vs2015/install")
     #set(OpenCV_DIR "D:/OpenCV/3.4.5/vs2015/install")
-    set(OpenCV_DIR "D:/OpenCV/4.6.0/msvc2019_64/install")
+    set(OpenCV_DIR "D:/OpenCV/4.5.4/msvc2019_64/install")
   endif (MINGW)
 
   find_package(OpenCV REQUIRED)
+
+  if(OpenCV_VERSION VERSION_LESS "3.0")
+    message(STATUS "OpenCV ver < 3")
+  else()
+    message(STATUS "OpenCV ver >= 3")
+  endif()
 endif (${IMAGEIMP} MATCHES "OCVIMAGE")
 
 

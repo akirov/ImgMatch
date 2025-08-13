@@ -50,17 +50,33 @@ OCVImage::OCVImage( const std::string& file_name, PixelRep pixel_rep ) :
     switch( pixel_rep )
     {
         case Image::PIXEL_Gray8:
+#if CV_MAJOR_VERSION < 3
             mMatImage = cv::imread(file_name, CV_LOAD_IMAGE_GRAYSCALE);
+#else
+            mMatImage = cv::imread(file_name, cv::IMREAD_GRAYSCALE);
+#endif  // CV_MAJOR_VERSION
             break;
         case Image::PIXEL_RGB24:
+#if CV_MAJOR_VERSION < 3
             mMatImage = cv::imread(file_name, CV_LOAD_IMAGE_COLOR);
+#else
+            mMatImage = cv::imread(file_name, cv::IMREAD_COLOR);
+#endif  // CV_MAJOR_VERSION
             break;
         case Image::PIXEL_RGB32:
-            mMatImage = cv::imread(file_name, CV_LOAD_IMAGE_ANYCOLOR);  // The same as CV_LOAD_IMAGE_UNCHANGED
+#if CV_MAJOR_VERSION < 3
+            mMatImage = cv::imread(file_name, CV_LOAD_IMAGE_ANYCOLOR);
+#else
+            mMatImage = cv::imread(file_name, cv::IMREAD_ANYCOLOR);
+#endif  // CV_MAJOR_VERSION
             break;
         case Image::PIXEL_UNKNOWN:
         default:
+#if CV_MAJOR_VERSION < 3
             mMatImage = cv::imread(file_name, CV_LOAD_IMAGE_UNCHANGED);
+#else
+            mMatImage = cv::imread(file_name, cv::IMREAD_UNCHANGED);
+#endif  // CV_MAJOR_VERSION
             break;
     }
 
@@ -131,7 +147,11 @@ void OCVImage::Convert( Image::PixelRep newRep )
                 {
                     if ( oldType == CV_8UC3 )
                     {
+#if CV_MAJOR_VERSION < 3
                         code = CV_RGB2GRAY;
+#else
+                        code = cv::COLOR_RGB2GRAY;
+#endif  // CV_MAJOR_VERSION
                         dstCn = 1;
                     }
                     break;
