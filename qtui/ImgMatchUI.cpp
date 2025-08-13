@@ -225,8 +225,8 @@ void ImgMatchUI::on_pbSrcImg1_clicked()
     fileName = QFileDialog::getOpenFileName(
         this,
         "Choose a file to open",
-        QString::null,
-        QString::null);
+        QString(),
+        QString());
 
     if ( ! fileName.isEmpty() )
     {
@@ -247,8 +247,8 @@ void ImgMatchUI::on_pbSrcImg2_clicked()
     fileName = QFileDialog::getOpenFileName(
         this,
         "Choose a file to open",
-        QString::null,
-        QString::null);
+        QString(),
+        QString());
 
     if ( ! fileName.isEmpty() )
     {
