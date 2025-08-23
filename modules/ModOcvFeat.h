@@ -38,7 +38,11 @@ class ModOcvFeat : public ImgMatch
 
   private:
 
+#if (CV_MAJOR_VERSION < 4)
     std::unique_ptr<cv::Feature2D> mDetector = nullptr;
+#else
+    cv::Ptr<cv::Feature2D> mDetector = nullptr;
+#endif  // CV_MAJOR_VERSION
     std::map<std::string, cv::Mat> mDescriptorsCache;
 };
 
